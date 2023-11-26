@@ -23,8 +23,8 @@ This project is a web platform designed to host university notes along with asso
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/your-username/university-notes-platform.git
-   cd university-notes-platform
+   git clone https://github.com/EmmanuelKeifala/COM-LMS.git
+   cd COM-LMS
    ```
 
 2. **Install dependencies:**
