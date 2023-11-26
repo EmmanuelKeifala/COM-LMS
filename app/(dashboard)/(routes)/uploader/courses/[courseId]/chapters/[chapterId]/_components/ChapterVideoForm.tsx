@@ -12,7 +12,7 @@ import Image from 'next/image';
 
 import {Button} from '@/components/ui/button';
 import {FileUpload} from '@/components/file-upload';
-import {GoogleUpload} from '@/components/GoogleUpload';
+
 import YoutubePlayerComponent from '@/components/YoutubePlayerComponent';
 
 interface ChapterVideoFormProps {
@@ -91,7 +91,7 @@ export const ChapterVideoForm = ({
             }}
           /> */}
 
-          <GoogleUpload />
+          {/* <GoogleUpload /> */}
 
           <div className="text-xs text-muted-foreground mt-4">
             Upload this chapter&apos;s video
