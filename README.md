@@ -29,7 +29,7 @@ This project is a web platform designed to host university notes along with asso
 
 2. **Install dependencies:**
 
-   ```npm install
+   ```bash npm install
 
    ```
 
