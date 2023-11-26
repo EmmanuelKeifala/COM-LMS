@@ -1,12 +1,15 @@
-'use client';
-import React, {useEffect} from 'react';
-import YouTubePlayer from 'youtube-player';
+import React from 'react';
 
 interface YoutubePlayerProps {
-  youtubeUrl: string;
+  youtubeUrl: string | null;
 }
 
 const YoutubePlayerComponent: React.FC<YoutubePlayerProps> = ({youtubeUrl}) => {
+  if (!youtubeUrl) {
+    // Render some fallback content or an empty state
+    return <p>No video URL available</p>;
+  }
+
   return (
     <iframe
       src={`${youtubeUrl}`}

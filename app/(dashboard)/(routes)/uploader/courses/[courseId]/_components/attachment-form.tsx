@@ -19,6 +19,7 @@ interface AttachmentFormProps {
 
 const formSchema = z.object({
   url: z.string().min(1),
+  name: z.string().min(1),
 });
 
 export const AttachmentForm = ({

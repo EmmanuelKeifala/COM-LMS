@@ -1,5 +1,3 @@
-'use client';
-
 import axios from 'axios';
 import {CheckCircle, XCircle} from 'lucide-react';
 import {useRouter} from 'next/navigation';
@@ -25,6 +23,7 @@ export const CourseProgressButton = ({
   const router = useRouter();
   const confetti = useConfettiStore();
   const [isLoading, setIsLoading] = useState(false);
+
   const onClick = async () => {
     try {
       setIsLoading(true);
@@ -60,7 +59,7 @@ export const CourseProgressButton = ({
       onClick={onClick}
       disabled={isLoading}
       type="button"
-      variant={isCompleted ? 'outline' : 'success'}
+      variant={isCompleted ? 'outline' : 'secondary'}
       className="w-full md:w-auto">
       {isCompleted ? 'Not completed' : 'Mark as complete'}
       <Icon className="h-4 w-4 ml-2" />
