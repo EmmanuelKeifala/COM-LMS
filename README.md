@@ -1,37 +1,59 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# University Notes Hosting Platform
+
+This project is a web platform designed to host university notes along with associated YouTube videos. The notes are organized into courses, providing an integrated learning experience for students.
+
+## Tech Stack
+
+- **Next.js 13**: A React framework for building modern web applications.
+- **Tailwind CSS**: A utility-first CSS framework for rapidly building custom designs.
+- **MongoDB**: A NoSQL database for storing and managing data efficiently.
+- **UploadThing**: A file upload library for handling file uploads seamlessly.
+- **ShadCN**: Re-usable components built using Radix UI and Tailwind CSS..
+- **Clerk**: An authentication and user management system for Next.js applications.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+- Node.js and npm installed on your machine.
+- MongoDB instance set up.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone the repository:**
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+   ```bash
+   git clone https://github.com/your-username/university-notes-platform.git
+   cd university-notes-platform
+   ```
 
-## Learn More
+2. **Install dependencies:**
 
-To learn more about Next.js, take a look at the following resources:
+   ```npm install
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+3. **Set up environment variables:**
+   ```NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+      CLERK_SECRET_KEY
+      DATABASE_URL
+      UPLOADTHING_SECRET
+      UPLOADTHING_APP_ID
+      NEXT_PUBLIC_APP_URL
+      NEXT_PUBLIC_UPLOADER_IDS
+   ```
+4. **Run the application:**
 
-## Deploy on Vercel
+   ```npm run dev
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# COM-LMS
-# COM-LMS
-# COM-LMS
+# Features
+
+- **Courses:** Organize notes into courses for easy navigation.
+- **YouTube Integration:** Attach YouTube videos to enhance learning.
+- **User Authentication:** Secure user authentication provided by Clerk.
+- **File Uploads:** Seamless file uploads using UploadThing.
+- **Responsive Design:** Tailwind CSS ensures a responsive and visually appealing UI.
+
+_Feel free to explore and enhance the platform based on your requirements!_
