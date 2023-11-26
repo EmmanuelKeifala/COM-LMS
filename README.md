@@ -43,10 +43,7 @@ This project is a web platform designed to host university notes along with asso
       NEXT_PUBLIC_UPLOADER_IDS
    ```
 4. **Run the application:**
-
-   ```npm run dev
-
-   ```
+   `npm run dev`
 
 # Features
 
