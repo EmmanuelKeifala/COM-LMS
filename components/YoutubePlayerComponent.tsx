@@ -1,22 +1,26 @@
-import React from 'react';
+'use client';
+import React, {useEffect} from 'react';
 
 interface YoutubePlayerProps {
-  youtubeUrl: string | null;
+  youtubeUrl: string;
 }
 
 const YoutubePlayerComponent: React.FC<YoutubePlayerProps> = ({youtubeUrl}) => {
-  if (!youtubeUrl) {
-    // Render some fallback content or an empty state
-    return <p>No video URL available</p>;
-  }
-
   return (
-    <iframe
-      src={`${youtubeUrl}`}
-      className="flex items-center justify-center h-full w-full bg-slate-200 rounded-md relative aspect-video mt-2"
-      allow="autoplay"
-      allowFullScreen
-      loading="lazy"></iframe>
+    <>
+      {youtubeUrl.includes('https') ? (
+        <iframe
+          src={`${youtubeUrl}`}
+          className="flex items-center justify-center h-full w-full bg-slate-200 rounded-md relative aspect-video mt-2"
+          allow="autoplay"
+          allowFullScreen
+          loading="lazy"></iframe>
+      ) : (
+        <div className="flex items-center justify-center text-3xl font-medium border  rounded-md border-slate-200 p-3 shadow-sm">
+          No video link
+        </div>
+      )}
+    </>
   );
 };
 
