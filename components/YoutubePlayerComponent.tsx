@@ -2,7 +2,7 @@
 import React, {useEffect} from 'react';
 
 interface YoutubePlayerProps {
-  youtubeUrl: string;
+  youtubeUrl: any;
 }
 
 const YoutubePlayerComponent: React.FC<YoutubePlayerProps> = ({youtubeUrl}) => {
