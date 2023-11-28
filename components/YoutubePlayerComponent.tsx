@@ -10,7 +10,7 @@ const YoutubePlayerComponent: React.FC<YoutubePlayerProps> = ({youtubeUrl}) => {
     <>
       {youtubeUrl.includes('https') ? (
         <iframe
-          src={`${youtubeUrl}`}
+          src={`${youtubeUrl}?rel=0`}
           className="flex items-center justify-center h-full w-full bg-slate-200 rounded-md relative aspect-video mt-2"
           allow="autoplay"
           allowFullScreen

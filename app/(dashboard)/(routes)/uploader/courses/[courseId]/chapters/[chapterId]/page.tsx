@@ -154,7 +154,7 @@ const ChapterIdPage = async ({
             />
           </div>
           <div>
-            <div className="flex items-center gap-x-2">
+            {/* <div className="flex items-center gap-x-2">
               <IconBadge icon={YoutubeIcon} />
               <h2 className="text-xl">Add a youtube link</h2>
             </div>
@@ -162,7 +162,7 @@ const ChapterIdPage = async ({
               initialData={chapter}
               chapterId={params.chapterId}
               courseId={params.courseId}
-            />
+            /> */}
           </div>
         </div>
       </div>
