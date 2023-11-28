@@ -26,11 +26,7 @@ export async function DELETE(
         userId: userId,
       },
       include: {
-        chapters: {
-          include: {
-            muxData: true,
-          },
-        },
+        chapters: {},
       },
     });
 

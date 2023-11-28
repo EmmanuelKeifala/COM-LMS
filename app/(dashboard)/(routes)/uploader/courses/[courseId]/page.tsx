@@ -8,10 +8,10 @@ import {DescriptionForm} from './_components/DescriptionForm';
 import {ImageForm} from './_components/ImageForm';
 import {CategoryForm} from './_components/CategoryForm';
 import {PriceForm} from './_components/PriceForm';
-import {AttachmentForm} from './_components/attachment-form';
 import {ChaptersForm} from './_components/ChaptersForm';
 import {Banner} from '@/components/banner';
 import {Actions} from './_components/actions';
+import {AttachmentForm} from './_components/attachment-form';
 
 const CourseIdPage = async ({params}: {params: {courseId: String}}) => {
   const {userId} = auth();
@@ -106,7 +106,11 @@ const CourseIdPage = async ({params}: {params: {courseId: String}}) => {
                 <IconBadge icon={File} />
                 <h2 className="text-xl">Resources & Attachments</h2>
               </div>
-              <AttachmentForm initialData={course} courseId={course.id} />
+              <AttachmentForm
+                initialData={course}
+                courseId={course.id}
+                chapterId={''}
+              />
             </div>
           </div>
         </div>

@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   Video,
   YoutubeIcon,
+  File,
 } from 'lucide-react';
 
 import {db} from '@/lib/db';
@@ -19,6 +20,8 @@ import {ChapterLinkForm} from './_components/ChapterLinkForm';
 import {Banner} from '@/components/banner';
 import {ChapterActions} from './_components/ChapterActions';
 import {GoogleDriveLinkForm} from './_components/GoogleDriveLinkForm';
+import {ChapterAttachmentForm} from './_components/ChapterAttachment';
+import {Chapter, ChapterAttachment} from '@prisma/client';
 
 const ChapterIdPage = async ({
   params,
@@ -31,15 +34,24 @@ const ChapterIdPage = async ({
     return redirect('/');
   }
 
-  const chapter = await db.chapter.findUnique({
+  const chapterWithAttachments = await db.chapter.findUnique({
     where: {
       id: params.chapterId,
       courseId: params.courseId,
     },
     include: {
-      muxData: true,
+      chapterAttachments: {
+        select: {
+          id: true,
+          name: true,
+          url: true,
+        },
+      },
     },
   });
+
+  const chapter: Chapter & {chapterAttachments: ChapterAttachment[]} =
+    chapterWithAttachments as any;
 
   if (!chapter) {
     return redirect('/');
@@ -127,12 +139,16 @@ const ChapterIdPage = async ({
               <IconBadge icon={Video} />
               <h2 className="text-xl">Add a video</h2>
             </div>
-            {/* <ChapterVideoForm
+            <GoogleDriveLinkForm
               initialData={chapter}
               chapterId={params.chapterId}
               courseId={params.courseId}
-            /> */}
-            <GoogleDriveLinkForm
+            />
+            <div className="flex items-center gap-x-2">
+              <IconBadge icon={File} />
+              <h2 className="text-xl">Attachments and Resources</h2>
+            </div>
+            <ChapterAttachmentForm
               initialData={chapter}
               chapterId={params.chapterId}
               courseId={params.courseId}

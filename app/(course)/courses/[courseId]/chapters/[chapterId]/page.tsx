@@ -18,12 +18,19 @@ const ChapterIdPage = async ({
   const {userId} = auth();
 
   if (!userId) return redirect('/');
-  const {chapter, course, attachments, nextChapter, userProgress, purchase} =
-    await getChapter({
-      userId,
-      chapterId: params.chapterId,
-      courseId: params.courseId,
-    });
+  const {
+    chapter,
+    course,
+    attachments,
+    nextChapter,
+    userProgress,
+    purchase,
+    chapterAttachment,
+  } = await getChapter({
+    userId,
+    chapterId: params.chapterId,
+    courseId: params.courseId,
+  });
 
   if (!chapter || !course) {
     return redirect('/');
@@ -66,24 +73,49 @@ const ChapterIdPage = async ({
           <div>
             <Preview value={chapter.description!} />
           </div>
-
-          {!!attachments.length && (
-            <>
-              <Separator />
-              <div className="p-4">
-                {attachments.map(attachment => (
-                  <a
-                    href={attachment.url}
-                    target="_blank"
-                    key={attachment.id}
-                    className="flex items-center p-3 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline">
-                    <File />
-                    <p className="line-clamp-1">{attachment.name}</p>
-                  </a>
-                ))}
-              </div>
-            </>
-          )}
+          <div>
+            <Preview value={'Course Resources'} />
+            {!!attachments.length && (
+              <>
+                <Separator />
+                <div className="p-4">
+                  {attachments.map(attachment => (
+                    <a
+                      href={attachment.url}
+                      target="_blank"
+                      key={attachment.id}
+                      className="flex items-center p-3 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline">
+                      <File />
+                      <p className="line-clamp-1">{attachment.name}</p>
+                    </a>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+          <div>
+            <Separator />
+          </div>
+          <div>
+            <Preview value={'Chapter Resources'} />
+            {!!chapterAttachment.length && (
+              <>
+                <Separator />
+                <div className="p-4">
+                  {chapterAttachment.map(attachment => (
+                    <a
+                      href={attachment.url}
+                      target="_blank"
+                      key={attachment.id}
+                      className="flex items-center p-3 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline">
+                      <File />
+                      <p className="line-clamp-1">{attachment.name}</p>
+                    </a>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

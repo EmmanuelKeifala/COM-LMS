@@ -18,12 +18,7 @@ export async function PATCH(
     });
     if (!ownCourse) return new NextResponse('Unauthorized', {status: 401});
 
-    const chapter = await db.chapter.findUnique({
-      where: {
-        id: params.chapterId,
-        courseId: params.courseId,
-      },
-    });
+    
 
     const publishedChapters = await db.chapter.update({
       where: {
