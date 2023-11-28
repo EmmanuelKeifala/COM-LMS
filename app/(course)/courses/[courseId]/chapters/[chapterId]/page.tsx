@@ -74,9 +74,9 @@ const ChapterIdPage = async ({
             <Preview value={chapter.description!} />
           </div>
           <div>
-            <Preview value={'Course Resources'} />
             {!!attachments.length && (
               <>
+                <Preview value={'Course Resources'} />
                 <Separator />
                 <div className="p-4">
                   {attachments.map(attachment => (
@@ -97,9 +97,9 @@ const ChapterIdPage = async ({
             <Separator />
           </div>
           <div>
-            <Preview value={'Chapter Resources'} />
             {!!chapterAttachment.length && (
               <>
+                <Preview value={'Chapter Resources'} />
                 <Separator />
                 <div className="p-4">
                   {chapterAttachment.map(attachment => (
