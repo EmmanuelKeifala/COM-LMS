@@ -6,14 +6,16 @@ type PurchaseWithCourse = Joined & {
 };
 
 const groupByCourse = (purchases: PurchaseWithCourse[]) => {
-  const grouped: {[courseTitle: string]: number} = {};
+  const grouped: {[courseTitle: string]: {total: number; students: number}} =
+    {};
 
   purchases.forEach(purchase => {
     const courseTitle = purchase.course.title;
     if (!grouped[courseTitle]) {
-      grouped[courseTitle] = 0;
+      grouped[courseTitle] = {total: 0, students: 0};
     }
-    grouped[courseTitle] += purchase.course.price!;
+    grouped[courseTitle].total += purchase.course.price!;
+    grouped[courseTitle].students += 1;
   });
 
   return grouped;
@@ -21,39 +23,45 @@ const groupByCourse = (purchases: PurchaseWithCourse[]) => {
 
 export const getAnalytics = async (userId: string) => {
   try {
+    // Fetch purchases from the 'joined' collection
     const purchases = await db.joined.findMany({
       where: {
-        course: {
-          userId: userId,
-        },
+        userId: userId,
       },
       include: {
         course: true,
       },
     });
 
+    // Group purchases by course
     const groupedEarnings = groupByCourse(purchases);
+
+    // Map grouped data to the desired format
     const data = Object.entries(groupedEarnings).map(
-      ([courseTitle, total]) => ({
+      ([courseTitle, {total, students}]) => ({
         name: courseTitle,
         total: total,
+        students: students,
       }),
     );
 
+    // Calculate total revenue and total students
     const totalRevenue = data.reduce((acc, curr) => acc + curr.total, 0);
-    const totalSales = purchases.length;
+    const totalStudents = data.reduce((acc, curr) => acc + curr.students, 0);
 
     return {
       data,
       totalRevenue,
-      totalSales,
+      totalStudents,
     };
   } catch (error) {
-    console.log('[GET_ANALYTICS]', error);
+    // Log the error for debugging
+
+    // Return an object with default values
     return {
       data: [],
       totalRevenue: 0,
-      totalSales: 0,
+      totalStudents: 0,
     };
   }
 };

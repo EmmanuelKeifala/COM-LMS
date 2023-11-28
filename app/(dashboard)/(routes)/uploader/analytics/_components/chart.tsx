@@ -8,11 +8,11 @@ interface ChartProps {
   data: {
     name: string;
     total: number;
+    students: number;
   }[];
 }
 
 export const Chart = ({data}: ChartProps) => {
-  console.log('Total', data);
   return (
     <Card>
       <ResponsiveContainer width="100%" height={350}>
@@ -31,7 +31,7 @@ export const Chart = ({data}: ChartProps) => {
             axisLine={false}
             tickFormatter={value => `Std ${value}`}
           />
-          <Bar dataKey="total" fill="#0369a1" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="students" fill="#0369a1" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </Card>
