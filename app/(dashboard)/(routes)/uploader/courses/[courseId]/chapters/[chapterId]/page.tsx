@@ -15,7 +15,6 @@ import {IconBadge} from '@/components/icon-badge';
 import {ChapterTitleForm} from './_components/ChapterTitleForm';
 import {ChapterDescriptionForm} from './_components/ChapterDescriptionForm';
 import {ChapterAccessForm} from './_components/ChapterAccessForm';
-import {ChapterVideoForm} from './_components/ChapterVideoForm';
 import {ChapterLinkForm} from './_components/ChapterLinkForm';
 import {Banner} from '@/components/banner';
 import {ChapterActions} from './_components/ChapterActions';
