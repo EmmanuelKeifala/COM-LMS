@@ -1,5 +1,5 @@
 import {db} from '@/lib/db';
-import {Attachment, Chapter, ChapterAttachment} from '@prisma/client';
+import {Attachment, Chapter, ChapterAttachment, VideoUrl} from '@prisma/client';
 
 interface GetChapterProps {
   userId: string;
@@ -47,6 +47,7 @@ export const getChapter = async ({
     let attachments: Attachment[] = [];
     let nextChapter: Chapter | null = null;
     let chapterAttachment: ChapterAttachment[] = [];
+    let videoUrls: VideoUrl[] = [];
 
     if (purchase) {
       attachments = await db.attachment.findMany({
@@ -57,6 +58,13 @@ export const getChapter = async ({
     }
     if (purchase) {
       chapterAttachment = await db.chapterAttachment.findMany({
+        where: {
+          chapterId: chapterId,
+        },
+      });
+    }
+    if (purchase) {
+      videoUrls = await db.videoUrl.findMany({
         where: {
           chapterId: chapterId,
         },
@@ -96,6 +104,7 @@ export const getChapter = async ({
       userProgress,
       purchase,
       chapterAttachment,
+      videoUrls,
     };
   } catch (error) {
     console.log('[GET_CHAPTER]', error);
@@ -108,6 +117,7 @@ export const getChapter = async ({
       userProgress: null,
       purchase: null,
       chapterAttachment: [],
+      videoUrls: [],
     };
   }
 };

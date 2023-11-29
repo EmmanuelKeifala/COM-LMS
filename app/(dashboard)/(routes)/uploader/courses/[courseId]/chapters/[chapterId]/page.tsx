@@ -20,7 +20,8 @@ import {Banner} from '@/components/banner';
 import {ChapterActions} from './_components/ChapterActions';
 import {GoogleDriveLinkForm} from './_components/GoogleDriveLinkForm';
 import {ChapterAttachmentForm} from './_components/ChapterAttachment';
-import {Chapter, ChapterAttachment} from '@prisma/client';
+import {Chapter, ChapterAttachment, VideoUrl} from '@prisma/client';
+import {VideoForm} from './_components/ChapterVideoUrl';
 
 const ChapterIdPage = async ({
   params,
@@ -46,17 +47,23 @@ const ChapterIdPage = async ({
           url: true,
         },
       },
+      videoUrls: true,
     },
   });
 
-  const chapter: Chapter & {chapterAttachments: ChapterAttachment[]} =
-    chapterWithAttachments as any;
+  const chapter: Chapter & {chapterAttachments: ChapterAttachment[]} & {
+    videoUrls: VideoUrl[];
+  } = chapterWithAttachments as any;
 
   if (!chapter) {
     return redirect('/');
   }
 
-  const requiredFields = [chapter.title, chapter.description, chapter.videoUrl];
+  const requiredFields = [
+    chapter.title,
+    chapter.description,
+    chapter.videoUrls,
+  ];
 
   const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter(Boolean).length;
@@ -133,11 +140,17 @@ const ChapterIdPage = async ({
               <IconBadge icon={Video} />
               <h2 className="text-xl">Add a video</h2>
             </div>
-            <GoogleDriveLinkForm
+            <VideoForm
+              initialData={chapter}
+              courseId={params.courseId}
+              chapterId={params.chapterId}
+            />
+            {/* <GoogleDriveLinkForm
               initialData={chapter}
               chapterId={params.chapterId}
               courseId={params.courseId}
-            />
+            /> */}
+
             <div className="flex items-center gap-x-2">
               <IconBadge icon={File} />
               <h2 className="text-xl">Attachments and Resources</h2>

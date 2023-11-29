@@ -55,19 +55,26 @@ model Attachment{
   @@index([courseId])
 }
 
+model VideoUrl{
+  id String @id @default(uuid()) @map("_id")
+  videoUrl String
+  position Int
+  chapterId String
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+}
+
 model Chapter{
   id String @id @default(uuid()) @map("_id")
   title String
   description String?
-  videoUrl String?
   youtubeUrl String?
+  videoUrls VideoUrl[]
   position Int
   isPublished Boolean @default(false)
   isFree Boolean @default(false)
-
   courseId String
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-    chapterAttachments ChapterAttachment[]
+  chapterAttachments ChapterAttachment[]
 
   userProgress UserProgress[]
 

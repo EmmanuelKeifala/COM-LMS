@@ -26,6 +26,7 @@ const ChapterIdPage = async ({
     userProgress,
     purchase,
     chapterAttachment,
+    videoUrls,
   } = await getChapter({
     userId,
     chapterId: params.chapterId,
@@ -50,7 +51,7 @@ const ChapterIdPage = async ({
       )}
       <div className="flex flex-col max-w-4xl mx-auto pb-20">
         <div className="p-4">
-          <YoutubePlayerComponent youtubeUrl={chapter?.videoUrl} />
+          <YoutubePlayerComponent youtubeUrls={videoUrls} />
         </div>
         <div>
           <div className="p-4 flex flex-col md:flex-row items-center justify-between">

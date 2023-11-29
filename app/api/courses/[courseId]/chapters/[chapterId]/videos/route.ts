@@ -9,7 +9,7 @@ export async function POST(
 ) {
   try {
     const {userId} = auth();
-    const {name, url} = await req.json();
+    const {title} = await req.json();
 
     if (!userId || !isUploader) {
       return new NextResponse('Unauthorized', {status: 401});
@@ -25,18 +25,27 @@ export async function POST(
     if (!chapterOwner) {
       return new NextResponse('Unauthorized', {status: 401});
     }
-
-    const chapterAttachment = await db.chapterAttachment.create({
-      data: {
-        url: url,
-        name: name,
+    const lastVideo = await db.videoUrl.findFirst({
+      where: {
         chapterId: params.chapterId,
+      },
+      orderBy: {
+        position: 'desc',
+      },
+    });
+    const newPosition = lastVideo ? lastVideo?.position + 1 : 1;
+
+    const chapterVideo = await db.videoUrl.create({
+      data: {
+        videoUrl: title,
+        chapterId: params.chapterId,
+        position: newPosition,
       },
     });
 
-    return NextResponse.json(chapterAttachment);
+    return NextResponse.json(chapterVideo);
   } catch (error) {
-    console.error('COURSE_ID_ATTACHMENTS', error);
+    console.error('[VIDEO]', error);
     return new NextResponse('Internal server error', {status: 500});
   }
 }
