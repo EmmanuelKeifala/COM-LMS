@@ -82,14 +82,16 @@ const ChapterIdPage = async ({
                 <Preview value={'Course Resources'} />
                 <Separator />
                 <div className="p-4">
-                  {attachments.map(attachment => (
+                  {attachments.map((attachment, index) => (
                     <a
                       href={attachment.url}
                       target="_blank"
                       key={attachment.id}
                       className="flex items-center p-3 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline">
                       <File />
-                      <p className="line-clamp-1">{attachment.name}</p>
+                      <p className="line-clamp-1">
+                        {index + 1}. {attachment.name}
+                      </p>
                     </a>
                   ))}
                 </div>
@@ -105,14 +107,14 @@ const ChapterIdPage = async ({
                 <Preview value={'Chapter Resources'} />
                 <Separator />
                 <div className="p-4">
-                  {chapterAttachment.map(attachment => (
+                  {chapterAttachment.map((attachment, index) => (
                     <a
                       href={attachment.url}
                       target="_blank"
                       key={attachment.id}
                       className="flex items-center p-3 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline">
-                      <File />
-                      <p className="line-clamp-1">{attachment.name}</p>
+                      {index + 1}. <File />
+                      <p className="line-clamp-1"> {attachment.name}</p>
                     </a>
                   ))}
                 </div>

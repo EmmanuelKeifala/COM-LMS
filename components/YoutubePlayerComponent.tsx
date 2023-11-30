@@ -1,4 +1,5 @@
 'use client';
+import {cn} from '@/lib/utils';
 import React, {useState, useEffect} from 'react';
 
 interface YoutubePlayerProps {
@@ -9,51 +10,14 @@ const YoutubePlayerComponent: React.FC<YoutubePlayerProps> = ({
   youtubeUrls,
 }) => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const [showButtons, setShowButtons] = useState(true);
 
-  const handleNextVideo = () => {
-    setCurrentVideoIndex(prevIndex => (prevIndex + 1) % youtubeUrls.length);
-    resetHideTimer();
+  const handleVideoChange = (index: number) => {
+    setCurrentVideoIndex(index);
   };
-
-  const handlePreviousVideo = () => {
-    setCurrentVideoIndex(prevIndex =>
-      prevIndex > 0 ? prevIndex - 1 : youtubeUrls.length - 1,
-    );
-    resetHideTimer();
-  };
-
-  const hideButtons = () => {
-    setShowButtons(false);
-  };
-
-  const showButtonsOnHover = () => {
-    setShowButtons(true);
-    resetHideTimer();
-  };
-
-  const resetHideTimer = () => {
-    clearTimeout(hideTimer);
-    hideTimer = setTimeout(hideButtons, 3000);
-  };
-
-  let hideTimer: NodeJS.Timeout;
-
-  useEffect(() => {
-    // Initial setup for the hide timer
-    resetHideTimer();
-
-    // Clear the timer when the component is unmounted
-    return () => clearTimeout(hideTimer);
-  }, []);
-
   return (
     <>
       {youtubeUrls.length > 0 ? (
-        <div
-          className="relative aspect-video mt-2"
-          onMouseEnter={showButtonsOnHover}
-          onMouseLeave={hideButtons}>
+        <div className="w-full aspect-video mt-2">
           <iframe
             id="youtubePlayer"
             src={`${youtubeUrls[currentVideoIndex].videoUrl}?rel=0`}
@@ -61,24 +25,19 @@ const YoutubePlayerComponent: React.FC<YoutubePlayerProps> = ({
             allow="autoplay"
             allowFullScreen
             loading="lazy"></iframe>
-          {showButtons && (
-            <div className="absolute top-0 right-0 m-4 flex items-center  gap-x-2">
-              {currentVideoIndex > 0 && (
-                <button
-                  onClick={handlePreviousVideo}
-                  className="p-2 bg-gray-800 text-white rounded-full hover:bg-gray-600 focus:outline-none">
-                  Back
-                </button>
-              )}
-              {currentVideoIndex < youtubeUrls.length - 1 && (
-                <button
-                  onClick={handleNextVideo}
-                  className="p-2 bg-gray-800 text-white rounded-full hover:bg-gray-600 focus:outline-none">
-                  Next
-                </button>
-              )}
-            </div>
-          )}
+          <div className="w-full m-4 flex flex-row justify-end items-end gap-x-2 ml-[-5px]">
+            {youtubeUrls.map((video, index) => (
+              <button
+                key={index}
+                onClick={() => handleVideoChange(index)}
+                className={cn(
+                  'p-2 bg-gray-800 text-white rounded hover:bg-slate-700',
+                  currentVideoIndex === index && 'bg-slate-600',
+                )}>
+                {index + 1}
+              </button>
+            ))}
+          </div>
         </div>
       ) : (
         <div className="flex items-center justify-center text-3xl font-medium border rounded-md border-slate-200 p-3 shadow-sm">

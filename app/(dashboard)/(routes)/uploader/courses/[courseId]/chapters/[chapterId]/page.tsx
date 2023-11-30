@@ -151,7 +151,7 @@ const ChapterIdPage = async ({
               courseId={params.courseId}
             /> */}
 
-            <div className="flex items-center gap-x-2">
+            <div className="flex items-center gap-x-2 mt-5">
               <IconBadge icon={File} />
               <h2 className="text-xl">Attachments and Resources</h2>
             </div>
