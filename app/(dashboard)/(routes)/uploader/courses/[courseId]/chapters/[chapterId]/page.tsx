@@ -6,8 +6,8 @@ import {
   Eye,
   LayoutDashboard,
   Video,
-  YoutubeIcon,
   File,
+  Lightbulb,
 } from 'lucide-react';
 
 import {db} from '@/lib/db';
@@ -15,13 +15,17 @@ import {IconBadge} from '@/components/icon-badge';
 import {ChapterTitleForm} from './_components/ChapterTitleForm';
 import {ChapterDescriptionForm} from './_components/ChapterDescriptionForm';
 import {ChapterAccessForm} from './_components/ChapterAccessForm';
-import {ChapterLinkForm} from './_components/ChapterLinkForm';
 import {Banner} from '@/components/banner';
 import {ChapterActions} from './_components/ChapterActions';
-import {GoogleDriveLinkForm} from './_components/GoogleDriveLinkForm';
 import {ChapterAttachmentForm} from './_components/ChapterAttachment';
-import {Chapter, ChapterAttachment, VideoUrl} from '@prisma/client';
+import {
+  Chapter,
+  ChapterAttachment,
+  ChapterQuiz,
+  VideoUrl,
+} from '@prisma/client';
 import {VideoForm} from './_components/ChapterVideoUrl';
+import {ChapterQuizUrl} from './_components/ChapterQuizUrl';
 
 const ChapterIdPage = async ({
   params,
@@ -48,12 +52,13 @@ const ChapterIdPage = async ({
         },
       },
       videoUrls: true,
+      quizUrls: true,
     },
   });
 
   const chapter: Chapter & {chapterAttachments: ChapterAttachment[]} & {
     videoUrls: VideoUrl[];
-  } = chapterWithAttachments as any;
+  } & {quizUrls: ChapterQuiz[]} = chapterWithAttachments as any;
 
   if (!chapter) {
     return redirect('/');
@@ -63,6 +68,7 @@ const ChapterIdPage = async ({
     chapter.title,
     chapter.description,
     chapter.videoUrls,
+    chapter.quizUrls,
   ];
 
   const totalFields = requiredFields.length;
@@ -145,12 +151,15 @@ const ChapterIdPage = async ({
               courseId={params.courseId}
               chapterId={params.chapterId}
             />
-            {/* <GoogleDriveLinkForm
+            <div className="flex items-center gap-x-2 mt-5">
+              <IconBadge icon={Lightbulb} />
+              <h2 className="text-xl">Chapter Quizz</h2>
+            </div>
+            <ChapterQuizUrl
               initialData={chapter}
               chapterId={params.chapterId}
               courseId={params.courseId}
-            /> */}
-
+            />
             <div className="flex items-center gap-x-2 mt-5">
               <IconBadge icon={File} />
               <h2 className="text-xl">Attachments and Resources</h2>
@@ -161,17 +170,7 @@ const ChapterIdPage = async ({
               courseId={params.courseId}
             />
           </div>
-          <div>
-            {/* <div className="flex items-center gap-x-2">
-              <IconBadge icon={YoutubeIcon} />
-              <h2 className="text-xl">Add a youtube link</h2>
-            </div>
-            <ChapterLinkForm
-              initialData={chapter}
-              chapterId={params.chapterId}
-              courseId={params.courseId}
-            /> */}
-          </div>
+          <div></div>
         </div>
       </div>
     </>

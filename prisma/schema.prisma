@@ -62,6 +62,12 @@ model VideoUrl{
   chapterId String
   chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 }
+model ChapterQuiz{
+  id String @id @default(uuid()) @map("_id")
+  quizUrl String
+  chapterId String
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+}
 
 model Chapter{
   id String @id @default(uuid()) @map("_id")
@@ -69,6 +75,7 @@ model Chapter{
   description String?
   youtubeUrl String?
   videoUrls VideoUrl[]
+  quizUrls ChapterQuiz[]
   position Int
   isPublished Boolean @default(false)
   isFree Boolean @default(false)

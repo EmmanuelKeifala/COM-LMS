@@ -1,5 +1,11 @@
 import {db} from '@/lib/db';
-import {Attachment, Chapter, ChapterAttachment, VideoUrl} from '@prisma/client';
+import {
+  Attachment,
+  Chapter,
+  ChapterAttachment,
+  ChapterQuiz,
+  VideoUrl,
+} from '@prisma/client';
 
 interface GetChapterProps {
   userId: string;
@@ -13,7 +19,7 @@ export const getChapter = async ({
   chapterId,
 }: GetChapterProps) => {
   try {
-    const purchase = await db.joined?.findUnique({
+    const isEnrolled = await db.joined?.findUnique({
       where: {
         userId_courseId: {
           userId,
@@ -48,30 +54,38 @@ export const getChapter = async ({
     let nextChapter: Chapter | null = null;
     let chapterAttachment: ChapterAttachment[] = [];
     let videoUrls: VideoUrl[] = [];
+    let quizUrls: ChapterQuiz[] = [];
 
-    if (purchase) {
+    if (isEnrolled) {
       attachments = await db.attachment.findMany({
         where: {
           courseId: courseId,
         },
       });
     }
-    if (purchase) {
+    if (isEnrolled) {
       chapterAttachment = await db.chapterAttachment.findMany({
         where: {
           chapterId: chapterId,
         },
       });
     }
-    if (purchase) {
+    if (isEnrolled) {
       videoUrls = await db.videoUrl.findMany({
         where: {
           chapterId: chapterId,
         },
       });
     }
+    if (isEnrolled) {
+      quizUrls = await db.chapterQuiz.findMany({
+        where: {
+          chapterId: chapterId,
+        },
+      });
+    }
 
-    if (chapter.isFree || purchase) {
+    if (chapter.isFree || isEnrolled) {
       nextChapter = await db.chapter.findFirst({
         where: {
           courseId: courseId,
@@ -102,9 +116,10 @@ export const getChapter = async ({
       attachments,
       nextChapter,
       userProgress,
-      purchase,
+      isEnrolled,
       chapterAttachment,
       videoUrls,
+      quizUrls,
     };
   } catch (error) {
     console.log('[GET_CHAPTER]', error);
@@ -115,9 +130,10 @@ export const getChapter = async ({
       attachments: [],
       nextChapter: null,
       userProgress: null,
-      purchase: null,
+      isEnrolled: null,
       chapterAttachment: [],
       videoUrls: [],
+      quizUrls: [],
     };
   }
 };

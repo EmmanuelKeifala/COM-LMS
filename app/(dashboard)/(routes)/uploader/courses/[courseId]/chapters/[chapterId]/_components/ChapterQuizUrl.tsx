@@ -8,7 +8,7 @@ import {Loader2, PlusCircle} from 'lucide-react';
 import {useState} from 'react';
 import toast from 'react-hot-toast';
 import {useRouter} from 'next/navigation';
-import {Chapter, Course, VideoUrl} from '@prisma/client';
+import {Chapter, ChapterQuiz, Course, VideoUrl} from '@prisma/client';
 
 import {
   Form,
@@ -21,24 +21,23 @@ import {Button} from '@/components/ui/button';
 import {cn} from '@/lib/utils';
 import {Input} from '@/components/ui/input';
 import {ChaptersVideoList} from './ChaptersVideoList';
+import {ChapterQuizList} from './ChapterQuizList';
 
-// import {ChaptersList} from './ChaptersList';
-
-interface VideoFormProps {
-  initialData: Chapter & {videoUrls: VideoUrl[]};
+interface ChapterQuizUrlProps {
+  initialData: Chapter & {quizUrls: ChapterQuiz[]};
   courseId: string;
   chapterId: string;
 }
 
 const formSchema = z.object({
-  title: z.string().min(1),
+  url: z.string().min(1),
 });
 
-export const VideoForm = ({
+export const ChapterQuizUrl = ({
   initialData,
   courseId,
   chapterId,
-}: VideoFormProps) => {
+}: ChapterQuizUrlProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -52,7 +51,7 @@ export const VideoForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: '',
+      url: '',
     },
   });
 
@@ -61,10 +60,10 @@ export const VideoForm = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.post(
-        `/api/courses/${courseId}/chapters/${chapterId}/videos`,
+        `/api/courses/${courseId}/chapters/${chapterId}/quiz`,
         values,
       );
-      toast.success('videos added');
+      toast.success('quizz added');
       toggleCreating();
       router.refresh();
     } catch {
@@ -72,29 +71,11 @@ export const VideoForm = ({
     }
   };
 
-  const onReorder = async (updateData: {id: string; position: number}[]) => {
-    try {
-      setIsUpdating(true);
-      await axios.put(
-        `/api/courses/${courseId}/chapters/${chapterId}/reorder`,
-        {
-          list: updateData,
-        },
-      );
-      toast.success('videos reordered');
-      router.refresh();
-    } catch {
-      toast.error('Something went wrong');
-    } finally {
-      setIsUpdating(false);
-    }
-  };
-
   const onDelete = async (id: string) => {
     try {
       setDeletingId(id);
       await axios.delete(
-        `/api/courses/${courseId}/chapters/${chapterId}/videos/${id}`,
+        `/api/courses/${courseId}/chapters/${chapterId}/quiz/${id}`,
       );
       toast.success('Chapter video deleted');
       router.refresh();
@@ -113,14 +94,14 @@ export const VideoForm = ({
         </div>
       )}
       <div className="font-medium flex items-center justify-between">
-        Chapter Videos
+        Chapter Quiz
         <Button onClick={toggleCreating} variant="ghost">
           {isCreating ? (
             <>Cancel</>
           ) : (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />
-              Add a video
+              Add a quiz
             </>
           )}
         </Button>
@@ -132,13 +113,13 @@ export const VideoForm = ({
             className="space-y-4 mt-4">
             <FormField
               control={form.control}
-              name="title"
+              name="url"
               render={({field}) => (
                 <FormItem>
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
-                      placeholder="e.g. 'past links'"
+                      placeholder="enter the google form url"
                       {...field}
                     />
                   </FormControl>
@@ -156,13 +137,12 @@ export const VideoForm = ({
         <div
           className={cn(
             'text-sm mt-2',
-            !initialData.videoUrls.length && 'text-slate-500 italic',
+            !initialData.quizUrls.length && 'text-slate-500 italic',
           )}>
-          {!initialData.videoUrls.length && 'No videos'}
-          <ChaptersVideoList
+          {!initialData.quizUrls.length && 'No quizzes'}
+          <ChapterQuizList
             onDelete={onDelete}
-            onReorder={onReorder}
-            items={initialData.videoUrls || []}
+            items={initialData.quizUrls || []}
           />
         </div>
       )}
