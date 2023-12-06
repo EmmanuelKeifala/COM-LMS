@@ -168,7 +168,7 @@ export const VideoForm = ({
       )}
       {!isCreating && (
         <p className="text-xs text-muted-foreground mt-4">
-          Drag and drop to reorder the chapters
+          Drag and drop to reorder the vidoes
         </p>
       )}
     </div>

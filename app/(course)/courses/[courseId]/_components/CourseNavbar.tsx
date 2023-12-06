@@ -16,7 +16,7 @@ export const CourseNavbar: React.FC<CourseNavbarProps> = ({
   progressCount,
 }) => {
   return (
-    <div className="p-4 border-b h-full flex items-center bg-white shadow-sm">
+    <div className="w-full p-4 border-b h-full flex items-center bg-white shadow-sm">
       <CourseMobileSidebar course={course} progressCount={progressCount} />
       <NavbarRoutes />
     </div>

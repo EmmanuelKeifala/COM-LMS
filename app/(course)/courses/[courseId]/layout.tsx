@@ -1,11 +1,11 @@
 import {auth} from '@clerk/nextjs';
 import {redirect} from 'next/navigation';
+import {Menu} from 'lucide-react';
 
 import {db} from '@/lib/db';
 import {getProgress} from '@/actions/get-progress';
 import {CourseNavbar} from './_components/CourseNavbar';
 import {CourseSidebar} from './_components/CourseSidebar';
-
 const CourseLayout = async ({
   children,
   params,
