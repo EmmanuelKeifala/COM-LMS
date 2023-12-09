@@ -1,13 +1,19 @@
 'use client';
 
-import {Bar, BarChart, ResponsiveContainer, XAxis, YAxis} from 'recharts';
+import {
+  Bar,
+  BarChart,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+  Tooltip,
+} from 'recharts';
 
 import {Card} from '@/components/ui/card';
 
 interface ChartProps {
   data: {
     name: string;
-    total: number;
     students: number;
   }[];
 }
@@ -29,9 +35,10 @@ export const Chart = ({data}: ChartProps) => {
             fontSize={12}
             tickLine={false}
             axisLine={false}
-            tickFormatter={value => `Std ${value}`}
+            tickFormatter={value => `${Math.round(value)}`}
           />
-          <Bar dataKey="students" fill="#0369a1" radius={[4, 4, 0, 0]} />
+          <Tooltip formatter={(value: number) => `${Math.floor(value)}`} />
+          <Bar dataKey="students" fill="#0369a1" radius={[2, 2, 0.5, 0.5]} />
         </BarChart>
       </ResponsiveContainer>
     </Card>

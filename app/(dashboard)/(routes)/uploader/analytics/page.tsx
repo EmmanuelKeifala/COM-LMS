@@ -13,11 +13,11 @@ const AnalyticsPage = async () => {
     return redirect('/');
   }
 
-  const {data, totalRevenue, totalStudents} = await getAnalytics(userId);
+  const {data, totalStudents} = await getAnalytics(userId);
   return (
     <div className="p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <DataCard label="Total Revenue" value={totalRevenue} shouldFormat />
+        {/* <DataCard label="Total Revenue" value={totalRevenue} shouldFormat /> */}
         <DataCard label="Total Students Enrolled" value={totalStudents} />
       </div>
       <Chart data={data} />
