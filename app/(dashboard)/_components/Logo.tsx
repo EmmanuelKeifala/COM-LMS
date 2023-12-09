@@ -1,5 +1,5 @@
 import Image from 'next/image';
 
 export const Logo = () => {
-  return <Image height={50} width={50} alt="logo" src="/logo.svg" />;
+  return <Image height={400} width={400} alt="logo" src="/logo1.png" />;
 };
