@@ -24,8 +24,6 @@ export const CourseSidebarItem = ({
   const router = useRouter();
 
   const Icon = isLocked ? Lock : isCompleted ? CheckCircle : PlayCircle;
-
-  console.log('COMPLETE', isCompleted);
   const isActive = pathname?.includes(id);
 
   const onClick = () => {

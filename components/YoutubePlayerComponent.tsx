@@ -1,19 +1,33 @@
 'use client';
+import Rating from '@/app/(course)/courses/[courseId]/chapters/[chapterId]/_components/rating';
 import {cn} from '@/lib/utils';
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 interface YoutubePlayerProps {
   youtubeUrls: any[];
+  chapterId: string;
+  courseId: string;
 }
 
 const YoutubePlayerComponent: React.FC<YoutubePlayerProps> = ({
   youtubeUrls,
+  chapterId,
+  courseId,
 }) => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [currentVideoId, setCurrentVideoId] = useState<string>('');
 
-  const handleVideoChange = (index: number) => {
+  useEffect(() => {
+    if (youtubeUrls.length > 0) {
+      setCurrentVideoId(youtubeUrls[0].id);
+    }
+  }, [youtubeUrls]);
+
+  const handleVideoChange = (index: number, videoId: string) => {
+    setCurrentVideoId(videoId);
     setCurrentVideoIndex(index);
   };
+
   return (
     <>
       {youtubeUrls.length > 0 ? (
@@ -25,18 +39,25 @@ const YoutubePlayerComponent: React.FC<YoutubePlayerProps> = ({
             allow="autoplay"
             allowFullScreen
             loading="lazy"></iframe>
-          <div className="w-full m-4 flex flex-row justify-end items-end gap-x-2 ml-[-5px]">
-            {youtubeUrls.map((video, index) => (
-              <button
-                key={index}
-                onClick={() => handleVideoChange(index)}
-                className={cn(
-                  'p-2 bg-gray-800 text-white rounded hover:bg-slate-700',
-                  currentVideoIndex === index && 'bg-slate-600',
-                )}>
-                {index + 1}
-              </button>
-            ))}
+          <div className="bg-slate-100 w-full m-4 flex flex-row-reverse justify-between gap-x-2 ml-[-5px] border p-3 items-center rounded-lg">
+            <div className="flex gap-x-2">
+              {youtubeUrls.map((video, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleVideoChange(index, video.id)}
+                  className={cn(
+                    'p-2 bg-gray-800 text-white rounded hover:bg-slate-700',
+                    currentVideoIndex === index && 'bg-slate-600',
+                  )}>
+                  {index + 1}
+                </button>
+              ))}
+            </div>
+            <Rating
+              chapterId={chapterId}
+              courseId={courseId}
+              videoId={currentVideoId}
+            />
           </div>
         </div>
       ) : (
