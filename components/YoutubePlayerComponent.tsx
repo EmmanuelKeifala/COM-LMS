@@ -5,8 +5,8 @@ import React, {useEffect, useState} from 'react';
 
 interface YoutubePlayerProps {
   youtubeUrls: any[];
-  chapterId: string;
-  courseId: string;
+  chapterId?: string;
+  courseId?: string;
 }
 
 const YoutubePlayerComponent: React.FC<YoutubePlayerProps> = ({

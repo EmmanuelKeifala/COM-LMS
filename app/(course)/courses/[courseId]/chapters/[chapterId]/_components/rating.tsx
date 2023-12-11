@@ -7,9 +7,9 @@ import {useRouter} from 'next/navigation';
 import {useAuth} from '@clerk/nextjs';
 
 interface RatingProps {
-  chapterId: string;
-  courseId: string;
-  videoId: string;
+  chapterId?: string;
+  courseId?: string;
+  videoId?: string;
 }
 
 const Rating = ({chapterId, courseId, videoId}: RatingProps) => {

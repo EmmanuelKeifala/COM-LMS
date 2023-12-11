@@ -1,6 +1,6 @@
 'use client';
 
-import {BarChart, Compass, Layout, List} from 'lucide-react';
+import {AreaChart, BarChart, Compass, Layout, List} from 'lucide-react';
 import {SidebarItem} from './SidebarItem';
 import {usePathname} from 'next/navigation';
 
@@ -26,6 +26,11 @@ const uploadRoute = [
     icon: BarChart,
     label: 'Analytics',
     href: '/uploader/analytics',
+  },
+  {
+    icon: AreaChart,
+    label: 'Video Analytics',
+    href: '/uploader/videos',
   },
 ];
 export const SidebarRoutes = () => {
