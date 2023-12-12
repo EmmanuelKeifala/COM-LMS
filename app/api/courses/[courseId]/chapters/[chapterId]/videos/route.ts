@@ -35,9 +35,15 @@ export async function POST(
     });
     const newPosition = lastVideo ? lastVideo?.position + 1 : 1;
 
+    // Find the index of "/view" in the URL
+    const index = title.indexOf('/view');
+
+    // Replace everything from "/view" to the end with "/preview"
+    var modifiedUrl = title.substring(0, index) + '/preview';
+
     const chapterVideo = await db.videoUrl.create({
       data: {
-        videoUrl: title,
+        videoUrl: modifiedUrl,
         chapterId: params.chapterId,
         position: newPosition,
       },
@@ -49,5 +55,3 @@ export async function POST(
     return new NextResponse('Internal server error', {status: 500});
   }
 }
-
-
