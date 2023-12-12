@@ -23,12 +23,12 @@ const AboutUs: React.FC = () => {
           key={`about-${stepKey}`}
           sequence={[
             'We are a dedicated team passionate about education and technology. Our goal is to empower students by creating a centralized platform where',
-            2000,
+            3000,
             'they can access and share valuable educational resources. We believe in the power of knowledge and the positive impact it can have on individuals and society.',
-            2000,
+            3000,
           ]}
           wrapper="span"
-          speed={50}
+          speed={40}
           style={{fontSize: '1.2em', display: 'inline-block'}}
           repeat={Infinity}
           deletionSpeed={90}
@@ -50,12 +50,12 @@ const AboutUs: React.FC = () => {
           key={`vision-${stepKey}`}
           sequence={[
             'Our vision is to become the go-to platform for students seeking a comprehensive repository of university notes and educational content.',
-            2000,
+            3000,
             'We aim to foster a collaborative learning community where students can easily navigate through courses, access supplementary materials, and engage in interactive learning experiences.',
-            2000,
+            3000,
           ]}
           wrapper="span"
-          speed={50}
+          speed={40}
           style={{fontSize: '1.2em', display: 'inline-block'}}
           repeat={Infinity}
           deletionSpeed={90}
@@ -83,7 +83,7 @@ const AboutUs: React.FC = () => {
             2000,
           ]}
           wrapper="span"
-          speed={50}
+          speed={40}
           style={{fontSize: '1.2em', display: 'inline-block'}}
           repeat={Infinity}
           deletionSpeed={90}
@@ -109,7 +109,7 @@ const AboutUs: React.FC = () => {
           ]}
           deletionSpeed={90}
           wrapper="span"
-          speed={50}
+          speed={40}
           style={{fontSize: '1.2em', display: 'inline-block'}}
           repeat={Infinity}
         />
@@ -126,12 +126,12 @@ const AboutUs: React.FC = () => {
           key={`founder2-${stepKey}`}
           sequence={[
             'David Moses Ansumana, a visionary, conceived the idea for this platform. In his 2nd year of pharmacy studies,',
-            2000,
+            3000,
             'David is not only an advocate for accessible education but also a catalyst for change, driving the creation of the meyoneeducation Platform to benefit students',
-            2000,
+            3000,
           ]}
           wrapper="span"
-          speed={50}
+          speed={40}
           style={{fontSize: '1.2em', display: 'inline-block'}}
           repeat={Infinity}
           deletionSpeed={90}
