@@ -7,6 +7,7 @@ import Link from 'next/link';
 import {LogOut} from 'lucide-react';
 import {SearchInput} from './search-input';
 import {isUploader} from '@/lib/uploader';
+import AboutUs from './AboutUs';
 
 export const NavbarRoutes = () => {
   const pathname = usePathname();
@@ -24,6 +25,7 @@ export const NavbarRoutes = () => {
         </div>
       )}
       <div className="flex gap-x-2 ml-auto">
+        <AboutUs />
         {isUploderPage || isCoursePage ? (
           <Link href="/">
             <Button size="sm" variant="ghost">
