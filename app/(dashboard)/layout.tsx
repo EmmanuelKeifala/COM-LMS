@@ -1,5 +1,6 @@
 import {Navbar} from './_components/Navbar';
 import {Sidebar} from './_components/Sidebar';
+import {ThemeProvider} from '@/components/theme-provider';
 
 const DashboardLayout = ({children}: {children: React.ReactNode}) => {
   return (

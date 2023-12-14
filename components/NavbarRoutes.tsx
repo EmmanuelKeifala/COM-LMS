@@ -42,7 +42,6 @@ export const NavbarRoutes = () => {
           </Link>
         ) : null}
         <UserButton afterSignOutUrl="/" />
-        <ModeToggle />
       </div>
     </>
   );

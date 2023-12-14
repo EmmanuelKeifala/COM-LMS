@@ -7,7 +7,6 @@ import {ConfettiProvider} from '@/components/providers/confetti-provider';
 import {Analytics} from '@vercel/analytics/react';
 import {SpeedInsights} from '@vercel/speed-insights/next';
 const inter = Inter({subsets: ['latin']});
-import {ThemeProvider} from '@/components/theme-provider';
 
 export const metadata: Metadata = {
   title: 'meyoneducation',
@@ -19,17 +18,11 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
     <ClerkProvider>
       <html lang="en">
         <body className={inter.className}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange>
-            {children}
-            <Analytics />
-            <SpeedInsights />
-            <ConfettiProvider />
-            <ToastProvider />
-          </ThemeProvider>
+          {children}
+          <Analytics />
+          <SpeedInsights />
+          <ConfettiProvider />
+          <ToastProvider />
         </body>
       </html>
     </ClerkProvider>
