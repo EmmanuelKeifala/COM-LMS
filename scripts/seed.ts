@@ -10,21 +10,20 @@ const database = new PrismaClient();
 
 async function main() {
   try {
-    await database.category.createMany({
+    await database.level.createMany({
       data: [
-        {name: 'Computer Science'},
-        {name: 'Music'},
-        {name: 'Fitness'},
-        {name: 'Photography'},
-        {name: 'Accounting'},
-        {name: 'Engineering'},
-        {name: 'Filming'},
+        {name: 'Pre-Pharmacy & Pre-Med'},
+        {name: 'B.Phram year 1'},
+        {name: 'B.Phram year 2'},
+        {name: 'B.Phram year 3'},
+        {name: 'B.Phram year 4'},
+        {name: 'B.Phram year 5'},
       ],
     });
 
     console.log('Success');
   } catch (error) {
-    console.log('Error seeding the database categories', error);
+    console.log('Error seeding the database levels', error);
   } finally {
     await database.$disconnect();
   }

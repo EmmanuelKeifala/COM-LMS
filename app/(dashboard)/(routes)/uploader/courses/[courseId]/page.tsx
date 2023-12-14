@@ -12,6 +12,7 @@ import {ChaptersForm} from './_components/ChaptersForm';
 import {Banner} from '@/components/banner';
 import {Actions} from './_components/actions';
 import {AttachmentForm} from './_components/attachment-form';
+import {LevelForm} from './_components/LevelForm';
 
 const CourseIdPage = async ({params}: {params: {courseId: String}}) => {
   const {userId} = auth();
@@ -40,13 +41,18 @@ const CourseIdPage = async ({params}: {params: {courseId: String}}) => {
       name: 'asc',
     },
   });
+  const levels = await db.level.findMany({
+    orderBy: {
+      name: 'asc',
+    },
+  });
   if (!course) return redirect('/');
 
   const requiredFields = [
     course.title,
     course.description,
     course.imageUrl,
-    // course.videoUrl,
+    course.levelId,
     course.categoryId,
     course.chapters.some(chapter => chapter.isPublished),
   ];
@@ -90,6 +96,14 @@ const CourseIdPage = async ({params}: {params: {courseId: String}}) => {
               options={categories.map(category => ({
                 label: category.name,
                 value: category.id,
+              }))}
+            />
+            <LevelForm
+              initialData={course}
+              courseId={course.id}
+              options={levels.map(level => ({
+                label: level.name,
+                value: level.id,
               }))}
             />
           </div>
