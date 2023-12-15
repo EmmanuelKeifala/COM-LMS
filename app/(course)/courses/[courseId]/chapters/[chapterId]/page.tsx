@@ -9,6 +9,7 @@ import {CourseEnrollButton} from './_components/course-enroll-button';
 import {Separator} from '@/components/ui/separator';
 import {Preview} from '@/components/preview';
 import {File, LucideLightbulb} from 'lucide-react';
+import ChatButton from '@/components/ChatButton';
 
 const ChapterIdPage = async ({
   params,
@@ -39,6 +40,7 @@ const ChapterIdPage = async ({
   }
   const isLocked = !chapter.isFree && !isEnrolled;
   const completeOnEnd = !!isEnrolled && !userProgress?.isCompleted;
+
   return (
     <div>
       {userProgress?.isCompleted && (
@@ -51,6 +53,11 @@ const ChapterIdPage = async ({
         />
       )}
       <div className="flex flex-col max-w-4xl mx-auto pb-20">
+        {isEnrolled && (
+          <div className="w-full flex items-end justify-end m-10">
+            <ChatButton />
+          </div>
+        )}
         <div className="p-4">
           <YoutubePlayerComponent
             youtubeUrls={videoUrls}

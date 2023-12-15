@@ -1,10 +1,7 @@
 'use client';
 
-import {Category} from '@prisma/client';
-import {
-  FcEngineering,
-  
-} from 'react-icons/fc';
+import {Category, Level} from '@prisma/client';
+import {FcEngineering} from 'react-icons/fc';
 
 import {TbMathFunction, TbMicroscope} from 'react-icons/tb';
 import {SlChemistry, SlSpeech} from 'react-icons/sl';
@@ -14,7 +11,7 @@ import {IconType} from 'react-icons';
 import {CategoryItem} from './category-item';
 
 interface CategoriesProps {
-  items: Category[];
+  items: Category[] & Level[];
 }
 
 const iconMap: Record<Category['name'], IconType> = {

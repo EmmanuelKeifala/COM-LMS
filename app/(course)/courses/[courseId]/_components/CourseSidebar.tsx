@@ -1,5 +1,5 @@
 import {auth} from '@clerk/nextjs';
-import {Chapter, Course, UserProgress} from '@prisma/client';
+import {Chapter, Course, Level, UserProgress} from '@prisma/client';
 import {redirect} from 'next/navigation';
 
 import {db} from '@/lib/db';
@@ -33,12 +33,22 @@ export const CourseSidebar = async ({
       },
     },
   });
+
+  const levelData = await db.level.findUnique({
+    where: {
+      id: course?.levelId!,
+    },
+  });
+
   return (
     <div className="h-full border-r flex flex-col overflow-y-auto shadow-sm">
       <div className="p-8 flex flex-col border-b">
         <h1 className="font-semibold">{course.title}</h1>
+        <h1 className=" font-light text-gray-500 text-sm mt-3">
+          {levelData?.name!}
+        </h1>
         {purchase && (
-          <div className="mt-10">
+          <div className="mt-3">
             <CourseProgress value={progressCount} />
           </div>
         )}

@@ -1,6 +1,5 @@
 import {auth} from '@clerk/nextjs';
 import {redirect} from 'next/navigation';
-import {Menu} from 'lucide-react';
 
 import {db} from '@/lib/db';
 import {getProgress} from '@/actions/get-progress';
@@ -24,6 +23,7 @@ const CourseLayout = async ({
       id: params.courseId,
     },
     include: {
+      level: true,
       chapters: {
         where: {
           isPublished: true,

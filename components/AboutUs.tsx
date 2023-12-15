@@ -154,7 +154,7 @@ const AboutUs: React.FC = () => {
 
   return (
     <>
-      <div className="hidden md:block">
+      <div className="md:block max-w-[900px] w-full">
         <Button
           size="sm"
           variant="ghost"
@@ -165,10 +165,9 @@ const AboutUs: React.FC = () => {
           className="hover:bg-sky-200">
           Get to know us
         </Button>
+
         <Tour open={open} onClose={() => setOpen(false)} steps={steps} />
       </div>
-
-      <div className="block md:hidden">{/* <AboutUsMobile /> */}</div>
     </>
   );
 };

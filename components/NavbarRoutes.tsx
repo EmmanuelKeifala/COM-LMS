@@ -18,6 +18,8 @@ export const NavbarRoutes = () => {
   const isUploderPage = pathname?.startsWith('/uploader');
   const isCoursePage = pathname?.includes('/courses');
   const isSearchPage = pathname === '/search';
+
+
   return (
     <>
       {isSearchPage && (
