@@ -170,7 +170,6 @@ const ChapterIdPage = async ({
               courseId={params.courseId}
             />
           </div>
-          <div></div>
         </div>
       </div>
     </>

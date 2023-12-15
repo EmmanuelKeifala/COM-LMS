@@ -5,6 +5,14 @@ import {FcEngineering} from 'react-icons/fc';
 
 import {TbMathFunction, TbMicroscope} from 'react-icons/tb';
 import {SlChemistry, SlSpeech} from 'react-icons/sl';
+import {
+  GiSkeleton,
+  GiStethoscope,
+  GiChemicalDrop,
+  GiHerbsBundle,
+  GiMedicines,
+} from 'react-icons/gi';
+import {MdOutlineLocalPharmacy} from 'react-icons/md';
 
 import {IconType} from 'react-icons';
 
@@ -20,6 +28,12 @@ const iconMap: Record<Category['name'], IconType> = {
   Math: TbMathFunction,
   Biology: TbMicroscope,
   'Communication Skills': SlSpeech,
+  Anatomy: GiSkeleton,
+  Physiology: GiStethoscope,
+  Biochemistry: GiChemicalDrop,
+  'Pharmaceutical Chemistry': MdOutlineLocalPharmacy,
+  Pharmacognosy: GiHerbsBundle,
+  'Into. to Pharmacy': GiMedicines,
 };
 
 export const Categories = ({items}: CategoriesProps) => {
