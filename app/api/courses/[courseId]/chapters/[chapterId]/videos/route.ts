@@ -35,11 +35,18 @@ export async function POST(
     });
     const newPosition = lastVideo ? lastVideo?.position + 1 : 1;
 
-    // Find the index of "/view" in the URL
     const index = title.indexOf('/view');
-
-    // Replace everything from "/view" to the end with "/preview"
     var modifiedUrl = title.substring(0, index) + '/preview';
+
+    const urlExist = await db.videoUrl.findUnique({
+      where: {
+        videoUrl: modifiedUrl,
+      },
+    });
+
+    if (urlExist) {
+      return new NextResponse('Video already exists', {status: 400});
+    }
 
     const chapterVideo = await db.videoUrl.create({
       data: {

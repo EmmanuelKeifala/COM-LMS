@@ -1,6 +1,5 @@
 import {auth} from '@clerk/nextjs';
 import {redirect} from 'next/navigation';
-
 import {DataCard} from '../analytics/_components/data-card';
 import {getVideoAnalytics} from '@/actions/get-video-analytics';
 import YoutubePlayerComponent from '@/components/YoutubePlayerComponent';
@@ -14,10 +13,34 @@ const VideoAnalytics = async () => {
   }
 
   const {totalVideos, ratedVideos} = await getVideoAnalytics(userId);
-  const videoArray: any = [];
-  ratedVideos.map(ratedVideo => {
-    videoArray.push(ratedVideo.video);
+
+  const videoGroups: {[videoId: string]: {videos: any[]; totalRating: number}} =
+    {};
+
+  ratedVideos.forEach(ratedVideo => {
+    const videoId = ratedVideo.video.id;
+
+    if (videoGroups[videoId]) {
+      videoGroups[videoId].videos.push(ratedVideo);
+      videoGroups[videoId].totalRating += ratedVideo?.value!;
+    } else {
+      videoGroups[videoId] = {
+        videos: [ratedVideo],
+        totalRating: ratedVideo?.value!,
+      };
+    }
   });
+  const videoArray: any[] = [];
+
+  Object.values(videoGroups).forEach(videoGroup => {
+    const averageRating = videoGroup.totalRating / videoGroup.videos.length;
+    const firstVideo = videoGroup.videos[0].video;
+    videoArray.push({
+      ...firstVideo,
+      rating: averageRating,
+    });
+  });
+
   return (
     <div className="p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -29,10 +52,9 @@ const VideoAnalytics = async () => {
           initialData={video}
           key={video.id}
           videoId={video.id}
-          rating={ratedVideos[index]?.value}
+          rating={video.rating}
         />
       ))}
-      {/* <Chart data={data} /> */}
     </div>
   );
 };

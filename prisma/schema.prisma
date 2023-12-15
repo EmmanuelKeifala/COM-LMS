@@ -65,18 +65,14 @@ model VideoRating {
   value     Float?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt()
-  
-  // Define a foreign key relationship to the VideoUrl model
   video     VideoUrl  @relation(fields: [videoId], references: [id], onDelete: Cascade)
-  
-  // Define a composite unique constraint to ensure each user rates a video only once
   @@unique([videoId, userId])
 }
 
 
 model VideoUrl{
   id String @id @default(uuid()) @map("_id")
-  videoUrl String
+  videoUrl String @unique
   position Int
   chapterId String
   ratings VideoRating[]
