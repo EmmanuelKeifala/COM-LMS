@@ -10,14 +10,14 @@ const database = new PrismaClient();
 
 async function main() {
   try {
-    await database.level.createMany({
+    await database.category.createMany({
       data: [
-        {name: 'Pre-Pharmacy & Pre-Med'},
-        {name: 'B.Phram year 1'},
-        {name: 'B.Phram year 2'},
-        {name: 'B.Phram year 3'},
-        {name: 'B.Phram year 4'},
-        {name: 'B.Phram year 5'},
+        {name: 'Anatomy'},
+        {name: 'Physiology'},
+        {name: 'Biochemistry'},
+        {name: 'Pharmaceutical Chemistry'},
+        {name: 'Pharmacognosy'},
+        {name: 'Into. to Pharmacy'},
       ],
     });
 
