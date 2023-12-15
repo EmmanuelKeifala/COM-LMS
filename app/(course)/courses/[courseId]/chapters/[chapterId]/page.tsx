@@ -53,11 +53,11 @@ const ChapterIdPage = async ({
         />
       )}
       <div className="flex flex-col max-w-4xl mx-auto pb-20">
-        {isEnrolled && (
+        {/* {isEnrolled && (
           <div className="w-full flex items-end justify-end m-10">
             <ChatButton />
           </div>
-        )}
+        )} */}
         <div className="p-4">
           <YoutubePlayerComponent
             youtubeUrls={videoUrls}
