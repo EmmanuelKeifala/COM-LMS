@@ -21,7 +21,10 @@ interface ChartProps {
 export const Chart = ({data}: ChartProps) => {
   return (
     <Card>
-      <ResponsiveContainer width="100%" height={350}>
+      <ResponsiveContainer
+        width="100%"
+        height={350}
+        className="overflow-x-auto">
         <BarChart data={data}>
           <XAxis
             dataKey="name"
