@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import {BookOpen} from 'lucide-react';
+import {BookOpen, Lock} from 'lucide-react';
 
 import {IconBadge} from '@/components/icon-badge';
 import {formatPrice} from '@/lib/format';
@@ -52,9 +52,12 @@ export const CourseCard = ({
           {progress! >= 0 ? (
             <CourseProgress size="sm" value={progress!} />
           ) : (
-            <p className="text-md md:text-sm font-medium text-slate-700">
-              Not enrolled in the course
-            </p>
+            <div className="w-full flex flex-row justify-between ">
+              <p className="text-sm text-muted-foreground">
+                Not enrolled in the course
+              </p>
+              <Lock size={15} className="font-bold" />
+            </div>
           )}
         </div>
       </div>
