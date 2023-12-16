@@ -5,6 +5,18 @@ export const getProgress = async (
   courseId: string,
 ): Promise<number> => {
   try {
+    const isEnrolled = await db.joined.findUnique({
+      where: {
+        userId_courseId: {
+          userId: userId,
+          courseId: courseId,
+        },
+      },
+    });
+
+    if (!isEnrolled) {
+      return -1;
+    }
     const publishedChapters = await db.chapter.findMany({
       where: {
         courseId: courseId,

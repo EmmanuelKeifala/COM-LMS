@@ -22,7 +22,6 @@ export const CourseCard = ({
   title,
   imageUrl,
   chaptersLength,
-  price,
   progress,
   category,
   level,
@@ -50,11 +49,11 @@ export const CourseCard = ({
               </span>
             </div>
           </div>
-          {progress !== null ? (
-            <CourseProgress size="sm" value={progress} />
+          {progress! >= 0 ? (
+            <CourseProgress size="sm" value={progress!} />
           ) : (
             <p className="text-md md:text-sm font-medium text-slate-700">
-              {formatPrice(price)}
+              Not enrolled in the course
             </p>
           )}
         </div>

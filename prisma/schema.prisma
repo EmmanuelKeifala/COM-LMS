@@ -124,15 +124,11 @@ model UserProgress {
 }
 model Joined {
   id String @id @default(uuid()) @map("_id")
-
   userId String
-
   courseId String
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
-
   @@unique([userId, courseId])
   @@index([courseId])
 }

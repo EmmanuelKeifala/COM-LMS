@@ -1,4 +1,4 @@
-import {Category, Course, Level} from '@prisma/client';
+import {Category, Course, Joined, Level} from '@prisma/client';
 
 import {CourseCard} from '@/components/course-card';
 
@@ -25,7 +25,7 @@ export const CoursesList = ({items}: CoursesListProps) => {
             imageUrl={item.imageUrl!}
             chaptersLength={item.chapters.length}
             price={item.price!}
-            progress={item.progress}
+            progress={item.progress!}
             category={item?.category?.name!}
             level={item?.level?.name!}
           />
