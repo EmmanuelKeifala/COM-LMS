@@ -154,7 +154,7 @@ const AboutUs: React.FC = () => {
 
   return (
     <>
-      <div className="md:block max-w-[900px] w-full">
+      <div className="hidden md:block max-w-[900px] w-full">
         <Button
           size="sm"
           variant="ghost"
