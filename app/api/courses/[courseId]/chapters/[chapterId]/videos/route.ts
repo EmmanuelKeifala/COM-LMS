@@ -38,7 +38,7 @@ export async function POST(
     const index = title.indexOf('/view');
     var modifiedUrl = title.substring(0, index) + '/preview';
 
-    const urlExist = await db.videoUrl.findUnique({
+    const urlExist = await db.videoUrl.findMany({
       where: {
         videoUrl: modifiedUrl,
       },

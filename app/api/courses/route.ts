@@ -28,22 +28,56 @@ export async function PATCH(
 ) {
   try {
     const {userId} = auth();
-    const {videoId, url} = await req.json();
-    
+    const {videoId, url: newUrl} = await req.json();
 
     if (!userId || !isUploader) {
       return new NextResponse('Unauthorized', {status: 401});
     }
-    const chapterVideo = await db.videoUrl.update({
+
+    // Retrieve the existing video URL
+    const existingVideo = await db.videoUrl.findUnique({
+      where: {
+        id: videoId,
+      },
+    });
+
+    if (!existingVideo) {
+      return new NextResponse('Video not found', {status: 404});
+    }
+
+    const oldUrl = existingVideo.videoUrl;
+
+    // Check if the new URL is different from the old URL
+    if (oldUrl === newUrl) {
+      return NextResponse.json(
+        {message: 'New URL must be different from the old URL'},
+        {
+          status: 400,
+        },
+      );
+    }
+
+    // Update VideoUrl with the new URL
+    const updatedVideoUrl = await db.videoUrl.update({
       where: {
         id: videoId,
       },
       data: {
-        videoUrl: url,
+        videoUrl: newUrl,
       },
     });
 
-    return NextResponse.json(chapterVideo);
+    // Set isReviewed to true for all related VideoRating records
+    await db.videoRating.updateMany({
+      where: {
+        videoId,
+      },
+      data: {
+        isReviewed: true,
+      },
+    });
+
+    return NextResponse.json(updatedVideoUrl);
   } catch (error) {
     console.error('[VIDEO]', error);
     return new NextResponse('Internal server error', {status: 500});

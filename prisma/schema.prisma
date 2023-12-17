@@ -63,6 +63,7 @@ model VideoRating {
   videoId   String
   userId    String
   value     Float?
+  isReviewed Boolean? @default(false)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt()
   video     VideoUrl  @relation(fields: [videoId], references: [id], onDelete: Cascade)
@@ -72,7 +73,7 @@ model VideoRating {
 
 model VideoUrl{
   id String @id @default(uuid()) @map("_id")
-  videoUrl String @unique
+  videoUrl String
   position Int
   chapterId String
   ratings VideoRating[]

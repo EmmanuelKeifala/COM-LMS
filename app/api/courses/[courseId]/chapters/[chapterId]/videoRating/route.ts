@@ -33,6 +33,7 @@ export async function POST(
         },
         data: {
           value: values.value,
+          isReviewed: false,
         },
       });
 
@@ -43,6 +44,7 @@ export async function POST(
           videoId: values.videoId,
           userId,
           value: values.value,
+          isReviewed: false,
         },
       });
 
@@ -64,8 +66,13 @@ export async function GET(
     if (!userId) {
       return new NextResponse('Unauthorized', {status: 401});
     }
-    // Fetch ratings for a particular videoId
-    const videoRatings = await db.videoRating.findMany();
+
+    // Fetch ratings for a particular videoId with isReviewed set to false
+    const videoRatings = await db.videoRating.findMany({
+      where: {
+        isReviewed: false,
+      },
+    });
 
     return NextResponse.json(videoRatings);
   } catch (error) {

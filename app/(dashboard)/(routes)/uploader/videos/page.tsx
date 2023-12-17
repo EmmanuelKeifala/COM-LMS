@@ -12,12 +12,12 @@ const VideoAnalytics = async () => {
     return redirect('/');
   }
 
-  const {totalVideos, ratedVideos} = await getVideoAnalytics(userId);
+  const {totalVideos, ratedVideosNotReviewed} = await getVideoAnalytics(userId);
 
   const videoGroups: {[videoId: string]: {videos: any[]; totalRating: number}} =
     {};
 
-  ratedVideos.forEach(ratedVideo => {
+  ratedVideosNotReviewed!.forEach(ratedVideo => {
     const videoId = ratedVideo.video.id;
 
     if (videoGroups[videoId]) {

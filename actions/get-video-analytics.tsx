@@ -7,11 +7,22 @@ export const getVideoAnalytics = async (userId: string) => {
         video: true,
       },
     });
+    const ratedVideosNotReviewed = await db.videoRating.findMany({
+      where: {
+        isReviewed: false,
+        value: {
+          lte: 3,
+        },
+      },
+      include: {
+        video: true,
+      },
+    });
     const totalVideos = ratedVideos.length;
 
     return {
       totalVideos,
-      ratedVideos,
+      ratedVideosNotReviewed,
     };
   } catch (error) {
     return {
