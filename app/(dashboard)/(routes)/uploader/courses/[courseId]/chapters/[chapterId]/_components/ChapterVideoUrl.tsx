@@ -67,8 +67,9 @@ export const VideoForm = ({
       toast.success('videos added');
       toggleCreating();
       router.refresh();
-    } catch {
-      toast.error('Something went wrong');
+    } catch (error: any) {
+      console.log('[ERROR]', error);
+      toast.error(error?.response.data.message!);
     }
   };
 
