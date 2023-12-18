@@ -7,7 +7,7 @@ import React, {useRef, useEffect} from 'react';
 import {Spin} from 'antd';
 import {Message} from 'ai';
 import {useUser} from '@clerk/nextjs';
-import {Bot, Send, Trash} from 'lucide-react';
+import {Bot, Send, Trash, XCircleIcon} from 'lucide-react';
 import Image from 'next/image';
 
 interface ChatWidgetProps {
@@ -44,11 +44,11 @@ const ChatWidget = ({open, onClose}: ChatWidgetProps) => {
         'bottom-0 right-0 z-10 w-full max-w-[500px] p-1 xl:right-36',
         open ? 'fixed' : 'hidden',
       )}>
-      <div className="flex h-[600px] flex-col rounded-md bg-gray-200 shadow-xl">
+      <div className=" flex h-[600px] flex-col rounded-md bg-gray-200 shadow-xl">
         <Button
           onClick={onClose}
-          className="self-end p-2 text-white bg-red-500 sm:hidden mt-5">
-          Close
+          className="self-end p-2 text-sky-500 bg-transparent w-[1020px]:hidden mt-1 mr-1 hover:bg-transparent">
+          <XCircleIcon size={30} className="mr-2 tex-xl" />
         </Button>
         <div className="h-full mt-3 px-3 overflow-y-auto " ref={scrollRef}>
           {messages.map(message => (
