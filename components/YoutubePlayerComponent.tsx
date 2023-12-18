@@ -40,13 +40,13 @@ const YoutubePlayerComponent: React.FC<YoutubePlayerProps> = ({
             allowFullScreen
             loading="lazy"></iframe>
           <div className="bg-slate-100 w-full m-4 flex flex-row-reverse justify-between gap-x-2 ml-[-5px] border p-3 items-center rounded-lg">
-            <div className="flex gap-x-2">
+            <div className="flex gap-x-2 flex-wrap mt-2">
               {youtubeUrls.map((video, index) => (
                 <button
                   key={index}
                   onClick={() => handleVideoChange(index, video.id)}
                   className={cn(
-                    'p-2 bg-gray-800 text-white rounded hover:bg-slate-700',
+                    'p-2 bg-gray-800 text-white mt-2 rounded hover:bg-slate-700',
                     currentVideoIndex === index && 'bg-slate-600',
                   )}>
                   {index + 1}
