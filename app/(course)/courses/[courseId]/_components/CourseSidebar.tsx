@@ -5,6 +5,7 @@ import {redirect} from 'next/navigation';
 import {db} from '@/lib/db';
 import {CourseProgress} from '@/components/course-progress';
 import {CourseSidebarItem} from './CourseSidebarItem';
+import {CourseUnEnrollButton} from '../chapters/[chapterId]/_components/course-unenroll-button';
 
 interface CourseSidebarProps {
   course: Course & {
@@ -50,6 +51,12 @@ export const CourseSidebar = async ({
         {purchase && (
           <div className="mt-3">
             <CourseProgress value={progressCount} />
+            <div className="mt-4">
+              <CourseUnEnrollButton
+                courseId={course.id}
+                courseName={course.title}
+              />
+            </div>
           </div>
         )}
       </div>
