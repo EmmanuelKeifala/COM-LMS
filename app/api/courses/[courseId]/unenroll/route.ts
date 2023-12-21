@@ -47,7 +47,7 @@ export async function POST(
         url: `${process.env.NEXT_PUBLIC_APP_URL}/?success=1`,
       });
     } else {
-      return new NextResponse('User is not enrolled in the course', {
+      return new NextResponse('User is not enrolled in this course', {
         status: 400,
       });
     }

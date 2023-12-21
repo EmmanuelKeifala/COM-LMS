@@ -54,7 +54,7 @@ export const CourseCard = ({
           ) : (
             <div className="w-full flex flex-row justify-between ">
               <p className="text-sm text-muted-foreground">
-                Not enrolled in the course
+                Not enrolled in this course
               </p>
               <Lock size={15} className="font-bold" />
             </div>
