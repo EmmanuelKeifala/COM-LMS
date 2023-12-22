@@ -95,8 +95,8 @@ const ChatWidget = ({open, onClose}: ChatWidgetProps) => {
             disabled={isLoading}
             onPressEnter={() => handleSubmit}
             autoSize={{
-              minRows: 2,
-              maxRows: 6,
+              minRows: 1.5,
+              maxRows: 2,
             }}
           />
           <Button type="submit" className="bg-sky-500">
