@@ -1,7 +1,7 @@
 'use client';
 import {useChat} from 'ai/react';
 import {cn} from '@/lib/utils';
-import {Input} from './ui/input';
+import {Input} from 'antd';
 import {Button} from './ui/button';
 import React, {useRef, useEffect} from 'react';
 import {Spin} from 'antd';
@@ -9,6 +9,8 @@ import {Message} from 'ai';
 import {useUser} from '@clerk/nextjs';
 import {Bot, Send, Trash, XCircleIcon} from 'lucide-react';
 import Image from 'next/image';
+
+const {TextArea} = Input;
 
 interface ChatWidgetProps {
   open: boolean;
@@ -26,7 +28,7 @@ const ChatWidget = ({open, onClose}: ChatWidgetProps) => {
     handleSubmit,
   } = useChat();
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (open) {
@@ -81,7 +83,9 @@ const ChatWidget = ({open, onClose}: ChatWidgetProps) => {
             onClick={() => setMessages([])}>
             <Trash />
           </Button>
-          <Input
+          <TextArea
+            // showCount
+            rows={1.5}
             name="question"
             value={input}
             onChange={handleInputChange}
@@ -89,6 +93,11 @@ const ChatWidget = ({open, onClose}: ChatWidgetProps) => {
             className=" outline-none"
             ref={inputRef}
             disabled={isLoading}
+            onPressEnter={() => handleSubmit}
+            autoSize={{
+              minRows: 2,
+              maxRows: 6,
+            }}
           />
           <Button type="submit" className="bg-sky-500">
             {isLoading ? <Spin /> : <Send />}
