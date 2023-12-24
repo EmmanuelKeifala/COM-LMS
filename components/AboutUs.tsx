@@ -114,7 +114,15 @@ const AboutUs: React.FC = () => {
           repeat={Infinity}
         />
       ),
-      cover: <Image src={'/me.png'} alt="pic1" width={200} height={200} />,
+      cover: (
+        <Image
+          src={'/me.png'}
+          alt="pic1"
+          width={1024}
+          height={1024}
+          className="w-[450px] h-[450px] rounded-md"
+        />
+      ),
       nextButtonProps: {
         className: 'bg-sky-500 text-white hover:bg-sky-400',
       },
