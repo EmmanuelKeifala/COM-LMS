@@ -8,7 +8,7 @@ import {CourseProgressButton} from './_components/course-progress-button';
 import {CourseEnrollButton} from './_components/course-enroll-button';
 import {Separator} from '@/components/ui/separator';
 import {Preview} from '@/components/preview';
-import {File, LucideLightbulb} from 'lucide-react';
+import {File, LucideLightbulb, DownloadIcon} from 'lucide-react';
 import ChatButton from '@/components/ChatButton';
 
 const ChapterIdPage = async ({
@@ -39,7 +39,6 @@ const ChapterIdPage = async ({
     return redirect('/');
   }
   const isLocked = !chapter.isFree && !isEnrolled;
-  const completeOnEnd = !!isEnrolled && !userProgress?.isCompleted;
 
   return (
     <div>
@@ -100,7 +99,8 @@ const ChapterIdPage = async ({
                       target="_blank"
                       key={attachment.id}
                       className="flex items-center p-3 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline">
-                      <span className="mr-2">{index + 1}.</span> <File />
+                      <span className="mr-2">{index + 1}.</span>{' '}
+                      <DownloadIcon />
                       <p className="ml-2 line-clamp-1"> {attachment.name}</p>
                     </a>
                   ))}
@@ -123,7 +123,8 @@ const ChapterIdPage = async ({
                       target="_blank"
                       key={attachment.id}
                       className="flex items-center p-3 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline">
-                      <span className="mr-2">{index + 1}.</span> <File />
+                      <span className="mr-2">{index + 1}.</span>{' '}
+                      <DownloadIcon />
                       <p className="ml-2 line-clamp-1"> {attachment.name}</p>
                     </a>
                   ))}
