@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
-  metadataBase: new URL('http://localhost:3000'),
+  metadataBase: new URL('https://https://meyoneducation.vercel.app/'),
   openGraph: {
     type: 'website',
     siteName: APP_NAME,
