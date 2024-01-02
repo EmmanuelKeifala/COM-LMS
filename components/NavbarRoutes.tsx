@@ -9,6 +9,7 @@ import {SearchInput} from './search-input';
 import {isUploader} from '@/lib/uploader';
 import AboutUs from './AboutUs';
 import {ModeToggle} from './ThemeToggle';
+import ClassSelection from './ClassSelection';
 
 export const NavbarRoutes = () => {
   const pathname = usePathname();
@@ -19,7 +20,6 @@ export const NavbarRoutes = () => {
   const isCoursePage = pathname?.includes('/courses');
   const isSearchPage = pathname === '/search';
 
-
   return (
     <>
       {isSearchPage && (
@@ -27,7 +27,10 @@ export const NavbarRoutes = () => {
           <SearchInput />
         </div>
       )}
-      <div className="flex gap-x-2 ml-auto">
+      <div className="flex gap-x-2 ml-auto justify-between">
+        {/* Attempted to make the class selection not visible for the uploader */}
+        {/* {!isUploader && <ClassSelection />} */}
+        <ClassSelection />
         <AboutUs />
         {isUploderPage || isCoursePage ? (
           <Link href="/">

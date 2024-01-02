@@ -21,18 +21,15 @@ const SearchPage = async ({searchParams}: SearchPageProps) => {
   if (!userId) {
     return redirect('/');
   }
-
-  const categories = await db.category.findMany({
-    orderBy: {
-      name: 'asc',
-    },
-  });
-
   const courses = await getCourses({
     userId,
     ...searchParams,
   });
-
+  const categories = await db.category.findMany({
+    where: {
+      levelId: courses[0]?.levelId!,
+    },
+  });
   return (
     <>
       <div className="px-6 pt-6 md:hidden md:mb-0 block">

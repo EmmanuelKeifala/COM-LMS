@@ -36,15 +36,19 @@ model Course {
 
 
 }
-model Category{
-  id String @id @default(uuid()) @map("_id")
-  name String @unique
+model Category {
+  id     String   @id @default(uuid()) @map("_id")
+  name   String   @unique
+  level  Level    @relation(fields: [levelId], references: [id])
+  levelId String
   courses Course[]
 }
-model Level{
-  id String @id @default(uuid()) @map("_id")
-  name String @unique
-  courses Course[]
+
+model Level {
+  id       String    @id @default(uuid()) @map("_id")
+  name     String    @unique
+  categories Category[]
+  courses  Course[]
 }
 model Attachment{
   id String @id @default(uuid()) @map("_id")
