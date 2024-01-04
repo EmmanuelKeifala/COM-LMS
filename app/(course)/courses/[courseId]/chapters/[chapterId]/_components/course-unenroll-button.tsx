@@ -6,18 +6,15 @@ import toast from 'react-hot-toast';
 
 import {Button, Popconfirm} from 'antd';
 interface CourseUnEnrollButtonProps {
-  price?: number;
   courseId: string;
   courseName?: string;
 }
 
 export const CourseUnEnrollButton = ({
-  price,
   courseId,
   courseName,
 }: CourseUnEnrollButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
-
   const onClick = async () => {
     try {
       setIsLoading(true);
@@ -32,13 +29,25 @@ export const CourseUnEnrollButton = ({
     }
   };
 
-  return (
-    <Popconfirm
-      title="Unenroll from this course"
-      description={`This action will unenroll you from the  ${courseName} course`}
-      onConfirm={onClick}
-      okType="danger">
-      <Button danger>UnEnroll</Button>
-    </Popconfirm>
-  );
+  // Determine if the screen size is small
+  const isSmallScreen = window.innerWidth < 768;
+  console.log('SMALL SCREEN', isSmallScreen);
+
+  if (!isSmallScreen) {
+    return (
+      <Popconfirm
+        title="Unenroll from this course"
+        description={`This action will unenroll you from the ${courseName} course`}
+        onConfirm={onClick}
+        okType="danger">
+        <Button danger>UnEnroll</Button>
+      </Popconfirm>
+    );
+  } else {
+    return (
+      <Button danger onClick={onClick}>
+        UnEnroll
+      </Button>
+    );
+  }
 };
