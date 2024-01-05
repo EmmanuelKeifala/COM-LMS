@@ -21,13 +21,18 @@ const SearchPage = async ({searchParams}: SearchPageProps) => {
   if (!userId) {
     return redirect('/');
   }
-  const courses = await getCourses({
+  const {coursesWithProgress, userClass} = await getCourses({
     userId,
     ...searchParams,
   });
+  const level = await db.level.findUnique({
+    where: {
+      name: userClass,
+    },
+  });
   const categories = await db.category.findMany({
     where: {
-      levelId: courses[0]?.levelId!,
+      levelId: level?.id!,
     },
   });
   return (
@@ -37,7 +42,7 @@ const SearchPage = async ({searchParams}: SearchPageProps) => {
       </div>
       <div className="p-6 space-y-4">
         <Categories items={categories} />
-        <CoursesList items={courses} />
+        <CoursesList items={coursesWithProgress} />
       </div>
     </>
   );

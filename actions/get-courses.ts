@@ -20,7 +20,10 @@ export const getCourses = async ({
   userId,
   title,
   categoryId,
-}: GetCourses): Promise<CourseWithProgressWithCategory[]> => {
+}: GetCourses): Promise<{
+  coursesWithProgress: CourseWithProgressWithCategory[];
+  userClass: string;
+}> => {
   try {
     // Fetch user data
     const userResponse = await fetchUserDetails(userId);
@@ -28,7 +31,8 @@ export const getCourses = async ({
 
     // Check if userClass is available
     if (!userClass) {
-      return [];
+      console.log('No userClass');
+      return {coursesWithProgress: [], userClass: ''};
     }
 
     // Find the Level based on userClass
@@ -40,7 +44,8 @@ export const getCourses = async ({
 
     // Check if the level is found
     if (!level) {
-      return [];
+      console.log('No Level');
+      return {coursesWithProgress: [], userClass: ''};
     }
 
     // Fetch courses based on levelId
@@ -82,11 +87,10 @@ export const getCourses = async ({
           };
         }),
       );
-
-    return coursesWithProgress;
+    return {coursesWithProgress, userClass};
   } catch (error) {
     console.error('[GET_COURSES]', error);
-    return [];
+    return {coursesWithProgress: [], userClass: ''};
   }
 };
 
