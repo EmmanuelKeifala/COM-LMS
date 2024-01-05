@@ -3,6 +3,7 @@
 import {AreaChart, BarChart, Compass, Layout, List} from 'lucide-react';
 import {SidebarItem} from './SidebarItem';
 import {usePathname} from 'next/navigation';
+import {FcFeedback} from 'react-icons/fc';
 
 const guestRoutes = [
   {
@@ -31,6 +32,11 @@ const uploadRoute = [
     icon: AreaChart,
     label: 'Video Analytics',
     href: '/uploader/videos',
+  },
+  {
+    icon: FcFeedback,
+    label: 'Feedbacks',
+    href: '/uploader/feedback',
   },
 ];
 export const SidebarRoutes = () => {

@@ -3,27 +3,58 @@ import {useState} from 'react';
 import ChatWidget from './Chat-widget';
 import {Button} from './ui/button';
 import {MessageCircle, XCircle} from 'lucide-react';
+import {MdFeedback} from 'react-icons/md';
+import FeedbackModal from './Feedback/modal';
 
-export default function ChatButton() {
+interface ChatButtonProps {
+  isChat: boolean;
+}
+
+export default function ChatButton({isChat}: ChatButtonProps) {
   const [chatBoxOpen, setChatBoxOpen] = useState<boolean>(false);
+  const [feedbackModalOpen, setFeedbackModalOpen] = useState<boolean>(false);
+
+  const toggleChatBox = () => {
+    setChatBoxOpen(!chatBoxOpen);
+    setFeedbackModalOpen(false);
+  };
+
+  const toggleFeedbackModal = () => {
+    setFeedbackModalOpen(!feedbackModalOpen);
+    setChatBoxOpen(false);
+  };
+
   return (
     <>
       <Button
-        onClick={() => setChatBoxOpen(!chatBoxOpen)}
-        className="w-[100px] rounded-full bg-sky-500 flex items-center hover:bg-sky-400"
+        onClick={isChat ? toggleChatBox : toggleFeedbackModal}
+        className="w-[150px] rounded-full bg-sky-500 flex items-center hover:bg-sky-400"
         style={{
           position: 'fixed',
           bottom: '20px',
           right: '20px',
         }}>
-        {chatBoxOpen ? (
-          <XCircle size={30} className="mr-2 tex-xl" />
+        {isChat ? (
+          chatBoxOpen ? (
+            <XCircle size={30} className="mr-2 tex-xl" />
+          ) : (
+            <MessageCircle className="mr-2 tex-xl" size={30} />
+          )
         ) : (
-          <MessageCircle className="mr-2 tex-xl" size={30} />
+          <MdFeedback size={30} className="mr-2 tex-xl" />
         )}
-        AI
+        {isChat ? 'AI' : 'Feedback'}
       </Button>
-      <ChatWidget open={chatBoxOpen} onClose={() => setChatBoxOpen(false)} />
+      {isChat ? (
+        <ChatWidget open={chatBoxOpen} onClose={() => setChatBoxOpen(false)} />
+      ) : (
+        <FeedbackModal
+          open={feedbackModalOpen}
+          onClose={() => setFeedbackModalOpen(false)}
+          title="Feedback"
+          description="Please let us know how we can improve your experience."
+        />
+      )}
     </>
   );
 }

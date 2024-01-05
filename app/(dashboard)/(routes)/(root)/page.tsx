@@ -6,6 +6,8 @@ import {getDashboardCourses} from '@/actions/get-dashboard-courses';
 import {CoursesList} from '@/components/courses-list';
 
 import {InfoCard} from './_components/info-card';
+import ChatButton from '@/components/ChatButton';
+import FeedbackModal from '@/components/Feedback/modal';
 
 export default async function Dashboard() {
   const {userId} = auth();
@@ -14,9 +16,8 @@ export default async function Dashboard() {
     return redirect('/');
   }
 
-  const {completedCourses, coursesInProgress} = await getDashboardCourses(
-    userId,
-  );
+  const {completedCourses, coursesInProgress} =
+    await getDashboardCourses(userId);
 
   return (
     <div className="p-6 space-y-4">
@@ -34,6 +35,8 @@ export default async function Dashboard() {
         />
       </div>
       <CoursesList items={[...coursesInProgress, ...completedCourses]} />
+
+      <ChatButton isChat={false} />
     </div>
   );
 }

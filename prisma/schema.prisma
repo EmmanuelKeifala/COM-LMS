@@ -150,3 +150,12 @@ model ChapterAttachment {
 
   @@index([chapterId])
 }
+
+model Feedback{
+    id String @id @default(uuid()) @map("_id")
+    name String
+    message String
+    feedbackType String
+    email String
+    rate String
+}
