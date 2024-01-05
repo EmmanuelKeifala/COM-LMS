@@ -27,7 +27,7 @@ export default function FeedbackModal({
     message: '',
     name: user?.fullName || '',
     rate: '',
-    feedbackType: '' as any,
+    feedbackType: 'other' as any,
   });
   const [isSending, setIsSending] = useState(false);
   const onSend = async () => {
