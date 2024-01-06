@@ -19,10 +19,18 @@ export const getVideoAnalytics = async (userId: string) => {
       },
     });
     const totalVideos = ratedVideos.length;
-
+    const videosWithEnoughRatings = ratedVideosNotReviewed.filter(
+      videoRating => {
+        // Assuming that `userId` is associated with the user making the request
+        const uniqueRaters = new Set(
+          ratedVideosNotReviewed.map(vr => vr.userId),
+        );
+        return uniqueRaters.size >= 5;
+      },
+    );
     return {
       totalVideos,
-      ratedVideosNotReviewed,
+      ratedVideosNotReviewed: videosWithEnoughRatings,
     };
   } catch (error) {
     return {
