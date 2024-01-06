@@ -17,7 +17,7 @@ const VideoAnalytics = async () => {
   const videoGroups: {[videoId: string]: {videos: any[]; totalRating: number}} =
     {};
 
-  ratedVideosNotReviewed!.forEach(ratedVideo => {
+  ratedVideosNotReviewed!.forEach((ratedVideo: any) => {
     const videoId = ratedVideo.video.id;
 
     if (videoGroups[videoId]) {
