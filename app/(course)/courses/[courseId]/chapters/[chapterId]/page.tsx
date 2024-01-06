@@ -41,7 +41,7 @@ const ChapterIdPage = async ({
   const isLocked = !chapter.isFree && !isEnrolled;
 
   return (
-    <div>
+    <div className="dark:bg-black dark:text-gray-400">
       {userProgress?.isCompleted && (
         <Banner variant="success" label="You already completed this chapter." />
       )}
