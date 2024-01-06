@@ -14,10 +14,10 @@ const sizeByVariant = {
 export const CourseProgress = ({value, size}: CourseProgressProps) => {
   return (
     <div>
-      <Progress className="h-2" value={value} />
+      <Progress className="h-2 " value={value} />
       <p
         className={cn(
-          'font-medium mt-2 text-sky-700',
+          'font-medium mt-2 text-sky-700 ',
           sizeByVariant[size || 'default'],
         )}>
         {Math.round(value)}% Complete
