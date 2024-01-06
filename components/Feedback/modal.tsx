@@ -75,9 +75,9 @@ export default function FeedbackModal({
         open
           ? 'opacity-100 pointer-events-auto'
           : 'opacity-0 pointer-events-none'
-      } transition-all duration-300 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-md w-full bg-white p-6 rounded-md shadow-lg`}>
+      } transition-all duration-300 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-md w-full bg-white dark:bg-gray-600 p-6 rounded-md shadow-lg`}>
       {(title || description) && (
-        <header className="bg-sky-500 text-white p-4 rounded-t-md">
+        <header className="bg-sky-500 dark:bg-sky-700 text-white p-4 rounded-t-md">
           <div className="flex items-center justify-between">
             {title && <h3 className="text-xl font-bold mb-2">{title}</h3>}
             <button
@@ -222,7 +222,7 @@ export default function FeedbackModal({
 
         <div>
           <button
-            className="w-full bg-sky-500 py-2 text-white text-xl rounded-md shadow-lg "
+            className="w-full bg-sky-500 dark:bg-sky-700 py-2 text-white text-xl rounded-md shadow-lg "
             type="submit"
             disabled={isSending}>
             {isSending ? (

@@ -27,9 +27,7 @@ export const NavbarRoutes = () => {
           <SearchInput />
         </div>
       )}
-      <div className="flex gap-x-2 ml-auto justify-between">
-        {/* Attempted to make the class selection not visible for the uploader */}
-        {/* {!isUploader && <ClassSelection />} */}
+      <div className="flex gap-x-2 ml-auto items-center justify-between">
         {isSearchPage && <ClassSelection />}
         <AboutUs />
         {isUploderPage || isCoursePage ? (
@@ -46,7 +44,10 @@ export const NavbarRoutes = () => {
             </Button>
           </Link>
         ) : null}
-        <UserButton afterSignOutUrl="/" />
+        <div className="flex gap-3 items-center">
+          <UserButton afterSignOutUrl="/" />
+          <ModeToggle />
+        </div>
       </div>
     </>
   );

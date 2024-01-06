@@ -16,7 +16,9 @@ export default function FeedbackModalElementRate({
   return (
     <label
       className={`inline-block p-2 rounded-full transition duration-300 ease-in-out ${
-        isSelected ? ' text-white bg-gray-200' : ' text-gray-800'
+        isSelected
+          ? ' text-white bg-gray-200 dark:bg-white dark:text-black'
+          : ' text-gray-800 dark:text-white dark:bg-white'
       } cursor-pointer`}>
       <input
         className="hidden"

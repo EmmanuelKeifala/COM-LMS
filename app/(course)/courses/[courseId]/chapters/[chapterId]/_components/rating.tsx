@@ -121,7 +121,7 @@ const Rating = ({chapterId, courseId, videoId}: RatingProps) => {
         allowHalf
         onChange={value => handleChange(value)}
       />
-      <p className="font-medium text-sm">
+      <p className="font-medium text-sm dark:text-black">
         {!rating ? 'no ratings yet' : `Video rating ${rating}/5`}
       </p>
     </div>

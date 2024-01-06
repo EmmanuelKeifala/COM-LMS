@@ -19,7 +19,7 @@ export const getVideoAnalytics = async (userId: string) => {
       },
     });
     const totalVideos = ratedVideos.length;
-    const videosWithEnoughRatings = ratedVideosNotReviewed.filter(
+    const videosWithEnoughRatings: any = ratedVideosNotReviewed.filter(
       videoRating => {
         // Assuming that `userId` is associated with the user making the request
         const uniqueRaters = new Set(
