@@ -60,7 +60,7 @@ export const Actions = ({disabled, courseId, isPublished}: ActionsProps) => {
   };
 
   return (
-    <div className="flex items-center gap-x-2">
+    <div className="flex items-center gap-x-2 dark:bg-black dark:text-white">
       <Button
         onClick={onClick}
         disabled={disabled || isLoading}

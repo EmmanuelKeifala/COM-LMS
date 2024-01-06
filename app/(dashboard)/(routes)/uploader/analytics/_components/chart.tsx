@@ -40,7 +40,12 @@ export const Chart = ({data}: ChartProps) => {
             axisLine={false}
             tickFormatter={value => `${Math.round(value)}`}
           />
-          <Tooltip formatter={(value: number) => `${Math.floor(value)}`} />
+          <Tooltip
+            formatter={(value: number) => `${Math.floor(value)}`}
+            contentStyle={{
+              color: 'black',
+            }}
+          />
           <Bar dataKey="students" fill="#0369a1" radius={[2, 2, 0.5, 0.5]} />
         </BarChart>
       </ResponsiveContainer>

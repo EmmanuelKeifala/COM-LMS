@@ -31,7 +31,7 @@ const YoutubePlayerComponent: React.FC<YoutubePlayerProps> = ({
   return (
     <>
       {youtubeUrls.length > 0 ? (
-        <div className="w-full aspect-video mt-2">
+        <div className="w-full aspect-video mt-2 dark:bg-black ">
           <iframe
             id="youtubePlayer"
             src={`${youtubeUrls[currentVideoIndex].videoUrl}?rel=0`}
@@ -39,7 +39,7 @@ const YoutubePlayerComponent: React.FC<YoutubePlayerProps> = ({
             allow="autoplay"
             allowFullScreen
             loading="lazy"></iframe>
-          <div className="bg-slate-100 w-full m-4 flex flex-row-reverse justify-between gap-x-2 ml-[-5px] border p-3 items-center rounded-lg">
+          <div className="bg-slate-100 dark:bg-gray-500 w-full m-4 flex flex-row-reverse justify-between gap-x-2 ml-[-5px] border p-3 items-center rounded-lg">
             <div className="flex gap-x-2 flex-wrap">
               {youtubeUrls.map((video, index) => (
                 <button
