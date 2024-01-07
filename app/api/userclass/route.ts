@@ -34,3 +34,31 @@ export async function POST(req: Request) {
     return new NextResponse('Internal Error', {status: 500});
   }
 }
+
+export async function GET(req: Request) {
+  try {
+    // Ensure user authentication
+    const {userId} = auth();
+    if (!userId) {
+      return new NextResponse('Unauthorized', {status: 401});
+    }
+
+    // Make PATCH request to Clerk API
+    const response = await axios.get(
+      `https://api.clerk.com/v1/users/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
+          Accept: 'application/json',
+        },
+      },
+    );
+
+    // Return success response
+    return new NextResponse(response.data.public_metadata.userClass);
+  } catch (error) {
+    console.error('[CLASSES]', error);
+    // Return error response
+    return new NextResponse('Internal Error', {status: 500});
+  }
+}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Select} from 'antd';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -6,6 +6,7 @@ import {useRouter} from 'next/navigation';
 
 const ClassSelection = () => {
   const router = useRouter();
+  const [userClassName, setuserClassName] = useState<string>('');
   const handleChange = async (value: string) => {
     try {
       await axios.post(`/api/userclass`, {
@@ -19,11 +20,20 @@ const ClassSelection = () => {
     }
   };
 
+  useEffect(() => {
+    const getUserClassName = async () => {
+      const reponse = await axios.get(`/api/userclass`);
+      setuserClassName(reponse.data);
+    };
+    getUserClassName();
+  }, []);
+
   return (
     <Select
+      className="dark:bg-white dark:text-white dark:rounded-md"
       onChange={handleChange}
       showSearch
-      placeholder={'Select your class'}
+      placeholder={userClassName ? userClassName : 'Select your class'}
       optionFilterProp="children"
       bordered={false}
       filterOption={(input, option) => (option?.label ?? '').includes(input)}
