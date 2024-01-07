@@ -50,7 +50,7 @@ export const CourseSidebarItem = ({
             isCompleted && 'text-emerald-700',
           )}
         />
-        <span className="text-sm capitalize line-clamp-1">{label}</span>
+        <span className="text-sm capitalize truncate">{label}</span>
       </div>
       <div
         className={cn(
