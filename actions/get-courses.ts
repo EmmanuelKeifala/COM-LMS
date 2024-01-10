@@ -29,52 +29,68 @@ export const getCourses = async ({
     const userResponse = await fetchUserDetails(userId);
     const userClass = userResponse?.public_metadata?.userClass;
 
-    // Check if userClass is available
-    if (!userClass) {
-      console.log('No userClass');
-      return {coursesWithProgress: [], userClass: ''};
-    }
-
     // Find the Level based on userClass
-    const level = await db.level.findUnique({
-      where: {
-        name: userClass,
-      },
-    });
+    const level = userClass
+      ? await db.level.findUnique({
+          where: {
+            name: userClass,
+          },
+        })
+      : null;
 
-    // Check if the level is found
-    if (!level) {
-      console.log('No Level');
-      return {coursesWithProgress: [], userClass: ''};
-    }
-
-    // Fetch courses based on levelId
-    const courses = await db.course.findMany({
-      where: {
-        isPublished: true,
-        title: {
-          contains: title,
-          mode: 'insensitive',
-        },
-        categoryId,
-        levelId: level.id,
-      },
-      include: {
-        category: true,
-        level: true,
-        chapters: {
+    // Fetch courses based on levelId if userClass is available
+    const courses = userClass
+      ? await db.course.findMany({
           where: {
             isPublished: true,
+            title: {
+              contains: title,
+              mode: 'insensitive',
+            },
+            categoryId,
+            levelId: level?.id,
           },
-          select: {
-            id: true,
+          include: {
+            category: true,
+            level: true,
+            chapters: {
+              where: {
+                isPublished: true,
+              },
+              select: {
+                id: true,
+              },
+            },
           },
-        },
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
+          orderBy: {
+            createdAt: 'desc',
+          },
+        })
+      : await db.course.findMany({
+          where: {
+            isPublished: true,
+            title: {
+              contains: title,
+              mode: 'insensitive',
+            },
+            categoryId,
+          },
+          include: {
+            category: true,
+            level: true,
+            chapters: {
+              where: {
+                isPublished: true,
+              },
+              select: {
+                id: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        });
 
     // Fetch progress for each course
     const coursesWithProgress: CourseWithProgressWithCategory[] =
@@ -87,7 +103,7 @@ export const getCourses = async ({
           };
         }),
       );
-    return {coursesWithProgress, userClass};
+    return {coursesWithProgress, userClass: userClass || ''};
   } catch (error) {
     console.error('[GET_COURSES]', error);
     return {coursesWithProgress: [], userClass: ''};
