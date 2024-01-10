@@ -55,11 +55,8 @@ const ChapterIdPage = async ({
       <div className="flex flex-col max-w-4xl mx-auto pb-20">
         {isEnrolled && (
           <div className="w-full flex items-end justify-end m-10">
-            {/* <ChatButton isChat={true} /> */}
-            <BubbleChat
-              chatflowid="97f0ecf7-0b26-4ffc-8e20-745ed9343b21"
-              apiHost="https://flowiseai-railway-production-1572.up.railway.app"
-            />
+            <ChatButton isChat={true} />
+            
           </div>
         )}
         <div className="p-4">
