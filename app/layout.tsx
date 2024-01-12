@@ -11,10 +11,10 @@ import {ThemeProvider} from '@/components/theme-provider';
 
 // Config for pwa
 const APP_NAME = 'meyoneducation';
-const APP_DEFAULT_TITLE = 'meyoneducation App';
-const APP_TITLE_TEMPLATE = '%s - meyoneducation App';
+const APP_DEFAULT_TITLE = 'meyoneducation - Online Medical Courses';
+const APP_TITLE_TEMPLATE = '%s - meyoneducation';
 const APP_DESCRIPTION =
-  'Here we provide course for all sort of medical students';
+  'Explore a variety of online courses for medical students at meyoneducation. Enhance your medical education with our comprehensive programs.';
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
-  metadataBase: new URL('https://https://meyoneducation.vercel.app/'),
+  metadataBase: new URL('https://meyoneducation.vercel.app/'),
   openGraph: {
     type: 'website',
     siteName: APP_NAME,
@@ -41,6 +41,7 @@ export const metadata: Metadata = {
       template: APP_TITLE_TEMPLATE,
     },
     description: APP_DESCRIPTION,
+    url: 'https://meyoneducation.vercel.app/',
   },
   twitter: {
     card: 'summary',
