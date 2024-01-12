@@ -26,7 +26,7 @@ export default function ChatButton({isChat}: ChatButtonProps) {
 
   return (
     <>
-      {/* <Button
+      <Button
         onClick={isChat ? toggleChatBox : toggleFeedbackModal}
         className="w-[150px] rounded-full bg-sky-500 flex items-center hover:bg-sky-400"
         style={{
@@ -34,17 +34,9 @@ export default function ChatButton({isChat}: ChatButtonProps) {
           bottom: '20px',
           right: '20px',
         }}>
-        {isChat ? (
-          chatBoxOpen ? (
-            <XCircle size={30} className="mr-2 tex-xl" />
-          ) : (
-            <MessageCircle className="mr-2 tex-xl" size={30} />
-          )
-        ) : (
-          <MdFeedback size={30} className="mr-2 tex-xl" />
-        )}
-        {isChat ? 'AI' : 'Feedback'}
-      </Button> */}
+        {!isChat && <MdFeedback size={30} className="mr-2 tex-xl" />}
+        {!isChat && 'Feedback'}
+      </Button>
       {isChat ? (
         <BubbleChat
           chatflowid="97f0ecf7-0b26-4ffc-8e20-745ed9343b21"
