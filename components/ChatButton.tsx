@@ -1,11 +1,10 @@
 'use client';
 import {useState} from 'react';
-import ChatWidget from './Chat-widget';
 import {Button} from './ui/button';
-import {MessageCircle, XCircle} from 'lucide-react';
 import {MdFeedback} from 'react-icons/md';
 import FeedbackModal from './Feedback/modal';
 import {BubbleChat} from 'flowise-embed-react';
+import {cn} from '@/lib/utils';
 interface ChatButtonProps {
   isChat: boolean;
 }
@@ -28,7 +27,10 @@ export default function ChatButton({isChat}: ChatButtonProps) {
     <>
       <Button
         onClick={isChat ? toggleChatBox : toggleFeedbackModal}
-        className="w-[150px] rounded-full bg-sky-500 flex items-center hover:bg-sky-400"
+        className={cn(
+          !isChat &&
+            'w-[150px] rounded-full bg-sky-500 flex items-center hover:bg-sky-400',
+        )}
         style={{
           position: 'fixed',
           bottom: '20px',
