@@ -53,16 +53,6 @@ export async function PATCH(
       return new NextResponse('Missing required fields', {status: 401});
     }
 
-    const publishedCourse = await db.course.update({
-      where: {
-        id: params.courseId,
-        userId,
-      },
-      data: {
-        isPublished: true,
-      },
-    });
-
     const courseDetail = await db.course.findUnique({
       where: {
         id: params.courseId,
@@ -93,6 +83,15 @@ export async function PATCH(
       to: userEmails,
       subject: 'Hello, 🔥',
       html: `<p> We have just published the ${courseDetail?.title} course</p> <br /> <div>Here is the link: <a href=${courseLink}>${courseDetail?.title}</a> </div> <br /> <p>Regards, <br /> meyoneducation</p>`,
+    });
+    const publishedCourse = await db.course.update({
+      where: {
+        id: params.courseId,
+        userId,
+      },
+      data: {
+        isPublished: true,
+      },
     });
 
     return NextResponse.json(publishedCourse);
