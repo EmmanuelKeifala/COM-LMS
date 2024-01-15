@@ -76,7 +76,7 @@ export async function PATCH(
         }
       });
     }
-    const courseLink = `https://meyoneducation.vercel.app/uploader/courses/${courseDetail?.id}`;
+    const courseLink = `https://meyoneducation.vercel.app/courses/${courseDetail?.id}`;
 
     const info = await transporter.sendMail({
       from: '"meyoneducation" <meyoneducationhub@gmail.com>', // sender address
