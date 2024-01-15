@@ -69,7 +69,10 @@ export const getAnalytics = async () => {
             isCompleted: false,
           },
         });
-        // const user = await clerkClient.users.getUser(userId);
+
+        // Fetch user details using the provided function
+        // const userResponse = await fetchUserDetails(userId);
+        // const userName = userResponse?.username;
 
         return {
           totalStudents,
@@ -98,3 +101,37 @@ export const getAnalytics = async () => {
     };
   }
 };
+
+// const fetchUserDetails = async (userId: string) => {
+//   try {
+//     const maxRetries = 3;
+//     let retries = 0;
+
+//     const makeRequest = async () => {
+//       const response = await axios.get(
+//         `https://api.clerk.com/v1/users/${userId}`,
+//         {
+//           headers: {
+//             Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
+//             Accept: 'application/json',
+//           },
+//         },
+//       );
+//       return response.data;
+//     };
+
+//     let userResponse = await makeRequest();
+
+//     while (userResponse === null && retries < maxRetries) {
+//       const retryAfter = userResponse.headers['retry-after'] || 1; // Default to 1 second if no header is provided
+//       await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+//       userResponse = await makeRequest();
+//       retries += 1;
+//     }
+
+//     return userResponse;
+//   } catch (error) {
+//     console.error('Error fetching user details:', error);
+//     return null;
+//   }
+// };
