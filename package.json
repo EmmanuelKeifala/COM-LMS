@@ -10,6 +10,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@bradgarropy/next-google-analytics": "^1.0.2",
     "@clerk/nextjs": "^4.27.2",
     "@ducanh2912/next-pwa": "^10.0.2",
     "@hello-pangea/dnd": "^16.3.0",
