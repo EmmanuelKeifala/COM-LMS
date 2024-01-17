@@ -2,17 +2,7 @@ import {auth} from '@clerk/nextjs';
 import {NextResponse} from 'next/server';
 import {clerkClient} from '@clerk/nextjs';
 import {db} from '@/lib/db';
-import nodemailer from 'nodemailer';
-
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST!,
-  port: parseInt(process.env.EMAIL_PORT!),
-  service: process.env.EMAIL_SERVICE!,
-  auth: {
-    user: process.env.SMTP_MAIL!,
-    pass: process.env.SMTP_PASSWORD!,
-  },
-});
+import {transporter} from '@/lib/sendEmail';
 
 export async function PATCH(
   req: Request,

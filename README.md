@@ -42,6 +42,12 @@ This project is a web platform designed to host university notes along with asso
       UPLOADTHING_APP_ID
       NEXT_PUBLIC_APP_URL
       NEXT_PUBLIC_UPLOADER_IDS
+      GOOGLE_ANALYTICS_ID
+      SMTP_PASSWORD
+      SMTP_MAIL
+      EMAIL_SERVICE
+      EMAIL_PORT
+      EMAIL_HOST
    ```
 4. **Run the application:**
    `npm run dev`
