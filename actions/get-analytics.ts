@@ -70,10 +70,6 @@ export const getAnalytics = async () => {
           },
         });
 
-        // Fetch user details using the provided function
-        // const userResponse = await fetchUserDetails(userId);
-        // const userName = userResponse?.username;
-
         return {
           totalStudents,
           userId,

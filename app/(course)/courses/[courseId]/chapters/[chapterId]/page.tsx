@@ -10,7 +10,6 @@ import {Separator} from '@/components/ui/separator';
 import {Preview} from '@/components/preview';
 import {File, LucideLightbulb, DownloadIcon} from 'lucide-react';
 import ChatButton from '@/components/ChatButton';
-import {BubbleChat} from 'flowise-embed-react';
 
 const ChapterIdPage = async ({
   params,

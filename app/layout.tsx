@@ -4,6 +4,7 @@ import {Inter} from 'next/font/google';
 import {ClerkProvider} from '@clerk/nextjs';
 import {ToastProvider} from '@/components/providers/toaster-provider';
 import {ConfettiProvider} from '@/components/providers/confetti-provider';
+import {SpeedInsights} from '@vercel/speed-insights/next';
 const inter = Inter({subsets: ['latin']});
 import {ThemeProvider} from '@/components/theme-provider';
 import GoogleAnalytics from '@bradgarropy/next-google-analytics';
@@ -64,9 +65,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
             disableTransitionOnChange>
             {children}
           </ThemeProvider>
-          {/* <Analytics /> */}
-          {/* <SpeedInsights /> */}
-
+          <SpeedInsights />
           <ConfettiProvider />
           <ToastProvider />
         </body>

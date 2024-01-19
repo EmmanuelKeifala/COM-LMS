@@ -7,8 +7,6 @@ import {CoursesList} from '@/components/courses-list';
 
 import {InfoCard} from './_components/info-card';
 import ChatButton from '@/components/ChatButton';
-import FeedbackModal from '@/components/Feedback/modal';
-
 export default async function Dashboard() {
   const {userId} = auth();
 
