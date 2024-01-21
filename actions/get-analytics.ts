@@ -6,6 +6,7 @@ export const getAnalytics = async () => {
       include: {
         course: true,
       },
+      cacheStrategy: {swr: 60, ttl: 60},
     });
 
     // Fetch completed courses for all users
@@ -13,17 +14,18 @@ export const getAnalytics = async () => {
       where: {
         isCompleted: true,
       },
+      cacheStrategy: {swr: 60, ttl: 60},
     });
 
     // Count the occurrences of each course title
     const courseCounts: {[courseTitle: string]: number} = {};
     const courseTitleToFirstWords: {[courseTitle: string]: string} = {};
 
-    joinedCourses.forEach(joined => {
+    joinedCourses.forEach((joined: {course: {title: string}}) => {
       const firstWords = joined.course.title
         .split(' ')
         .slice(0, 2)
-        .map(word => word[0])
+        .map((word: string) => word[0])
         .join('');
 
       // Populate courseCounts
@@ -49,7 +51,7 @@ export const getAnalytics = async () => {
 
     // Collect analytics data for each user
     const userData = await Promise.all(
-      joinedCourses.map(async joined => {
+      joinedCourses.map(async (joined: {userId: any}) => {
         const userId = joined.userId;
 
         // Fetch completed courses for the specific user
@@ -58,6 +60,7 @@ export const getAnalytics = async () => {
             userId,
             isCompleted: true,
           },
+          cacheStrategy: {swr: 60, ttl: 60},
         });
 
         // Fetch in-progress courses for the specific user
@@ -66,6 +69,7 @@ export const getAnalytics = async () => {
             userId,
             isCompleted: false,
           },
+          cacheStrategy: {swr: 60, ttl: 60},
         });
 
         return {

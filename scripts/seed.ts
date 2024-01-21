@@ -7,19 +7,21 @@ async function main() {
     // Create B.Pharm year 1 level
     const level = await database.level.findUnique({
       where: {
-        name: 'Pre-Pharmacy & Pre-Med',
+        name: 'B.Pharm year 2',
       },
     });
 
     // Create categories under B.Pharm year 1 level
     await database.category.createMany({
       data: [
-        {name: 'Math', levelId: level.id},
-        {name: 'Physics', levelId: level.id},
-        {name: 'Chemistry', levelId: level.id},
-        {name: 'Biology', levelId: level.id},
-        {name: 'Communication Skills', levelId: level.id},
-        // {name: 'Into. to Pharmacy', levelId: level.id},
+        {name: 'Community Medicine', levelId: level.id},
+        {name: 'Pharmaceutical Chemistry', levelId: level.id},
+        {name: 'Physiology', levelId: level.id},
+        {name: 'Clinical Pharmacy', levelId: level.id},
+        {name: 'Pharmacy Jurisprudence', levelId: level.id},
+        {name: 'First Aid', levelId: level.id},
+        {name: 'Pharmaceutics general  & technology', levelId: level.id},
+        {name: 'Pharmaceutics microbiology', levelId: level.id},
       ],
     });
 

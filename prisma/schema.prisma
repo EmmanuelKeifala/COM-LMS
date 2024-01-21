@@ -8,6 +8,7 @@ generator client {
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
   relationMode = "prisma"
 }
 
@@ -38,7 +39,7 @@ model Course {
 }
 model Category {
   id     String   @id @default(uuid()) @map("_id")
-  name   String   @unique
+  name   String   
   level  Level    @relation(fields: [levelId], references: [id])
   levelId String
   courses Course[]

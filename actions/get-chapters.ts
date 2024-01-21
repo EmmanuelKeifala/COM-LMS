@@ -26,6 +26,7 @@ export const getChapter = async ({
           courseId,
         },
       },
+      cacheStrategy: {swr: 60, ttl: 60},
     });
 
     const course = await db.course.findUnique({
@@ -36,6 +37,7 @@ export const getChapter = async ({
       select: {
         price: true,
       },
+      cacheStrategy: {swr: 60, ttl: 60},
     });
 
     const chapter = await db.chapter.findUnique({
@@ -43,6 +45,7 @@ export const getChapter = async ({
         id: chapterId,
         isPublished: true,
       },
+      cacheStrategy: {swr: 60, ttl: 60},
     });
 
     if (!chapter || !course) {
@@ -61,6 +64,7 @@ export const getChapter = async ({
         where: {
           courseId: courseId,
         },
+        cacheStrategy: {swr: 60, ttl: 60},
       });
     }
     if (isEnrolled) {
@@ -68,6 +72,7 @@ export const getChapter = async ({
         where: {
           chapterId: chapterId,
         },
+        cacheStrategy: {swr: 60, ttl: 60},
       });
     }
     if (isEnrolled) {
@@ -75,6 +80,7 @@ export const getChapter = async ({
         where: {
           chapterId: chapterId,
         },
+        cacheStrategy: {swr: 60, ttl: 60},
       });
     }
     if (isEnrolled) {
@@ -82,6 +88,7 @@ export const getChapter = async ({
         where: {
           chapterId: chapterId,
         },
+        cacheStrategy: {swr: 60, ttl: 60},
       });
     }
 
@@ -97,6 +104,7 @@ export const getChapter = async ({
         orderBy: {
           position: 'asc',
         },
+        cacheStrategy: {swr: 60, ttl: 60},
       });
     }
 
@@ -107,6 +115,7 @@ export const getChapter = async ({
           chapterId,
         },
       },
+      cacheStrategy: {swr: 60, ttl: 60},
     });
 
     return {

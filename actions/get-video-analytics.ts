@@ -6,6 +6,7 @@ export const getVideoAnalytics = async (userId: string) => {
       include: {
         video: true,
       },
+      cacheStrategy: {swr: 60, ttl: 60},
     });
     const ratedVideosNotReviewed = await db.videoRating.findMany({
       where: {
@@ -17,6 +18,7 @@ export const getVideoAnalytics = async (userId: string) => {
       include: {
         video: true,
       },
+      cacheStrategy: {swr: 60, ttl: 60},
     });
     const totalVideos = ratedVideos.length;
     const videosWithEnoughRatings: any = ratedVideosNotReviewed.filter(

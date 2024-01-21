@@ -12,6 +12,7 @@ export const getProgress = async (
           courseId: courseId,
         },
       },
+      cacheStrategy: {swr: 60, ttl: 60},
     });
 
     if (!isEnrolled) {
@@ -25,6 +26,7 @@ export const getProgress = async (
       select: {
         id: true,
       },
+      cacheStrategy: {swr: 60, ttl: 60},
     });
 
     const publishedChapterIds = publishedChapters.map(chapter => chapter.id);

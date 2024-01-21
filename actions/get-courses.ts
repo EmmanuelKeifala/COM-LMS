@@ -35,6 +35,7 @@ export const getCourses = async ({
           where: {
             name: userClass,
           },
+          cacheStrategy: {swr: 60, ttl: 60},
         })
       : null;
 
@@ -65,6 +66,7 @@ export const getCourses = async ({
           orderBy: {
             createdAt: 'desc',
           },
+          cacheStrategy: {swr: 60, ttl: 60},
         })
       : await db.course.findMany({
           where: {
@@ -90,6 +92,7 @@ export const getCourses = async ({
           orderBy: {
             createdAt: 'desc',
           },
+          cacheStrategy: {swr: 60, ttl: 60},
         });
 
     // Fetch progress for each course
@@ -111,7 +114,7 @@ export const getCourses = async ({
 };
 
 // Fetch user details from the API
-const fetchUserDetails = async (userId: string) => {
+const fetchUserDetails: any = async (userId: string) => {
   try {
     const response = await axios.get(
       `https://api.clerk.com/v1/users/${userId}`,

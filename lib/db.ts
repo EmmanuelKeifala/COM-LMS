@@ -1,7 +1,17 @@
-import {PrismaClient} from '@prisma/client';
-declare global {
-  var prisma: PrismaClient | undefined;
+import {PrismaClient} from '@prisma/client/edge';
+import {withAccelerate} from '@prisma/extension-accelerate';
+
+function makePrisma() {
+  return new PrismaClient({
+    datasources: {db: {url: process.env.DATABASE_URL}},
+  }).$extends(withAccelerate());
 }
 
-export const db = globalThis.prisma || new PrismaClient();
-if (process.env.NODE_ENV !== 'production') globalThis.prisma = db;
+const globalForPrisma = global as unknown as {
+  prisma: ReturnType<typeof makePrisma>;
+};
+
+export const db = globalForPrisma.prisma ?? makePrisma();
+
+if (process.env.NODE_ENV !== 'production')
+  globalForPrisma.prisma = makePrisma();

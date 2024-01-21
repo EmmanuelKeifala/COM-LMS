@@ -11,8 +11,13 @@ import {
   GiChemicalDrop,
   GiHerbsBundle,
   GiMedicines,
+  GiHospitalCross,
+  GiFirstAidKit,
+  GiMedicinePills,
+  GiPillDrop,
 } from 'react-icons/gi';
 import {MdOutlineLocalPharmacy} from 'react-icons/md';
+import {GoLaw} from 'react-icons/go';
 
 import {IconType} from 'react-icons';
 
@@ -34,6 +39,12 @@ const iconMap: Record<Category['name'], IconType> = {
   'Pharmaceutical Chemistry': MdOutlineLocalPharmacy,
   Pharmacognosy: GiHerbsBundle,
   'Into. to Pharmacy': GiMedicines,
+  'Clinical Pharmacy': GiHospitalCross,
+  'Pharmacy Jurisprudence': GoLaw,
+  'First Aid': GiFirstAidKit,
+  'Pharmaceutics general  & technology': GiPillDrop,
+  'Pharmaceutics microbiology': GiMedicinePills,
+  'Community Medicine': GiMedicines,
 };
 
 export const Categories = ({items}: CategoriesProps) => {
