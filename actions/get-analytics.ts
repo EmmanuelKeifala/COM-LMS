@@ -12,6 +12,7 @@ export const getAnalytics = async () => {
             },
           },
         },
+        cacheStrategy: {swr: 60, ttl: 60},
       });
 
       // Use batch fetching to get all user progress in a single query
@@ -21,6 +22,7 @@ export const getAnalytics = async () => {
             in: joinedCourses.map(joined => joined.userId),
           },
         },
+        cacheStrategy: {swr: 60, ttl: 60},
       });
 
       // Count the occurrences of each course title using Prisma's distinct option
@@ -43,6 +45,7 @@ export const getAnalytics = async () => {
         where: {
           isCompleted: true,
         },
+        cacheStrategy: {swr: 60, ttl: 60},
       });
 
       // Map course counts to the desired format for the Chart component
