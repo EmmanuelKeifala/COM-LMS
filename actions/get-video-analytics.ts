@@ -22,10 +22,10 @@ export const getVideoAnalytics = async (userId: string) => {
     });
     const totalVideos = ratedVideos.length;
     const videosWithEnoughRatings: any = ratedVideosNotReviewed.filter(
-      videoRating => {
+      (videoRating: any) => {
         // Assuming that `userId` is associated with the user making the request
         const uniqueRaters = new Set(
-          ratedVideosNotReviewed.map(vr => vr.userId),
+          ratedVideosNotReviewed.map((vr: any) => vr.userId),
         );
         return uniqueRaters.size >= 5;
       },

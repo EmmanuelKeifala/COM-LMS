@@ -40,7 +40,7 @@ export const getDashboardCourses = async (
     });
 
     const courses = purchasedCourses.map(
-      purchase => purchase.course,
+      (purchase: any) => purchase.course,
     ) as CourseWithProgressWithCategory[];
 
     for (let course of courses) {
