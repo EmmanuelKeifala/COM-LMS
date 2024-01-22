@@ -1,36 +1,47 @@
 import {db} from '@/lib/db';
 export const getAnalytics = async () => {
   try {
-    // Fetch joined from the 'joined' collection
+    // Fetch joined courses with only necessary columns
     const joinedCourses = await db.joined.findMany({
-      include: {
-        course: true,
+      select: {
+        userId: true,
+        course: {
+          select: {
+            title: true,
+          },
+        },
       },
     });
 
-    // Fetch completed courses for all users
-    const completedCourses = await db.userProgress.findMany({
+    // Use batch fetching to get all user progress in a single query
+    const userProgress = await db.userProgress.findMany({
       where: {
-        isCompleted: true,
+        userId: {
+          in: joinedCourses.map(joined => joined.userId),
+        },
       },
     });
 
-    // Count the occurrences of each course title
+    // Count the occurrences of each course title using Prisma's distinct option
     const courseCounts: {[courseTitle: string]: number} = {};
     const courseTitleToFirstWords: {[courseTitle: string]: string} = {};
 
-    joinedCourses.forEach((joined: {course: {title: string}}) => {
+    joinedCourses.forEach(joined => {
       const firstWords = joined.course.title
         .split(' ')
         .slice(0, 2)
-        .map((word: string) => word[0])
+        .map(word => word[0])
         .join('');
 
-      // Populate courseCounts
       courseCounts[firstWords] = (courseCounts[firstWords] || 0) + 1;
-
-      // Populate courseTitleToFirstWords
       courseTitleToFirstWords[joined.course.title] = firstWords;
+    });
+
+    // Use Prisma's count aggregate function for completed courses
+    const completedCoursesCount = await db.userProgress.count({
+      where: {
+        isCompleted: true,
+      },
     });
 
     // Map course counts to the desired format for the Chart component
@@ -38,6 +49,7 @@ export const getAnalytics = async () => {
       name,
       students,
     }));
+
     const tableData = Object.entries(courseTitleToFirstWords).map(
       ([actualName, abbreviation]) => ({
         actualName,
@@ -47,26 +59,18 @@ export const getAnalytics = async () => {
 
     const totalStudents = data.reduce((acc, curr) => acc + curr.students, 0);
 
-    // Collect analytics data for each user
+    // Parallelize the fetching of user-specific data
     const userData = await Promise.all(
-      joinedCourses.map(async (joined: {userId: any}) => {
+      joinedCourses.map(async joined => {
         const userId = joined.userId;
 
-        // Fetch completed courses for the specific user
-        const userCompletedCourses = await db.userProgress.findMany({
-          where: {
-            userId,
-            isCompleted: true,
-          },
-        });
+        const userCompletedCourses = userProgress.filter(
+          course => course.userId === userId && course.isCompleted === true,
+        );
 
-        // Fetch in-progress courses for the specific user
-        const userInProgressCourses = await db.userProgress.findMany({
-          where: {
-            userId,
-            isCompleted: false,
-          },
-        });
+        const userInProgressCourses = userProgress.filter(
+          course => course.userId === userId && course.isCompleted === false,
+        );
 
         return {
           totalStudents,
@@ -80,7 +84,7 @@ export const getAnalytics = async () => {
     );
 
     return {
-      totalCompletedCourses: completedCourses.length,
+      totalCompletedCourses: completedCoursesCount,
       userData,
       data,
       totalStudents,
