@@ -29,7 +29,9 @@ export const getProgress = async (
       cacheStrategy: {swr: 60, ttl: 60},
     });
 
-    const publishedChapterIds = publishedChapters.map(chapter => chapter.id);
+    const publishedChapterIds = publishedChapters.map(
+      (chapter: any) => chapter.id,
+    );
 
     const validCompletedChapters = await db.userProgress.count({
       where: {
