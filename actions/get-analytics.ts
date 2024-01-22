@@ -6,7 +6,6 @@ export const getAnalytics = async () => {
       include: {
         course: true,
       },
-      cacheStrategy: {swr: 60, ttl: 60},
     });
 
     // Fetch completed courses for all users
@@ -14,7 +13,6 @@ export const getAnalytics = async () => {
       where: {
         isCompleted: true,
       },
-      cacheStrategy: {swr: 60, ttl: 60},
     });
 
     // Count the occurrences of each course title
@@ -60,7 +58,6 @@ export const getAnalytics = async () => {
             userId,
             isCompleted: true,
           },
-          cacheStrategy: {swr: 60, ttl: 60},
         });
 
         // Fetch in-progress courses for the specific user
@@ -69,7 +66,6 @@ export const getAnalytics = async () => {
             userId,
             isCompleted: false,
           },
-          cacheStrategy: {swr: 60, ttl: 60},
         });
 
         return {
