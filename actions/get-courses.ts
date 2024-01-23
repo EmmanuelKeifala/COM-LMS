@@ -35,7 +35,7 @@ export const getCourses = async ({
           where: {
             name: userClass,
           },
-          cacheStrategy: {swr: 60, ttl: 60},
+          cacheStrategy: {swr: 60, ttl: 60 * 200},
         })
       : null;
 
@@ -66,7 +66,7 @@ export const getCourses = async ({
           orderBy: {
             createdAt: 'desc',
           },
-          cacheStrategy: {swr: 60, ttl: 60},
+          cacheStrategy: {swr: 60, ttl: 60 * 200},
         })
       : await db.course.findMany({
           where: {
@@ -92,7 +92,7 @@ export const getCourses = async ({
           orderBy: {
             createdAt: 'desc',
           },
-          cacheStrategy: {swr: 60, ttl: 60},
+          cacheStrategy: {swr: 60, ttl: 60 * 200},
         });
 
     // Fetch progress for each course

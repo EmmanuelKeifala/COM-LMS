@@ -19,109 +19,63 @@ export const getChapter = async ({
   chapterId,
 }: GetChapterProps) => {
   try {
-    const isEnrolled = await db.joined?.findUnique({
-      where: {
-        userId_courseId: {
-          userId,
-          courseId,
-        },
-      },
-      cacheStrategy: {swr: 60, ttl: 60},
-    });
+    const cacheStrategy = {swr: 60 * 60, ttl: 60 * 60 * 10};
 
-    const course = await db.course.findUnique({
-      where: {
-        isPublished: true,
-        id: courseId,
-      },
-      select: {
-        price: true,
-      },
-      cacheStrategy: {swr: 60, ttl: 60},
-    });
-
-    const chapter = await db.chapter.findUnique({
-      where: {
-        id: chapterId,
-        isPublished: true,
-      },
-      cacheStrategy: {swr: 60, ttl: 60},
-    });
+    const [isEnrolled, course, chapter, userProgress] = await Promise.all([
+      db.joined?.findUnique({
+        where: {userId_courseId: {userId, courseId}},
+        cacheStrategy,
+      }),
+      db.course.findUnique({
+        where: {isPublished: true, id: courseId},
+        cacheStrategy,
+      }),
+      db.chapter.findUnique({
+        where: {id: chapterId, isPublished: true},
+        cacheStrategy,
+      }),
+      db.userProgress.findUnique({
+        where: {userId_chapterId: {userId, chapterId}},
+        cacheStrategy,
+      }),
+    ]);
 
     if (!chapter || !course) {
       throw new Error('Chapter or course not found');
     }
 
-    let muxData = null;
     let attachments: Attachment[] = [];
-    let nextChapter: Chapter | null = null;
     let chapterAttachment: ChapterAttachment[] = [];
     let videoUrls: VideoUrl[] = [];
     let quizUrls: ChapterQuiz[] = [];
+    let nextChapter: Chapter | null = null;
 
     if (isEnrolled) {
-      attachments = await db.attachment.findMany({
-        where: {
-          courseId: courseId,
-        },
-        cacheStrategy: {swr: 60, ttl: 60},
-      });
-    }
-    if (isEnrolled) {
-      chapterAttachment = await db.chapterAttachment.findMany({
-        where: {
-          chapterId: chapterId,
-        },
-        cacheStrategy: {swr: 60, ttl: 60},
-      });
-    }
-    if (isEnrolled) {
-      videoUrls = await db.videoUrl.findMany({
-        where: {
-          chapterId: chapterId,
-        },
-        cacheStrategy: {swr: 60, ttl: 60},
-      });
-    }
-    if (isEnrolled) {
-      quizUrls = await db.chapterQuiz.findMany({
-        where: {
-          chapterId: chapterId,
-        },
-        cacheStrategy: {swr: 60, ttl: 60},
-      });
+      const [attachmentData, chapterAttachmentData, videoUrlData, quizUrlData] =
+        await Promise.all([
+          db.attachment.findMany({where: {courseId}, cacheStrategy}),
+          db.chapterAttachment.findMany({where: {chapterId}, cacheStrategy}),
+          db.videoUrl.findMany({where: {chapterId}, cacheStrategy}),
+          db.chapterQuiz.findMany({where: {chapterId}, cacheStrategy}),
+        ]);
+
+      attachments = attachmentData;
+      chapterAttachment = chapterAttachmentData;
+      videoUrls = videoUrlData;
+      quizUrls = quizUrlData;
     }
 
     if (chapter.isFree || isEnrolled) {
       nextChapter = await db.chapter.findFirst({
-        where: {
-          courseId: courseId,
-          isPublished: true,
-          position: {
-            gt: chapter?.position,
-          },
-        },
-        orderBy: {
-          position: 'asc',
-        },
-        cacheStrategy: {swr: 60, ttl: 60},
+        where: {courseId, isPublished: true, position: {gt: chapter?.position}},
+        orderBy: {position: 'asc'},
+        cacheStrategy,
       });
     }
-
-    const userProgress = await db.userProgress.findUnique({
-      where: {
-        userId_chapterId: {
-          userId,
-          chapterId,
-        },
-      },
-      cacheStrategy: {swr: 60, ttl: 60},
-    });
 
     return {
       chapter,
       course,
-      muxData,
       attachments,
       nextChapter,
       userProgress,
