@@ -19,7 +19,7 @@ export const getChapter = async ({
   chapterId,
 }: GetChapterProps) => {
   try {
-    const cacheStrategy = {swr: 60 * 60, ttl: 60 * 60 * 10};
+    const cacheStrategy = {swr: 60, ttl: 60};
 
     const [isEnrolled, course, chapter, userProgress] = await Promise.all([
       db.joined?.findUnique({
