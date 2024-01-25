@@ -1,13 +1,7 @@
 import {db} from '@/lib/db';
 import {isUploader} from '@/lib/uploader';
 import {auth} from '@clerk/nextjs';
-import Mux from '@mux/mux-node';
 import {NextResponse} from 'next/server';
-
-const {Video} = new Mux(
-  process.env.MUX_TOKEN_ID!,
-  process.env.MUX_TOKEN_SECRET!,
-);
 
 export async function DELETE(
   req: Request,

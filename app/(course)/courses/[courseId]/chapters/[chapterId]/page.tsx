@@ -2,7 +2,6 @@ import {getChapter} from '@/actions/get-chapters';
 import {Banner} from '@/components/banner';
 import {auth} from '@clerk/nextjs';
 import {redirect} from 'next/navigation';
-import {VideoPlayer} from './_components/video-player';
 import YoutubePlayerComponent from '@/components/YoutubePlayerComponent';
 import {CourseProgressButton} from './_components/course-progress-button';
 import {CourseEnrollButton} from './_components/course-enroll-button';
@@ -55,7 +54,6 @@ const ChapterIdPage = async ({
         {isEnrolled && (
           <div className="w-full flex items-end justify-end m-10">
             <ChatButton isChat={true} />
-            
           </div>
         )}
         <div className="p-4">

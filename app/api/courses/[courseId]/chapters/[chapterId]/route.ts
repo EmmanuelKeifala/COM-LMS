@@ -1,7 +1,5 @@
-import Mux from '@mux/mux-node';
 import {auth} from '@clerk/nextjs';
 import {NextResponse} from 'next/server';
-import {isUploader} from '@/lib/uploader';
 import {db} from '@/lib/db';
 
 export async function DELETE(
