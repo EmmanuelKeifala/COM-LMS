@@ -5,9 +5,11 @@ import {ClerkProvider} from '@clerk/nextjs';
 import {ToastProvider} from '@/components/providers/toaster-provider';
 import {ConfettiProvider} from '@/components/providers/confetti-provider';
 import {SpeedInsights} from '@vercel/speed-insights/next';
-const inter = Inter({subsets: ['latin']});
+import {Analytics} from '@vercel/analytics/react';
 import {ThemeProvider} from '@/components/theme-provider';
 import GoogleAnalytics from '@bradgarropy/next-google-analytics';
+
+const inter = Inter({subsets: ['latin']});
 
 // Config for pwa
 const APP_NAME = 'meyoneducation';
@@ -65,6 +67,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
             disableTransitionOnChange>
             {children}
           </ThemeProvider>
+          <Analytics mode={'production'} />;
           <SpeedInsights />
           <ConfettiProvider />
           <ToastProvider />
