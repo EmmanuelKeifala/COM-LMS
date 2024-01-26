@@ -4,12 +4,6 @@ import axios from 'axios';
 
 export async function GET(req: Request) {
   try {
-    if (
-      req.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}`
-    ) {
-      return new NextResponse('Unauthorized', {status: 401});
-    }
-
     const response = await axios.get(
       `https://api.clerk.com/v1/users?limit=499`,
       {
@@ -19,11 +13,12 @@ export async function GET(req: Request) {
         },
       },
     );
+
     const usersWithoutClasses: any = [];
     {
       response?.data?.map((user: any) => {
         if (!user?.publicMetadata?.userClass) {
-          usersWithoutClasses?.push(user?.emailAddresses[0]?.emailAddress);
+          usersWithoutClasses?.push(user?.email_addresses[0].email_address);
         }
       });
     }
@@ -45,7 +40,7 @@ export async function GET(req: Request) {
     <p><em>meyoneducation Team</em></p>`,
     });
 
-    return NextResponse.json({ok: true});
+    return NextResponse.json('Emails sent successfully', {status: 200});
   } catch (error) {
     console.log('[CRON JOB ERROR]', error);
     return new NextResponse('Internal server error', {status: 500});
