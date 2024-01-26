@@ -4,11 +4,11 @@ import {transporter} from '@/lib/sendEmail';
 
 export async function GET(req: Request) {
   try {
-    if (
-      req.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}`
-    ) {
-      return new NextResponse('Unauthorized', {status: 401});
-    }
+    // if (
+    //   req.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}`
+    // ) {
+    //   return new NextResponse('Unauthorized', {status: 401});
+    // }
     const users = await clerkClient.users.getUserList({
       limit: 499,
     });
