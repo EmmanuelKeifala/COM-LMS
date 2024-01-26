@@ -15,22 +15,24 @@ export async function GET(req: Request) {
     );
 
     const usersWithoutClasses: any = [];
-    {
-      response.data.map((user: any) => {
-        if (!user.publicMetadata.userClass) {
-          usersWithoutClasses.push(user.email_addresses[0].email_address);
-        }
-      });
-    }
-    {
-      usersWithoutClasses.map(async (email: any) => {
-        const info = await transporter.sendMail({
-          from: '"meyoneducation" <meyoneducationhub@gmail.com>', // sender address
-          to: email,
-          subject: 'Hello',
-          html: `    <p><strong>Reminder: Select Your Class on meyoneducation Platform</strong></p>
 
-          <p>Dear Student,</p>
+    response.data.forEach((user: any) => {
+      if (!user.publicMetadata.userClass) {
+        usersWithoutClasses.push({
+          name: user.first_name,
+          email: user.email_addresses[0].email_address,
+        });
+      }
+    });
+
+    usersWithoutClasses.map(async (userData: any) => {
+      const info = await transporter.sendMail({
+        from: '"meyoneducation" <meyoneducationhub@gmail.com>', // sender address
+        to: userData.email,
+        subject: 'Hello',
+        html: `    <p><strong>Reminder: Select Your Class on meyoneducation Platform</strong></p>
+
+          <p>Dear ${userData.name},</p>
 
           <p>We hope this email finds you well. We would like to remind you to select your class on the meyoneducation platform. We have recently published the exciting new course, and it's essential for you to enroll in your respective class to access the course materials.</p>
           <p>If you're unsure how to select your class, or if you have any questions, please don't hesitate to reach out to us. You can ask for assistance in our dedicated WhatsApp group, where our team and fellow students are ready to help.</p>
@@ -39,9 +41,8 @@ export async function GET(req: Request) {
 
         <p><strong>Best regards,</strong></p>
         <p><em>meyoneducation Team</em></p>`,
-        });
       });
-    }
+    });
 
     return NextResponse.json('Emails sent successfully', {status: 200});
   } catch (error) {
