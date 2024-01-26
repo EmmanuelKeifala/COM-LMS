@@ -17,7 +17,7 @@ export async function GET(req: Request) {
     const usersWithoutClasses: any = [];
 
     response.data.forEach((user: any) => {
-      if (!user.publicMetadata.userClass) {
+      if (!user.publicMetadata?.userClass) {
         usersWithoutClasses.push({
           name: user.first_name,
           email: user.email_addresses[0].email_address,
