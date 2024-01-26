@@ -1,21 +1,28 @@
 import {clerkClient} from '@clerk/nextjs';
 import {NextResponse} from 'next/server';
 import {transporter} from '@/lib/sendEmail';
+import axios from 'axios';
 
 export async function GET(req: Request) {
   try {
-    // if (
-    //   req.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}`
-    // ) {
-    //   return new NextResponse('Unauthorized', {status: 401});
-    // }
-    const users = await clerkClient.users.getUserList({
-      limit: 499,
-    });
+    if (
+      req.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}`
+    ) {
+      return new NextResponse('Unauthorized', {status: 401});
+    }
 
+    const response = await axios.get(
+      `https://api.clerk.com/v1//users?limit=499`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
+          Accept: 'application/json',
+        },
+      },
+    );
     const usersWithoutClasses: any = [];
     {
-      users.map(user => {
+      response.data.map((user: any) => {
         if (!user.publicMetadata.userClass) {
           usersWithoutClasses.push(user.emailAddresses[0].emailAddress);
         }
