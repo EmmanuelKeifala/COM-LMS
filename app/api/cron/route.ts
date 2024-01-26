@@ -1,4 +1,3 @@
-import {clerkClient} from '@clerk/nextjs';
 import {NextResponse} from 'next/server';
 import {transporter} from '@/lib/sendEmail';
 import axios from 'axios';
@@ -12,7 +11,7 @@ export async function GET(req: Request) {
     }
 
     const response = await axios.get(
-      `https://api.clerk.com/v1//users?limit=499`,
+      `https://api.clerk.com/v1/users?limit=499`,
       {
         headers: {
           Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
