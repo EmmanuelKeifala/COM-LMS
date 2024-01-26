@@ -21,9 +21,9 @@ export async function GET(req: Request) {
     );
     const usersWithoutClasses: any = [];
     {
-      response.data.map((user: any) => {
-        if (!user.publicMetadata.userClass) {
-          usersWithoutClasses.push(user.emailAddresses[0].emailAddress);
+      response?.data?.map((user: any) => {
+        if (!user?.publicMetadata?.userClass) {
+          usersWithoutClasses?.push(user?.emailAddresses[0]?.emailAddress);
         }
       });
     }
