@@ -12,7 +12,6 @@ export const getProgress = async (
           courseId: courseId,
         },
       },
-      cacheStrategy: {swr: 60, ttl: 60},
     });
 
     if (!isEnrolled) {

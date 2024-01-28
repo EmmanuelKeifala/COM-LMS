@@ -24,19 +24,15 @@ export const getChapter = async ({
     const [isEnrolled, course, chapter, userProgress] = await Promise.all([
       db.joined?.findUnique({
         where: {userId_courseId: {userId, courseId}},
-        cacheStrategy,
       }),
       db.course.findUnique({
         where: {isPublished: true, id: courseId},
-        cacheStrategy,
       }),
       db.chapter.findUnique({
         where: {id: chapterId, isPublished: true},
-        cacheStrategy,
       }),
       db.userProgress.findUnique({
         where: {userId_chapterId: {userId, chapterId}},
-        cacheStrategy,
       }),
     ]);
 
@@ -53,10 +49,10 @@ export const getChapter = async ({
     if (isEnrolled) {
       const [attachmentData, chapterAttachmentData, videoUrlData, quizUrlData] =
         await Promise.all([
-          db.attachment.findMany({where: {courseId}, cacheStrategy}),
-          db.chapterAttachment.findMany({where: {chapterId}, cacheStrategy}),
-          db.videoUrl.findMany({where: {chapterId}, cacheStrategy}),
-          db.chapterQuiz.findMany({where: {chapterId}, cacheStrategy}),
+          db.attachment.findMany({where: {courseId}}),
+          db.chapterAttachment.findMany({where: {chapterId}}),
+          db.videoUrl.findMany({where: {chapterId}}),
+          db.chapterQuiz.findMany({where: {chapterId}}),
         ]);
 
       attachments = attachmentData;
@@ -69,7 +65,6 @@ export const getChapter = async ({
       nextChapter = await db.chapter.findFirst({
         where: {courseId, isPublished: true, position: {gt: chapter?.position}},
         orderBy: {position: 'asc'},
-        cacheStrategy,
       });
     }
 
