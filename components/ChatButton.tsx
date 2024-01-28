@@ -28,20 +28,22 @@ export default function ChatButton({isChat}: ChatButtonProps) {
 
   return (
     <>
-      <Button
-        onClick={isChat ? toggleChatBox : toggleFeedbackModal}
-        className={cn(
-          !isChat &&
-            'w-[150px] ml-4 rounded-full bg-sky-500 flex items-center hover:bg-sky-400',
-        )}
-        style={{
-          position: 'fixed',
-          bottom: '20px',
-          right: '70px',
-        }}>
-        {!isChat && <MdFeedback size={30} className="mr-2 tex-xl" />}
-        {!isChat && 'Feedback'}
-      </Button>
+      {!isChat && (
+        <Button
+          onClick={isChat ? toggleChatBox : toggleFeedbackModal}
+          className={cn(
+            !isChat &&
+              'w-[150px] ml-4 rounded-full bg-sky-500 flex items-center hover:bg-sky-400',
+          )}
+          style={{
+            position: 'fixed',
+            bottom: '20px',
+            right: '70px',
+          }}>
+          {!isChat && <MdFeedback size={30} className="mr-2 text-xl" />}
+          {!isChat && 'Feedback'}
+        </Button>
+      )}
       {isChat ? (
         <BubbleChat
           chatflowid="97f0ecf7-0b26-4ffc-8e20-745ed9343b21"
