@@ -28,7 +28,9 @@ export const getCourses = async ({
     // Fetch user data
     const userResponse = await fetchUserDetails(userId);
     const userClass = userResponse?.public_metadata?.userClass;
-
+    if (!userClass) {
+      return {coursesWithProgress: [], userClass: ''};
+    }
     // Find the Level based on userClass
     const level = userClass
       ? await db.level.findUnique({
