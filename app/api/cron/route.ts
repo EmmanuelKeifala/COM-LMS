@@ -53,7 +53,9 @@ export async function GET(req: Request) {
     // Send emails in batches
     for (let i = 0; i < usersWithoutClasses.length; i += batchSize) {
       const batch = usersWithoutClasses.slice(i, i + batchSize);
-      await sendEmailBatch(batch);
+
+      // Parallelize email sending within a batch
+      await Promise.all(batch.map(sendEmailBatch));
 
       // Introduce a delay between batches
       if (i + batchSize < usersWithoutClasses.length) {
