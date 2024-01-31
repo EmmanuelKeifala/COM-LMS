@@ -33,7 +33,17 @@ export const CoursesList = ({items}: CoursesListProps) => {
       </div>
       {items.length === 0 && (
         <div className="text-center text-sm text-muted-foreground mt-10">
-          No courses found
+          No courses found. Go to the{' '}
+          <a
+            href="https://meyoneducation.vercel.app/search"
+            className="text-bold underline">
+            browse
+          </a>{' '}
+          tab to enroll in courses
+          <br />
+          <span className="text-center text-sm text-muted-foreground italic">
+            Make sure you select your class
+          </span>
         </div>
       )}
     </div>

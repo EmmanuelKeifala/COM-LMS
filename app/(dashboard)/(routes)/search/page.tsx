@@ -41,8 +41,16 @@ const SearchPage = async ({searchParams}: SearchPageProps) => {
         <SearchInput />
       </div>
       <div className="p-6 space-y-4">
-        <Categories items={categories} />
-        <CoursesList items={coursesWithProgress} />
+        {userClass && <Categories items={categories} />}
+        {userClass ? (
+          <CoursesList items={coursesWithProgress} />
+        ) : (
+          <>
+            <div className="text-center text-sm text-muted-foreground mt-10">
+              Please select your class to load your courses
+            </div>
+          </>
+        )}
       </div>
     </>
   );
