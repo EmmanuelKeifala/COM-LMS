@@ -4,6 +4,7 @@ import {AreaChart, BarChart, Compass, Layout, List} from 'lucide-react';
 import {SidebarItem} from './SidebarItem';
 import {usePathname} from 'next/navigation';
 import {FcFeedback} from 'react-icons/fc';
+import {MdMail} from 'react-icons/md';
 
 const guestRoutes = [
   {
@@ -37,6 +38,11 @@ const uploadRoute = [
     icon: FcFeedback,
     label: 'Feedbacks',
     href: '/uploader/feedback',
+  },
+  {
+    icon: MdMail,
+    label: 'Emails',
+    href: '/uploader/email',
   },
 ];
 export const SidebarRoutes = () => {
