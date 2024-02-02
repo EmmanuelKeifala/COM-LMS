@@ -34,28 +34,26 @@ export async function POST(req: Request) {
       },
     );
 
-    const userData: any = [
-      {name: 'Emmanuel', email: 'emmanuelkeifala@gmail.com'},
-    ];
-    // if (data.userCategory === 'general') {
-    //   response.data.forEach((user: any) => {
-    //     if (user) {
-    //       userData.push({
-    //         name: user?.first_name || 'Student',
-    //         email: user.email_addresses[0].email_address,
-    //       });
-    //     }
-    //   });
-    // } else if (data.userCategory === 'noClass') {
-    //   response.data.forEach((user: any) => {
-    //     if (!user.public_metadata.userClass) {
-    //       userData.push({
-    //         name: user?.first_name || 'Student',
-    //         email: user.email_addresses[0].email_address,
-    //       });
-    //     }
-    //   });
-    // }
+    const userData: any = [];
+    if (data.userCategory === 'general') {
+      response.data.forEach((user: any) => {
+        if (user) {
+          userData.push({
+            name: user?.first_name || 'Student',
+            email: user.email_addresses[0].email_address,
+          });
+        }
+      });
+    } else if (data.userCategory === 'noClass') {
+      response.data.forEach((user: any) => {
+        if (!user.public_metadata.userClass) {
+          userData.push({
+            name: user?.first_name || 'Student',
+            email: user.email_addresses[0].email_address,
+          });
+        }
+      });
+    }
     // Set the batch size and delay between batches
     const batchSize = 50;
     const delayBetweenBatches = 5000;
