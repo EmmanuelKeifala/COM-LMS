@@ -10,6 +10,7 @@ This project is a web platform designed to host university notes along with asso
 - **UploadThing**: A file upload library for handling file uploads seamlessly.
 - **ShadCN**: Re-usable components built using Radix UI and Tailwind CSS..
 - **Clerk**: An authentication and user management system for Next.js applications.
+- **Pusher**: For instant Messaging.
 
 ## Getting Started
 

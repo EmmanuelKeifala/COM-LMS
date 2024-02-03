@@ -54,6 +54,7 @@ export async function POST(req: Request) {
         }
       });
     }
+    const userData: any = [
     // Set the batch size and delay between batches
     const batchSize = 50;
     const delayBetweenBatches = 5000;
