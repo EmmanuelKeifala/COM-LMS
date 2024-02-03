@@ -105,6 +105,12 @@ export default function EmailForm() {
                     <SelectItem value="noClass">
                       Students without class
                     </SelectItem>
+                    <SelectItem value="courseNotCompleted">
+                      Students who have not completed their courses
+                    </SelectItem>
+                    <SelectItem value="noCourse">
+                      Students who have not selected any course
+                    </SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
