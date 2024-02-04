@@ -58,12 +58,15 @@ export default function EmailForm() {
         data,
       });
       form.reset();
+      form.resetField('userCategory');
       toast.success('Emails were sent successfully');
     } catch (error) {
       console.log(error);
       toast.error('Something went wrong');
+      form.reset();
     } finally {
       setIsLoading(false);
+      form.reset();
     }
   };
 
