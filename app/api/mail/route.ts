@@ -73,7 +73,6 @@ export async function POST(req: Request) {
     // Set the batch size and delay between batches
     const batchSize = 50;
     const delayBetweenBatches = 5000;
-    console.log(userData);
     // Send emails in batches
     for (let i = 0; i < userData.length; i += batchSize) {
       const batch = userData.slice(i, i + batchSize);
