@@ -6,7 +6,6 @@ import {usePathname} from 'next/navigation';
 import {FcFeedback} from 'react-icons/fc';
 import {MdEmail} from 'react-icons/md';
 
-
 const guestRoutes = [
   {
     icon: Layout,
@@ -41,8 +40,6 @@ const uploadRoute = [
     href: '/uploader/feedback',
   },
   {
-
-
     icon: MdEmail,
     label: 'Emails',
     href: '/uploader/email',
