@@ -67,11 +67,39 @@ if (!self.define) {
     });
   };
 }
-define(['./workbox-7144475a'], (function (workbox) { 'use strict';
+define(['./workbox-1e54d6fe'], (function (workbox) { 'use strict';
 
   importScripts("/fallback-development.js");
   self.skipWaiting();
   workbox.clientsClaim();
+
+  /**
+   * The precacheAndRoute() method efficiently caches and responds to
+   * requests for URLs in the manifest.
+   * See https://goo.gl/S9QRab
+   */
+  workbox.precacheAndRoute([{
+    "url": "/_next/data/development/fallback.json",
+    "revision": "development"
+  }, {
+    "url": "/fallback-font.woff2",
+    "revision": "development"
+  }, {
+    "url": "/fallback.mp3",
+    "revision": "development"
+  }, {
+    "url": "/fallback.mp4",
+    "revision": "development"
+  }, {
+    "url": "/fallback.webp",
+    "revision": "development"
+  }, {
+    "url": "/~offline",
+    "revision": "development"
+  }], {
+    "ignoreURLParametersMatching": [/^utm_/, /^fbclid$/, /ts/]
+  });
+  workbox.cleanupOutdatedCaches();
   workbox.registerRoute("/", new workbox.NetworkFirst({
     "cacheName": "start-url",
     plugins: [{

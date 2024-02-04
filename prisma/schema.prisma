@@ -116,7 +116,6 @@ model Chapter{
 model UserProgress {
   id String @id @default(uuid()) @map("_id")
   userId String
-
   chapterId String
   chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
