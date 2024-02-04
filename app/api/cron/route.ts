@@ -35,49 +35,43 @@ async function sendEmailBatch(emails: any[]) {
 }
 
 export async function GET(req: Request) {
-  try {
-    const response = await axios.get(
-      `https://api.clerk.com/v1/users?limit=499`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
-          Accept: 'application/json',
-        },
-      },
-    );
-
-    const usersWithoutClasses: any = [];
-
-    response.data.forEach((user: any) => {
-      if (user) {
-        usersWithoutClasses.push({
-          name: user?.first_name || 'Student',
-          email: user.email_addresses[0].email_address,
-        });
-      }
-    });
-    // Set the batch size and delay between batches
-    const batchSize = 50;
-    const delayBetweenBatches = 5000;
-
-    // Send emails in batches
-    for (let i = 0; i < usersWithoutClasses.length; i += batchSize) {
-      const batch = usersWithoutClasses.slice(i, i + batchSize);
-
-      // Parallelize email sending within a batch
-      await sendEmailBatch(batch);
-
-      // Introduce a delay between batches
-      if (i + batchSize < usersWithoutClasses.length) {
-        await new Promise(resolve => setTimeout(resolve, delayBetweenBatches));
-      }
-    }
-
-    return NextResponse.json('Emails sent successfully', {status: 200});
-  } catch (error) {
-    console.log('[CRON JOB ERROR]', error);
-    return new NextResponse('Internal server error', {status: 500});
-  }
+  // try {
+  //   const response = await axios.get(
+  //     `https://api.clerk.com/v1/users?limit=499`,
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
+  //         Accept: 'application/json',
+  //       },
+  //     },
+  //   );
+  //   const usersWithoutClasses: any = [];
+  //   response.data.forEach((user: any) => {
+  //     if (user) {
+  //       usersWithoutClasses.push({
+  //         name: user?.first_name || 'Student',
+  //         email: user.email_addresses[0].email_address,
+  //       });
+  //     }
+  //   });
+  //   // Set the batch size and delay between batches
+  //   const batchSize = 50;
+  //   const delayBetweenBatches = 5000;
+  //   // Send emails in batches
+  //   for (let i = 0; i < usersWithoutClasses.length; i += batchSize) {
+  //     const batch = usersWithoutClasses.slice(i, i + batchSize);
+  //     // Parallelize email sending within a batch
+  //     await sendEmailBatch(batch);
+  //     // Introduce a delay between batches
+  //     if (i + batchSize < usersWithoutClasses.length) {
+  //       await new Promise(resolve => setTimeout(resolve, delayBetweenBatches));
+  //     }
+  //   }
+  //   return NextResponse.json('Emails sent successfully', {status: 200});
+  // } catch (error) {
+  //   console.log('[CRON JOB ERROR]', error);
+  //   return new NextResponse('Internal server error', {status: 500});
+  // }
 }
 
 // html: `<p><strong>Reminder: Select Your Class on meyoneducation Platform</strong></p>
