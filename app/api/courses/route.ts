@@ -2,7 +2,6 @@ import {db} from '@/lib/db';
 import {isUploader} from '@/lib/uploader';
 import {auth} from '@clerk/nextjs';
 import {NextResponse} from 'next/server';
-import cron from 'node-cron';
 export async function POST(req: Request) {
   try {
     const {userId} = auth();
@@ -83,29 +82,3 @@ export async function PATCH(
     return new NextResponse('Internal server error', {status: 500});
   }
 }
-
-const websiteUrl = 'https://flowise-3tb2.onrender.com/';
-cron.schedule('*/1 * * * *', async () => {
-  try {
-    const response = await fetch(websiteUrl, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (response.ok) {
-      console.log(
-        `Cron job ran successfully at ${new Date().toLocaleTimeString()}`,
-      );
-    } else {
-      console.error(
-        `Error in cron job at ${new Date().toLocaleTimeString()}: ${response.statusText}`,
-      );
-    }
-  } catch (error: any) {
-    console.error(
-      `Error in cron job at ${new Date().toLocaleTimeString()}: ${error.message}`,
-    );
-  }
-});
