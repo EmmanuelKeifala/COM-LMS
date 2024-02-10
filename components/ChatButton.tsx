@@ -46,8 +46,8 @@ export default function ChatButton({isChat}: ChatButtonProps) {
       )}
       {isChat ? (
         <BubbleChat
-          chatflowid="97f0ecf7-0b26-4ffc-8e20-745ed9343b21"
-          apiHost="https://flowiseai-railway-production-1572.up.railway.app"
+          chatflowid="9d8e545e-439a-4dc3-adb5-043cc2ccdf70"
+          apiHost="https://flowise-3tb2.onrender.com"
         />
       ) : (
         <FeedbackModal

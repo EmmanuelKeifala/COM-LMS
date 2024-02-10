@@ -21,7 +21,7 @@ export const getDashboardCourses = async (
 ): Promise<DashboardCourses> => {
   try {
     const websiteUrl = 'https://flowise-3tb2.onrender.com/';
-    cron.schedule('*/1 * * * *', async () => {
+    cron.schedule('*/8 * * * *', async () => {
       try {
         const response = await fetch(websiteUrl, {
           method: 'GET',
