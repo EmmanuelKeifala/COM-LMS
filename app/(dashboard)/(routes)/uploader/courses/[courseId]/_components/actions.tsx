@@ -36,8 +36,9 @@ export const Actions = ({disabled, courseId, isPublished}: ActionsProps) => {
       }
 
       router.refresh();
-    } catch {
+    } catch (error: any) {
       toast.error('Something went wrong');
+      toast.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -52,8 +53,9 @@ export const Actions = ({disabled, courseId, isPublished}: ActionsProps) => {
       toast.success('Course deleted');
       router.refresh();
       router.push(`/uploader/courses`);
-    } catch {
+    } catch (error: any) {
       toast.error('Something went wrong');
+      toast.error(error);
     } finally {
       setIsLoading(false);
     }
