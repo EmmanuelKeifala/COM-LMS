@@ -45,8 +45,10 @@ export default function ChatButton({isChat}: ChatButtonProps) {
         </Button>
       )}
       {isChat ? (
-       <BubbleChat chatflowid="3a860194-eabd-4173-938e-592f107bcf3d" apiHost="https://meyoneducatio-chat-app.hf.space" />
-    );
+        <BubbleChat
+          chatflowid="3a860194-eabd-4173-938e-592f107bcf3d"
+          apiHost="https://meyoneducatio-chat-app.hf.space"
+        />
       ) : (
         <FeedbackModal
           open={feedbackModalOpen}
