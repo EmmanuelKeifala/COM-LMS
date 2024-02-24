@@ -46,7 +46,7 @@ export default function ChatButton({isChat}: ChatButtonProps) {
       )}
       {isChat ? (
         <BubbleChat
-          chatflowid="3a860194-eabd-4173-938e-592f107bcf3d"
+          chatflowid="83263889-e867-43aa-855f-0812859cd9ba"
           apiHost="https://meyoneducatio-chat-app.hf.space"
         />
       ) : (
@@ -59,9 +59,9 @@ export default function ChatButton({isChat}: ChatButtonProps) {
       )}
 
       {isDashboard && (
-        <BubbleChat
-          chatflowid="97f0ecf7-0b26-4ffc-8e20-745ed9343b21"
-          apiHost="https://flowiseai-railway-production-1572.up.railway.app"
+         <BubbleChat
+          chatflowid="83263889-e867-43aa-855f-0812859cd9ba"
+          apiHost="https://meyoneducatio-chat-app.hf.space"
         />
       )}
     </>
