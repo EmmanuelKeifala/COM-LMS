@@ -12,7 +12,7 @@ async function sendEmailBatch(emails: any[], data: any) {
       html: `
         <p>Dear ${user.name},</p>
         ${data.messageBody}
-        <p><strong>Best regards,<br /> Emmanuel Keifala</strong></p>
+        <p><strong>Best regards,<br />David Moses Ansumana</strong></p>
         <p><em>meyoneducation Team</em></p>`,
     });
   });
