@@ -15,7 +15,7 @@ const CreateMeetingPage = (props: Props) => {
   const [call, setCall] = useState<Call>();
   const client = useStreamVideoClient();
   if (!user || !client) {
-    return <Loader2 className="mx-auto animate-spin" />;
+    return <Loader2 className="mt-10 mx-auto animate-spin" />;
   }
 
   async function createMeeting() {
@@ -38,8 +38,8 @@ const CreateMeetingPage = (props: Props) => {
     }
   }
   return (
-    <div className="flex flex-col mt-10 items-center space-y-6">
-      <div className="w-90 mx-auto space-y-6 rounded-md bg-slate-100 p-5">
+    <div className="flex flex-col mt-10 items-center space-y-6 ">
+      <div className="w-90 mx-auto space-y-6 rounded-md bg-slate-100 p-5 dark:bg-gray-900 dark:text-gray-500">
         <h2 className="text-xl font-bold text-center">Create a new meeting</h2>
         <DescriptionInput
           value={descriptionInput}
@@ -199,6 +199,6 @@ interface MeetingLinkProps {
 }
 
 function MeetingLink({call}: MeetingLinkProps) {
-  const meetingLink = `${process.env.NEXT_PUBLIC_APP_URL}meeting/${call.id}`;
+  const meetingLink = `${process.env.NEXT_PUBLIC_APP_URL}videoStreaming/meeting/${call.id}`;
   return <div className="text-center">{meetingLink}</div>;
 }

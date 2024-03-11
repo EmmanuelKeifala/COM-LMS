@@ -19,7 +19,7 @@ export const NavbarRoutes = () => {
   const isUploderPage = pathname?.startsWith('/uploader');
   const isCoursePage = pathname?.includes('/courses');
   const isSearchPage = pathname === '/search';
-  const isMeetingPage = pathname === '/videoStreaming';
+  const isMeetingPage = pathname.includes('/videoStreaming');
 
   return (
     <>
@@ -48,7 +48,7 @@ export const NavbarRoutes = () => {
         {isMeetingPage && (
           <div className="flex flex-row w-full gap-10">
             <div className="hover:font-bold hover:rounded-md">
-              <Link href="">New Meeting</Link>
+              <Link href="/videoStreaming">New Meeting</Link>
             </div>
             <div className="flex items-center gap-5 hover:font-bold hover:rounded-md">
               <Link href="/meeting">Meetings</Link>

@@ -1,3 +1,4 @@
+import '@stream-io/video-react-sdk/dist/css/styles.css';
 import './globals.css';
 import type {Metadata} from 'next';
 import {Inter} from 'next/font/google';
@@ -8,7 +9,6 @@ import {SpeedInsights} from '@vercel/speed-insights/next';
 import {Analytics} from '@vercel/analytics/react';
 import {ThemeProvider} from '@/components/theme-provider';
 import GoogleAnalytics from '@bradgarropy/next-google-analytics';
-
 const inter = Inter({subsets: ['latin']});
 
 // Config for pwa
