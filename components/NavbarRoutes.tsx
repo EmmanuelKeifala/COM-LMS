@@ -19,6 +19,7 @@ export const NavbarRoutes = () => {
   const isUploderPage = pathname?.startsWith('/uploader');
   const isCoursePage = pathname?.includes('/courses');
   const isSearchPage = pathname === '/search';
+  const isMeetingPage = pathname === '/videoStreaming';
 
   return (
     <>
@@ -27,9 +28,9 @@ export const NavbarRoutes = () => {
           <SearchInput />
         </div>
       )}
-      <div className="flex gap-x-2 ml-auto items-center justify-between">
+      <div className="w-full flex gap-x-2 ml-auto items-center justify-between">
         {isSearchPage && <ClassSelection />}
-        <AboutUs />
+        {!isMeetingPage && <AboutUs />}
         {isUploderPage || isCoursePage ? (
           <Link href="/">
             <Button size="sm" variant="ghost">
@@ -44,6 +45,16 @@ export const NavbarRoutes = () => {
             </Button>
           </Link>
         ) : null}
+        {isMeetingPage && (
+          <div className="flex flex-row w-full gap-10">
+            <div className="hover:font-bold hover:rounded-md">
+              <Link href="">New Meeting</Link>
+            </div>
+            <div className="flex items-center gap-5 hover:font-bold hover:rounded-md">
+              <Link href="/meeting">Meetings</Link>
+            </div>
+          </div>
+        )}
         <div className="flex gap-3 items-center">
           <UserButton afterSignOutUrl="/" />
           <ModeToggle />

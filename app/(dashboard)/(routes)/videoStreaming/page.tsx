@@ -1,15 +1,17 @@
 import React from 'react';
-import Navbar from './_components/Navbar';
 import ClientProvider from '@/providers/ClientProvider';
+import CreateMeetingPage from './_components/CreateMeetingPage';
 
 type Props = {};
 
 const VideoStreamingPage = (props: Props) => {
   return (
     <ClientProvider>
-      <div>
-        <Navbar />
-      </div>
+      <>
+        <div>
+          <CreateMeetingPage />
+        </div>
+      </>
     </ClientProvider>
   );
 };
