@@ -1,9 +1,16 @@
 'use client';
+import {getUserIds} from '@/actions/get-token';
 import {useUser} from '@clerk/nextjs';
-import {Call, useStreamVideoClient} from '@stream-io/video-react-sdk';
-import {Loader2} from 'lucide-react';
+import {
+  Call,
+  MemberRequest,
+  useStreamVideoClient,
+} from '@stream-io/video-react-sdk';
+import {Copy, CopyX, Link2Icon, Loader2} from 'lucide-react';
 import React, {useState} from 'react';
 import toast from 'react-hot-toast';
+import Button from './Button';
+import Link from 'next/link';
 
 type Props = {};
 
@@ -24,11 +31,31 @@ const CreateMeetingPage = (props: Props) => {
     }
     try {
       const id = crypto.randomUUID();
-      const call = client.call('default', id);
 
+      const callType = participantInput ? 'meyoneducation' : 'default';
+      const call = client.call(callType, id);
+      const memberEmails = participantInput
+        .split(',')
+        .map(email => email.trim());
+
+      const memberIds = await getUserIds(memberEmails);
+      const members: MemberRequest[] = memberIds
+        .map(id => ({
+          user_id: id,
+          role: 'call_member',
+        }))
+        .concat({
+          user_id: user.id,
+          role: 'call_member',
+        })
+        .filter((v, i, a) => a.findIndex(v2 => v2.user_id === v.user_id) === i);
+
+      const starts_at = new Date(startTimeInput || Date.now()).toISOString();
       await call.getOrCreate({
         data: {
+          members,
           custom: {description: descriptionInput},
+          starts_at,
         },
       });
       setCall(call);
@@ -38,24 +65,27 @@ const CreateMeetingPage = (props: Props) => {
     }
   }
   return (
-    <div className="flex flex-col mt-10 items-center space-y-6 ">
-      <div className="w-90 mx-auto space-y-6 rounded-md bg-slate-100 p-5 dark:bg-gray-900 dark:text-gray-500">
-        <h2 className="text-xl font-bold text-center">Create a new meeting</h2>
-        <DescriptionInput
-          value={descriptionInput}
-          onChange={setDescriptionInput}
-        />
-        <StartTimeInput value={startTimeInput} onChange={setStartTimeInput} />
-        <ParticipantsInput
-          value={participantInput}
-          onChange={setParticipantInput}
-        />
-
-        <button onClick={createMeeting} className="w-full">
-          Create Meeting
-        </button>
+    <div className="fixed inset-0 flex justify-center items-center bg-opacity-50">
+      <div className=" w-full md:w-2/4 bg-gray-50 rounded-lg shadow-lg p-6 md:mr-10 ">
+        <h2 className="text-2xl font-bold mb-4 text-center">
+          Create a new meeting
+        </h2>
+        <div className="space-y-4">
+          <DescriptionInput
+            value={descriptionInput}
+            onChange={setDescriptionInput}
+          />
+          <StartTimeInput value={startTimeInput} onChange={setStartTimeInput} />
+          <ParticipantsInput
+            value={participantInput}
+            onChange={setParticipantInput}
+          />
+          <Button onClick={createMeeting} className="w-full">
+            Create Meeting
+          </Button>
+        </div>
+        {call && <MeetingLink call={call} />}
       </div>
-      {call && <MeetingLink call={call} />}
     </div>
   );
 };
@@ -90,7 +120,7 @@ function DescriptionInput({value, onChange}: DescriptionInputProps) {
             value={value}
             onChange={e => onChange(e.target.value)}
             maxLength={500}
-            className="w-full rounded-md border-gray-300 p-2 resize-none"
+            className="w-full rounded-md border border-gray-300 p-3 resize-none focus:outline-none focus:border-blue-500"
           />
         </label>
       )}
@@ -146,7 +176,7 @@ function StartTimeInput({value, onChange}: StartTimeInputProps) {
             value={value}
             onChange={e => onChange(e.target.value)}
             min={dateTimeLocalNow}
-            className="w-full rounded-md border-gray-300 p-2"
+            className="w-full rounded-md border border-gray-300 p-3 focus:outline-none focus:border-blue-500"
           />
         </label>
       )}
@@ -185,8 +215,9 @@ function ParticipantsInput({value, onChange}: ParticipantsInputProps) {
           <textarea
             value={value}
             onChange={e => onChange(e.target.value)}
-            className="w-full rounded-md border border-gray-300 p-2 resize-none"
+            className="w-full rounded-md border border-gray-300 p-3 resize-none focus:outline-none focus:border-blue-500"
             placeholder="Enter emails separated by commas"
+            style={{minHeight: '50px'}}
           />
         </label>
       )}
@@ -199,6 +230,59 @@ interface MeetingLinkProps {
 }
 
 function MeetingLink({call}: MeetingLinkProps) {
-  const meetingLink = `${process.env.NEXT_PUBLIC_APP_URL}videoStreaming/meeting/${call.id}`;
-  return <div className="text-center">{meetingLink}</div>;
+  const meetingLink = `${process.env.NEXT_PUBLIC_APP_URL}videoStreaming/meets/meeting/${call.id}`;
+  return (
+    <div className="text-center flex flex-row items-center gap-3 justify-center mt-5">
+      <span className="flex items-center">
+        <p className="mr-1">Invitation Link</p>
+        <Link2Icon size={26} className="text-gray-600" />
+      </span>
+      <Link
+        href={meetingLink}
+        target="_blank"
+        className="font-medium text-blue-500 hover:underline">
+        {meetingLink}
+      </Link>
+      <button
+        title="Copy invitation link"
+        onClick={() => {
+          navigator.clipboard.writeText(meetingLink);
+          toast.success('Copied to clipboard!');
+        }}
+        className="text-gray-600 hover:text-blue-500 focus:outline-none">
+        <Copy size={26} />
+      </button>
+      <a
+        href={getMailToLink(
+          meetingLink,
+          call.state.startsAt,
+          call.state.custom.description,
+        )}
+        target="_black"
+        className="text-blue-500 hover:underline">
+        Send email invitation
+      </a>
+    </div>
+  );
+}
+
+function getMailToLink(
+  meetingLink: string,
+  startsAt?: Date,
+  description?: string,
+) {
+  const startDateFormatted = startsAt
+    ? startsAt.toLocaleString('en-us', {dateStyle: 'full', timeStyle: 'short'})
+    : undefined;
+
+  const subject =
+    'Join my meeting' + startDateFormatted ? `at ${startDateFormatted}` : '';
+  const body =
+    `Join my meeting at ${meetingLink}` +
+    (startDateFormatted
+      ? `\n\nThe meeting starts at ${startDateFormatted}.`
+      : '') +
+    (description ? `\n\nDescription: ${description}` : '');
+
+  return `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }

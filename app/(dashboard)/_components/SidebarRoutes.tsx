@@ -20,7 +20,7 @@ const guestRoutes = [
   {
     icon: MdVideoChat,
     label: 'Video Chat',
-    href: '/videoStreaming',
+    href: '/videoStreaming/meets',
   },
 ];
 const uploadRoute = [

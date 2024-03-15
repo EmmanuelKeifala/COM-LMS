@@ -86,4 +86,21 @@ body,
   font-size: 16px !important;
 }
 
+.str-video__participant-details {
+  color: "white"
+}
+
+.str-video__menu-container {
+  color: "white"
+
+}
+
+.str-video__notification {
+  color: "white"
+}
+
+.pointer-events-auto {
+  pointer-events: auto;
+}
+
 @import "~@uploadthing/react/styles.css"

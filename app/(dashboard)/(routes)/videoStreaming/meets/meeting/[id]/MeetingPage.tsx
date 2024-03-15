@@ -17,9 +17,12 @@ export default function MeetingPage({id}: MeetingPageProps) {
   const [call, setCall] = useState<Call>();
   const client = useStreamVideoClient();
 
-  console.log('Loaded client: ', client);
   if (!client) {
-    return <Loader2 className="mt-10 mx-auto animate-spin" />;
+    return (
+      <>
+        <Loader2 className="mt-10 mx-auto animate-spin" />
+      </>
+    );
   }
   if (!call) {
     return (
@@ -27,6 +30,7 @@ export default function MeetingPage({id}: MeetingPageProps) {
         onClick={async () => {
           const call = client.call('default', id);
           await call.join();
+          setCall(call);
         }}>
         Join Meeting
       </button>
@@ -34,7 +38,7 @@ export default function MeetingPage({id}: MeetingPageProps) {
   }
   return (
     <StreamCall call={call}>
-      <StreamTheme className="space-y-3">
+      <StreamTheme className="space-y-7 mt-10 ">
         <SpeakerLayout />
         <CallControls />
       </StreamTheme>

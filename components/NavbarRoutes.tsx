@@ -48,7 +48,7 @@ export const NavbarRoutes = () => {
         {isMeetingPage && (
           <div className="flex flex-row w-full gap-10">
             <div className="hover:font-bold hover:rounded-md">
-              <Link href="/videoStreaming">New Meeting</Link>
+              <Link href="/videoStreaming/meets">New Meeting</Link>
             </div>
             <div className="flex items-center gap-5 hover:font-bold hover:rounded-md">
               <Link href="/meeting">Meetings</Link>
