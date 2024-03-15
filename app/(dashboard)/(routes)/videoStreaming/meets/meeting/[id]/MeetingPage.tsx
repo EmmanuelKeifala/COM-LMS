@@ -12,12 +12,14 @@ import {
   useCallStateHooks,
   VideoPreview,
   DeviceSettings,
+  CallingState,
 } from '@stream-io/video-react-sdk';
 import {Loader2} from 'lucide-react';
 import {useState, useEffect} from 'react';
 import PermissionPrompts from './_components/PermissionPrompts';
 import Button from '../../_components/Button';
 import AudioVolumeIndicator from './_components/AudioVolumeIndicator';
+import FlexibleCallLayout from './_components/FlexibleCallLayout';
 
 interface MeetingPageProps {
   id: string;
@@ -87,8 +89,9 @@ function MeetingScreen() {
         </p>
       )}
       {setupComplete ? (
-        <SpeakerLayout />
+        <CallUI />
       ) : (
+        // <SpeakerLayout />
         <SetupUI onSetupComplete={handleSetupComplete} />
       )}
     </div>
@@ -139,6 +142,18 @@ function SetupUI({onSetupComplete}: SetupUIProps) {
       <Button onClick={onSetupComplete}>Join Meeting</Button>
     </div>
   );
+}
+
+function CallUI() {
+  const {useCallCallingState} = useCallStateHooks();
+
+  const callingState = useCallCallingState();
+
+  if (callingState !== CallingState.JOINED) {
+    return <Loader2 className="mx-auto animate-spin" />;
+  }
+
+  return <FlexibleCallLayout />;
 }
 
 function UpcomingMeetingsScreen() {
