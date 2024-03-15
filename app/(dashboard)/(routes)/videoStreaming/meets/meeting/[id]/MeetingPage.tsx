@@ -10,9 +10,14 @@ import {
   useStreamVideoClient,
   CallControls,
   useCallStateHooks,
+  VideoPreview,
+  DeviceSettings,
 } from '@stream-io/video-react-sdk';
 import {Loader2} from 'lucide-react';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
+import PermissionPrompts from './_components/PermissionPrompts';
+import Button from '../../_components/Button';
+import AudioVolumeIndicator from './_components/AudioVolumeIndicator';
 
 interface MeetingPageProps {
   id: string;
@@ -50,8 +55,14 @@ export default function MeetingPage({id}: MeetingPageProps) {
 }
 
 function MeetingScreen() {
+  const call = useStreamCall();
   const {useCallEndedAt, useCallStartsAt} = useCallStateHooks();
+  const [setupComplete, setSetupComplete] = useState(false);
 
+  async function handleSetupComplete() {
+    call.join();
+    setSetupComplete(true);
+  }
   const callEndedAt = useCallEndedAt();
   const callStartsAt = useCallStartsAt();
 
@@ -66,7 +77,68 @@ function MeetingScreen() {
     return <UpcomingMeetingsScreen />;
   }
 
-  return <div>Call UI</div>;
+  const description = call.state.custom.description;
+
+  return (
+    <div className="space-y-6">
+      {description && (
+        <p className="text-center">
+          Meeting descritpion: <span className="font-bold">{description}</span>
+        </p>
+      )}
+      {setupComplete ? (
+        <SpeakerLayout />
+      ) : (
+        <SetupUI onSetupComplete={handleSetupComplete} />
+      )}
+    </div>
+  );
+}
+interface SetupUIProps {
+  onSetupComplete: () => void;
+}
+
+function SetupUI({onSetupComplete}: SetupUIProps) {
+  const call = useStreamCall();
+
+  const {useMicrophoneState, useCameraState} = useCallStateHooks();
+
+  const micState = useMicrophoneState();
+  const camState = useCameraState();
+  const [micCamDisabled, setMicCamDisabled] = useState(false);
+
+  useEffect(() => {
+    if (micCamDisabled) {
+      call.camera.disable();
+      call.microphone.disable();
+    } else {
+      // call.camera.enable();
+      call.microphone.enable();
+    }
+  }, [micCamDisabled, call]);
+
+  if (!micState.hasBrowserPermission || !camState.hasBrowserPermission) {
+    return <PermissionPrompts />;
+  }
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <h1 className="text-center text-2xl font-bold ">Setup</h1>
+      <VideoPreview />
+      <div className="flex h-16 items-center gap-4">
+        <AudioVolumeIndicator />
+        <DeviceSettings />
+      </div>
+      <label className="flex items-center gap-3 font-medium">
+        <input
+          type="checkbox"
+          checked={micCamDisabled}
+          onChange={e => setMicCamDisabled(e.target.checked)}
+        />
+        Join with mic and camera off
+      </label>
+      <Button onClick={onSetupComplete}>Join Meeting</Button>
+    </div>
+  );
 }
 
 function UpcomingMeetingsScreen() {
