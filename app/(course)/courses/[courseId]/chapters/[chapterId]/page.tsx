@@ -97,6 +97,7 @@ const ChapterIdPage = async ({
                       href={attachment.url}
                       target="_blank"
                       key={attachment.id}
+                      rel="noopener noreferrer"
                       className="flex items-center p-3 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline">
                       <span className="mr-2">{index + 1}.</span>{' '}
                       <DownloadIcon />
@@ -121,6 +122,7 @@ const ChapterIdPage = async ({
                       href={attachment.url}
                       target="_blank"
                       key={attachment.id}
+                      rel="noopener noreferrer"
                       className="flex items-center p-3 w-full bg-sky-200 dark:bg-gray-500 border text-sky-700 dark:text-black rounded-md hover:underline">
                       <span className="mr-2">{index + 1}.</span>{' '}
                       <DownloadIcon />
@@ -145,6 +147,7 @@ const ChapterIdPage = async ({
                       href={attachment.quizUrl}
                       target="_blank"
                       key={attachment.id}
+                      rel="noopener noreferrer"
                       className="flex items-center p-3 w-full bg-sky-200 dark:bg-gray-500 dark:text-black border text-sky-700 rounded-md hover:underline">
                       <LucideLightbulb className="mr-2" />
                       <p className="line-clamp-1"> Quiz {index + 1}</p>
