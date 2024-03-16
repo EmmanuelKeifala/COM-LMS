@@ -35,7 +35,7 @@ const MyMeetingsPage = () => {
     loadCalls();
   }, [client, user?.id]);
   return (
-    <div className="mx-auto max-w-lg p-6 bg-white shadow-md rounded-lg mt-10">
+    <div className=" max-w-lg p-6 bg-white shadow-md rounded-lg mt-10">
       <h1 className="text-center text-2xl font-bold mb-4">My Meetings</h1>
       {!calls && <Loader2 className="mx-auto animate-spin" />}
       {calls?.length === 0 && <p className="text-center">No meetings found</p>}

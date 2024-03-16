@@ -5,7 +5,7 @@ type Props = {};
 
 const VideoStreamingPage = (props: Props) => {
   return (
-    <div>
+    <div className="md:pl-56 pt-[80px] h-full dark:bg-black dark:text-white">
       <CreateMeetingPage />
     </div>
   );

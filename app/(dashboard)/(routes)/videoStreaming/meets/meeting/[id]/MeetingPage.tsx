@@ -20,6 +20,7 @@ import PermissionPrompts from './_components/PermissionPrompts';
 import Button from '../../_components/Button';
 import AudioVolumeIndicator from './_components/AudioVolumeIndicator';
 import FlexibleCallLayout from './_components/FlexibleCallLayout';
+import RecordingList from '../../_components/RecordingsList';
 
 interface MeetingPageProps {
   id: string;
@@ -73,7 +74,11 @@ function MeetingScreen() {
   const callHasEnded = !!callEndedAt;
 
   if (callHasEnded) {
-    return <MeetingEndedScreen />;
+    return (
+      <div className="max-w-lg  mt-2">
+        <MeetingEndedScreen />
+      </div>
+    );
   }
   if (callIsInFuture) {
     return <UpcomingMeetingsScreen />;
@@ -82,7 +87,7 @@ function MeetingScreen() {
   const description = call.state.custom.description;
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-lg  mt-2">
       {description && (
         <p className="text-center">
           Meeting descritpion: <span className="font-bold">{description}</span>
@@ -179,8 +184,15 @@ function UpcomingMeetingsScreen() {
 }
 function MeetingEndedScreen() {
   return (
-    <div className="flex flex-col items-center gap-6">
-      <p className="font-bold">This meeting has ended</p>
+    <div className="flex flex-col items-center justify-center h-full">
+      <p className="text-2xl font-semibold text-center mb-6">
+        This meeting has ended
+      </p>
+
+      <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-lg">
+        <h2 className="text-xl font-semibold mb-4 text-center">Recordings</h2>
+        <RecordingList />
+      </div>
     </div>
   );
 }

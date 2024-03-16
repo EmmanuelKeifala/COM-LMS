@@ -6,5 +6,9 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <MyMeetingsPage />;
+  return (
+    <div>
+      <MyMeetingsPage />
+    </div>
+  );
 }
