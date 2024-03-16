@@ -1,4 +1,3 @@
-import {cn} from '@/lib/utils';
 import Link from 'next/link';
 import {buttonClassname} from '../../../_components/Button';
 
@@ -7,12 +6,17 @@ interface PageProps {
 }
 
 export default function Page({params: {id}}: PageProps) {
-  <div className="flex flex-col items-center gap-3 mt-30">
-    <p className="font-bold">You left the meeting.</p>
-    <Link
-      href={`/videoStreaming/meets/meeting/${id}`}
-      className={cn(buttonClassname, 'bg-gray-500 hover:bg-gray-600')}>
-      Rejoin
-    </Link>
-  </div>;
+  return (
+    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
+      <div className="flex flex-col items-center md:ml-60">
+        <p className="text-lg font-semibold mb-4">You have left the meeting.</p>
+        <Link href={`/videoStreaming/meets/meeting/${id}`}>
+          <span
+            className={`${buttonClassname} bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors duration-300`}>
+            Rejoin Meeting
+          </span>
+        </Link>
+      </div>
+    </div>
+  );
 }

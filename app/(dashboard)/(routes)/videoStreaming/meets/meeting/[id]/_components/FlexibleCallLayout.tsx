@@ -15,7 +15,7 @@ export default function FlexibleCallLayout() {
   const router = useRouter();
   const call = useStreamCall();
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 flex flex-col justify-center items-center">
       <CallLayoutButtons layout={layout} setLayout={setLayout} />
       <CallLayoutView layout={layout} />
       <CallControls
