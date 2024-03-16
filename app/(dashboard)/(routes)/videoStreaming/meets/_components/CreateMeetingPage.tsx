@@ -6,39 +6,38 @@ import {
   MemberRequest,
   useStreamVideoClient,
 } from '@stream-io/video-react-sdk';
-import {Copy, CopyX, Link2Icon, Loader2} from 'lucide-react';
+import {Copy, Link2Icon, Loader2} from 'lucide-react';
 import React, {useState} from 'react';
 import toast from 'react-hot-toast';
 import Button from './Button';
 import Link from 'next/link';
 
-type Props = {};
-
-const CreateMeetingPage = (props: Props) => {
+const CreateMeetingPage = () => {
   const [descriptionInput, setDescriptionInput] = useState('');
   const [startTimeInput, setStartTimeInput] = useState('');
   const {user} = useUser();
   const [participantInput, setParticipantInput] = useState('');
   const [call, setCall] = useState<Call>();
   const client = useStreamVideoClient();
+
   if (!user || !client) {
-    return <Loader2 className="mt-10 mx-auto animate-spin" />;
+    return <Loader2 className="fixed inset-0 mx-auto animate-spin" />;
   }
 
   async function createMeeting() {
     if (!client || !user) {
       return;
     }
+
     try {
       const id = crypto.randomUUID();
-
       const callType = participantInput ? 'meyoneducation' : 'default';
       const call = client.call(callType, id);
       const memberEmails = participantInput
         .split(',')
         .map(email => email.trim());
-
       const memberIds = await getUserIds(memberEmails);
+
       const members: MemberRequest[] = memberIds
         .map(id => ({
           user_id: id,
@@ -58,17 +57,19 @@ const CreateMeetingPage = (props: Props) => {
           starts_at,
         },
       });
+
       setCall(call);
     } catch (error) {
       console.log('[VIDEO ERROR]', error);
       toast.error('Something went wrong');
     }
   }
+
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-opacity-50">
-      <div className=" w-full md:w-2/4 bg-gray-50 rounded-lg shadow-lg p-6 md:mr-10 ">
+    <div className="fixed inset-0 flex justify-center items-center bg-opacity-50 md:ml-40">
+      <div className="w-full md:w-2/4 bg-white rounded-lg shadow-lg p-6 md:mr-10">
         <h2 className="text-2xl font-bold mb-4 text-center">
-          Create a new meeting
+          Create a New Meeting
         </h2>
         <div className="space-y-4">
           <DescriptionInput
@@ -99,6 +100,7 @@ interface DescriptionInputProps {
 
 function DescriptionInput({value, onChange}: DescriptionInputProps) {
   const [active, setActive] = useState(false);
+
   return (
     <div className="flex flex-col space-y-2">
       <div className="font-medium">Meeting Info:</div>
@@ -135,14 +137,12 @@ interface StartTimeInputProps {
 
 function StartTimeInput({value, onChange}: StartTimeInputProps) {
   const [active, setActive] = useState(false);
-
   const dateTimeLocalNow = new Date(
     new Date().getTime() - new Date().getTimezoneOffset() * 60_000,
   )
     .toISOString()
     .slice(0, 16);
 
-  console.log(dateTimeLocalNow);
   return (
     <div className="flex flex-col space-y-2">
       <div className="font-medium">Meeting Start Time:</div>
@@ -191,6 +191,7 @@ interface ParticipantsInputProps {
 
 function ParticipantsInput({value, onChange}: ParticipantsInputProps) {
   const [active, setActive] = useState(false);
+
   return (
     <div className="flex flex-col space-y-2">
       <div className="font-medium">Participants:</div>
@@ -231,6 +232,7 @@ interface MeetingLinkProps {
 
 function MeetingLink({call}: MeetingLinkProps) {
   const meetingLink = `${process.env.NEXT_PUBLIC_APP_URL}videoStreaming/meets/meeting/${call.id}`;
+
   return (
     <div className="text-center flex flex-row items-center gap-3 justify-center mt-5">
       <span className="flex items-center">
@@ -276,7 +278,7 @@ function getMailToLink(
     : undefined;
 
   const subject =
-    'Join my meeting' + startDateFormatted ? `at ${startDateFormatted}` : '';
+    'Join my meeting' + (startDateFormatted ? ` at ${startDateFormatted}` : '');
   const body =
     `Join my meeting at ${meetingLink}` +
     (startDateFormatted

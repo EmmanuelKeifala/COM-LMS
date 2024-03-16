@@ -51,7 +51,7 @@ export const NavbarRoutes = () => {
               <Link href="/videoStreaming/meets">New Meeting</Link>
             </div>
             <div className="flex items-center gap-5 hover:font-bold hover:rounded-md">
-              <Link href="/meeting">Meetings</Link>
+              <Link href="/videoStreaming/meetings">Meetings</Link>
             </div>
           </div>
         )}
