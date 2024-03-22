@@ -159,3 +159,33 @@ model Feedback{
     email String
     rate String
 }
+enum GameType {
+  mcq
+  open_ended
+  saq
+}
+model Game {
+    id String @id @default(uuid()) @map("_id")
+    userId String
+    timeStarted DateTime
+    topic String
+    timeEned DateTime
+    gameType GameType
+    questions Question[]
+}
+
+model Question{
+    id String @id @default(uuid()) @map("_id")
+    question String
+    answer String
+    gameId String
+    options Json? // only for mcqs
+    percentageCorrect Float? // for open ended questions
+    isCorrect Boolean?
+    questionType GameType
+    userAnswer String
+
+    game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+    @@index([gameId], name: "gameId")
+}
