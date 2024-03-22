@@ -13,7 +13,7 @@ const QuizMeCard = (props: Props) => {
     <Card
       className="hover:cursor-pointer hover:opacity-76"
       onClick={() => {
-        router.push('/quizzer');
+        router.push('/quiz/quizzer');
       }}>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-2xl font-bold">Quiz Me</CardTitle>
