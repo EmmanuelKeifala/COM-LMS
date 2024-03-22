@@ -4,7 +4,7 @@ import {AreaChart, BarChart, Compass, Layout, List} from 'lucide-react';
 import {SidebarItem} from './SidebarItem';
 import {usePathname} from 'next/navigation';
 import {FcFeedback} from 'react-icons/fc';
-import {MdEmail} from 'react-icons/md';
+import {MdEmail, MdQuiz} from 'react-icons/md';
 
 const guestRoutes = [
   {
@@ -16,6 +16,11 @@ const guestRoutes = [
     icon: Compass,
     label: 'Browse',
     href: '/search',
+  },
+  {
+    icon: MdQuiz,
+    label: 'Quiz',
+    href: '/quiz',
   },
 ];
 const uploadRoute = [
