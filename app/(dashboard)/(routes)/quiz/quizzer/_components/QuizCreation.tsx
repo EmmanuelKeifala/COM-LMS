@@ -23,12 +23,11 @@ import {Input} from '@/components/ui/input';
 import {Button} from '@/components/ui/button';
 import {BookOpen, BookOpenCheck, CopyCheck} from 'lucide-react';
 import {Separator} from '@/components/ui/separator';
-
-type Props = {};
+import {useMutation} from '@tanstack/react-query';
 
 type Input = z.infer<typeof quizCreationSchema>;
 
-const QuizCreation = (props: Props) => {
+const QuizCreation = () => {
   const form = useForm<Input>({
     resolver: zodResolver(quizCreationSchema),
     defaultValues: {
