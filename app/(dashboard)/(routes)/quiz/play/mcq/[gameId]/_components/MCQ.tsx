@@ -1,5 +1,6 @@
 'use client';
 import {Button} from '@/components/ui/button';
+import {differenceInSeconds} from 'date-fns';
 import {
   Card,
   CardDescription,
@@ -13,6 +14,7 @@ import MCQCounter from '../../../_components/MCQCounter';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import {formatTimeDelta} from '@/lib/utils';
 export const metadata: Metadata = {
   title: 'Take Quiz',
 };
@@ -27,7 +29,18 @@ const MCQ = ({game}: Props) => {
   const [wrongAnswers, setWrongAnswers] = React.useState<number>(0);
   const [isChecking, setIsChecking] = React.useState<boolean>(false);
   const [hasEnded, setHasEnded] = React.useState<boolean>(false);
+  const [now, setNow] = React.useState<Date>(new Date());
 
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      if (!hasEnded) {
+        setNow(new Date());
+      }
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [hasEnded]);
   const currentQuestion = React.useMemo(() => {
     return game.questions[questionIndex];
   }, [questionIndex, game.questions]);
@@ -95,25 +108,24 @@ const MCQ = ({game}: Props) => {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [handleNext]);
-
   if (hasEnded) {
     return (
-      <div className="h-full w-full flex flex-col justify-center items-center mt-10">
+      <div className="h-full w-full flex flex-col justify-center items-center mt-10 text-center">
         <div className="max-w-4xl w-full px-4">
-          <h1 className="text-3xl font-bold text-center mb-4">Quiz Ended</h1>
-          <p className="text-lg text-center text-gray-700 mb-8">
-            You completed In 00:00
+          <h1 className="text-3xl font-bold mb-4">Quiz Ended</h1>
+          <p className="text-lg text-gray-700 mb-8">
+            You completed In{' '}
+            {formatTimeDelta(differenceInSeconds(now, game.timeStarted))}
           </p>
           <Link
             href={`/quiz/statistics/${game.id}`}
-            className="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-white hover:bg-blue-600 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 active:bg-blue-700 transition duration-150 ease-in-out">
+            className="inline-flex items-center bg-blue-500 border px-4 py-2  border-transparent rounded-md font-semibold text-white hover:bg-blue-600 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 active:bg-blue-700 transition duration-150 ease-in-out">
             View Statistics <BarChart className="w-4 h-4 ml-2" />
           </Link>
         </div>
       </div>
     );
   }
-
   return (
     <div className="h-full w-full flex flex-col justify-center items-center mt-10">
       <div className="max-w-4xl w-full px-4">
@@ -126,7 +138,7 @@ const MCQ = ({game}: Props) => {
           </p>
           <div className="flex self-start mt-3 text-slate-400">
             <Timer className="mr-3" />
-            <span>00:00</span>
+            {formatTimeDelta(differenceInSeconds(now, game.timeStarted))}
           </div>
           <MCQCounter
             correctAnswers={correctAnswers}
