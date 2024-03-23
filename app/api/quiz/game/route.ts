@@ -21,7 +21,8 @@ export async function POST(req: Request, res: Response) {
     });
 
     const {data} = await axios.post(
-      `${process.env.NEXT_PUBLIC_APP_URL}api/quiz/questions`,
+      // `${process.env.NEXT_PUBLIC_APP_URL}api/quiz/questions`,
+      `http://localhost:3000/api/quiz/questions`,
       {
         amount,
         topic,

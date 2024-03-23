@@ -53,11 +53,11 @@ const QuizCreation = () => {
       console.log(response.data);
       const {gameId} = response.data;
       if (form.getValues('type') === 'mcq') {
-        router.push(`/play/mcq/${gameId}`);
+        router.push(`/quiz/play/mcq/${gameId}`);
       } else if (form.getValues('type') === 'open_ended') {
-        router.push(`/play/open_ended/${gameId}`);
+        router.push(`/quiz/play/open_ended/${gameId}`);
       } else {
-        router.push(`/play/saq/${gameId}`);
+        router.push(`/quiz/play/saq/${gameId}`);
       }
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -68,99 +68,101 @@ const QuizCreation = () => {
 
   form.watch();
   return (
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pr-10">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">Quiz Creation</CardTitle>
-          <CardDescription>Choose a topic</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="topic"
-                render={({field}) => (
-                  <FormItem>
-                    <FormLabel>Topic</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter a topic" {...field} />
-                    </FormControl>
-                    <FormDescription>Please enter a topic</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="amount"
-                render={({field}) => (
-                  <FormItem>
-                    <FormLabel>Number of questions</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        min={1}
-                        placeholder="Enter an amount"
-                        {...field}
-                        onChange={e =>
-                          form.setValue('amount', parseInt(e.target.value))
-                        }
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="flex justify-between gap-3">
-                <Button
-                  type="button"
-                  className="w-1/2 rounded-none rounded-l-lg"
-                  variant={
-                    form.getValues('type') === 'mcq' ? 'default' : 'secondary'
-                  }
-                  onClick={() => {
-                    form.setValue('type', 'mcq');
-                  }}>
-                  <CopyCheck className="h-4 w-4 mr-3" />
-                  Multiple Choice
+    <div className="flex justify-center items-center h-full">
+      <div className="w-full max-w-md md:max-w-lg lg:max-w-xl">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold">Quiz Creation</CardTitle>
+            <CardDescription>Choose a topic</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-8">
+                <FormField
+                  control={form.control}
+                  name="topic"
+                  render={({field}) => (
+                    <FormItem>
+                      <FormLabel>Topic</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter a topic" {...field} />
+                      </FormControl>
+                      <FormDescription>Please enter a topic</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="amount"
+                  render={({field}) => (
+                    <FormItem>
+                      <FormLabel>Number of questions</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min={1}
+                          placeholder="Enter an amount"
+                          {...field}
+                          onChange={e =>
+                            form.setValue('amount', parseInt(e.target.value))
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="flex flex-col md:flex-row justify-between gap-3">
+                  <Button
+                    type="button"
+                    className="md:w-1/3"
+                    variant={
+                      form.getValues('type') === 'mcq' ? 'default' : 'secondary'
+                    }
+                    onClick={() => {
+                      form.setValue('type', 'mcq');
+                    }}>
+                    <CopyCheck className="h-4 w-4 mr-3" />
+                    Multiple Choice
+                  </Button>
+                  <Button
+                    type="button"
+                    className="md:w-1/3"
+                    variant={
+                      form.getValues('type') === 'open_ended'
+                        ? 'default'
+                        : 'secondary'
+                    }
+                    onClick={() => {
+                      form.setValue('type', 'open_ended');
+                    }}>
+                    <BookOpen className="h-4 w-4 mr-3" />
+                    Open Ended
+                  </Button>
+                  <Button
+                    type="button"
+                    className="md:w-1/3"
+                    variant={
+                      form.getValues('type') === 'saq' ? 'default' : 'secondary'
+                    }
+                    onClick={() => {
+                      form.setValue('type', 'saq');
+                    }}>
+                    <BookOpenCheck className="h-4 w-4 mr-3" />
+                    Short Answered
+                  </Button>
+                </div>
+                <Button type="submit" disabled={isPending} className="w-full">
+                  {isPending ? 'Submitting...' : 'Submit'}
                 </Button>
-                <Separator orientation="vertical" />
-                <Button
-                  type="button"
-                  className="w-1/2 "
-                  variant={
-                    form.getValues('type') === 'open_ended'
-                      ? 'default'
-                      : 'secondary'
-                  }
-                  onClick={() => {
-                    form.setValue('type', 'open_ended');
-                  }}>
-                  <BookOpen className="h-4 w-4 mr-3" />
-                  Open Ended
-                </Button>
-                <Separator orientation="vertical" />
-                <Button
-                  type="button"
-                  className="w-1/2 rounded-none rounded-r-lg"
-                  variant={
-                    form.getValues('type') === 'saq' ? 'default' : 'secondary'
-                  }
-                  onClick={() => {
-                    form.setValue('type', 'saq');
-                  }}>
-                  <BookOpenCheck className="h-4 w-4 mr-3" />
-                  Short Answered
-                </Button>
-              </div>
-              <Button type="submit" disabled={isPending}>
-                {isPending ? 'Submitting...' : 'Submit'}
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
