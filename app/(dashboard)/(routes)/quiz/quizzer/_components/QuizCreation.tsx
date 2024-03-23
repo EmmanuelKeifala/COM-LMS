@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import {zodResolver} from '@hookform/resolvers/zod';
-import React from 'react';
+import React, {useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {z} from 'zod';
 import {
@@ -23,11 +23,16 @@ import {Input} from '@/components/ui/input';
 import {Button} from '@/components/ui/button';
 import {BookOpen, BookOpenCheck, CopyCheck} from 'lucide-react';
 import {Separator} from '@/components/ui/separator';
-import {useMutation} from '@tanstack/react-query';
+import axios from 'axios';
+import {useRouter} from 'next/navigation';
+import {quizCreationSchema} from '@/lib/validation';
 
 type Input = z.infer<typeof quizCreationSchema>;
 
 const QuizCreation = () => {
+  const router = useRouter();
+  const [isPending, setIsPending] = useState(false);
+
   const form = useForm<Input>({
     resolver: zodResolver(quizCreationSchema),
     defaultValues: {
@@ -36,8 +41,29 @@ const QuizCreation = () => {
       type: 'mcq',
     },
   });
-  function onSubmit(input: Input) {
-    alert(JSON.stringify(input, null, 2));
+
+  async function onSubmit(input: Input) {
+    setIsPending(true);
+    try {
+      const response = await axios.post('/api/quiz/game', {
+        amount: input.amount,
+        topic: input.topic,
+        type: input.type,
+      });
+      console.log(response.data);
+      const {gameId} = response.data;
+      if (form.getValues('type') === 'mcq') {
+        router.push(`/play/mcq/${gameId}`);
+      } else if (form.getValues('type') === 'open_ended') {
+        router.push(`/play/open_ended/${gameId}`);
+      } else {
+        router.push(`/play/saq/${gameId}`);
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    } finally {
+      setIsPending(false);
+    }
   }
 
   form.watch();
@@ -128,7 +154,9 @@ const QuizCreation = () => {
                   Short Answered
                 </Button>
               </div>
-              <Button type="submit">Submit</Button>
+              <Button type="submit" disabled={isPending}>
+                {isPending ? 'Submitting...' : 'Submit'}
+              </Button>
             </form>
           </Form>
         </CardContent>
@@ -136,13 +164,4 @@ const QuizCreation = () => {
     </div>
   );
 };
-
 export default QuizCreation;
-
-export const quizCreationSchema = z.object({
-  topic: z
-    .string()
-    .min(4, {message: 'Topic must be at least four(4) characters long'}),
-  type: z.enum(['mcq', 'open_ended', 'saq']),
-  amount: z.number().min(1).max(20),
-});

@@ -6,7 +6,6 @@ type Props = {};
 export const metadata: Metadata = {
   title: 'Quiz | Quizzer',
 };
-
 const page = (props: Props) => {
   return <QuizCreation />;
 };

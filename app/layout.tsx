@@ -10,7 +10,6 @@ import {ThemeProvider} from '@/components/theme-provider';
 import GoogleAnalytics from '@bradgarropy/next-google-analytics';
 
 const inter = Inter({subsets: ['latin']});
-
 // Config for pwa
 const APP_NAME = 'meyoneducation';
 const APP_DEFAULT_TITLE = 'meyoneducation - Online Medical Courses';

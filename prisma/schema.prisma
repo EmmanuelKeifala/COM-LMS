@@ -6,186 +6,188 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_DATABASE_URL")
+  provider     = "mongodb"
+  url          = env("DATABASE_URL")
+  directUrl    = env("DIRECT_DATABASE_URL")
   relationMode = "prisma"
 }
 
 model Course {
-  id String @id @default(uuid()) @map("_id")
-  userId String
-  title String 
+  id          String       @id @default(uuid()) @map("_id")
+  userId      String
+  title       String
   description String?
-  imageUrl String?
-  videoUrl String?
-  youtubeUrl String?
-  price Int?
-  isPublished Boolean @default(false)
-  purchases Joined[]
-  categoryId String?
-  category Category? @relation(fields: [categoryId], references: [id])
-  levelId String?
-  level Level? @relation(fields: [levelId], references: [id])
+  imageUrl    String?
+  videoUrl    String?
+  youtubeUrl  String?
+  price       Int?
+  isPublished Boolean      @default(false)
+  purchases   Joined[]
+  categoryId  String?
+  category    Category?    @relation(fields: [categoryId], references: [id])
+  levelId     String?
+  level       Level?       @relation(fields: [levelId], references: [id])
   attachments Attachment[]
-  chapters Chapter[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  chapters    Chapter[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
   @@index([categoryId])
   @@index([levelId])
-
-
 }
+
 model Category {
-  id     String   @id @default(uuid()) @map("_id")
-  name   String   
-  level  Level    @relation(fields: [levelId], references: [id])
+  id      String   @id @default(uuid()) @map("_id")
+  name    String
+  level   Level    @relation(fields: [levelId], references: [id])
   levelId String
   courses Course[]
 }
 
 model Level {
-  id       String    @id @default(uuid()) @map("_id")
-  name     String    @unique
+  id         String     @id @default(uuid()) @map("_id")
+  name       String     @unique
   categories Category[]
-  courses  Course[]
+  courses    Course[]
 }
-model Attachment{
-  id String @id @default(uuid()) @map("_id")
-  name String
-  url String
-  courseId String
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+model Attachment {
+  id        String   @id @default(uuid()) @map("_id")
+  name      String
+  url       String
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-
   @@index([courseId])
 }
+
 model VideoRating {
-  id        String    @id @default(uuid()) @map("_id")
-  videoId   String
-  userId    String
-  value     Float?
+  id         String   @id @default(uuid()) @map("_id")
+  videoId    String
+  userId     String
+  value      Float?
   isReviewed Boolean? @default(false)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt()
-  video     VideoUrl  @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt()
+  video      VideoUrl @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
   @@unique([videoId, userId])
 }
 
-
-model VideoUrl{
-  id String @id @default(uuid()) @map("_id")
-  videoUrl String
-  position Int
+model VideoUrl {
+  id        String        @id @default(uuid()) @map("_id")
+  videoUrl  String
+  position  Int
   chapterId String
-  ratings VideoRating[]
-  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-}
-model ChapterQuiz{
-  id String @id @default(uuid()) @map("_id")
-  quizUrl String
-  chapterId String
-  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  ratings   VideoRating[]
+  chapter   Chapter       @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 }
 
-model Chapter{
-  id String @id @default(uuid()) @map("_id")
-  title String
-  description String?
-  youtubeUrl String?
-  videoUrls VideoUrl[]
-  quizUrls ChapterQuiz[]
-  position Int
-  isPublished Boolean @default(false)
-  isFree Boolean @default(false)
-  courseId String
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+model ChapterQuiz {
+  id        String  @id @default(uuid()) @map("_id")
+  quizUrl   String
+  chapterId String
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+}
+
+model Chapter {
+  id                 String              @id @default(uuid()) @map("_id")
+  title              String
+  description        String?
+  youtubeUrl         String?
+  videoUrls          VideoUrl[]
+  quizUrls           ChapterQuiz[]
+  position           Int
+  isPublished        Boolean             @default(false)
+  isFree             Boolean             @default(false)
+  courseId           String
+  course             Course              @relation(fields: [courseId], references: [id], onDelete: Cascade)
   chapterAttachments ChapterAttachment[]
 
   userProgress UserProgress[]
 
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-
 model UserProgress {
-  id String @id @default(uuid()) @map("_id")
-  userId String
+  id        String  @id @default(uuid()) @map("_id")
+  userId    String
   chapterId String
-  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
   isCompleted Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([chapterId])
   @@unique([userId, chapterId])
+  @@index([chapterId])
 }
+
 model Joined {
-  id String @id @default(uuid()) @map("_id")
-  userId String
-  courseId String
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  id        String   @id @default(uuid()) @map("_id")
+  userId    String
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
+
   @@unique([userId, courseId])
   @@index([courseId])
 }
 
-
 model ChapterAttachment {
-  id String @id @default(uuid()) @map("_id")
-  name String
-  url String
+  id        String   @id @default(uuid()) @map("_id")
+  name      String
+  url       String
   chapterId String
-  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  chapter   Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([chapterId])
 }
 
-model Feedback{
-    id String @id @default(uuid()) @map("_id")
-    name String
-    message String
-    feedbackType String
-    email String
-    rate String
+model Feedback {
+  id           String @id @default(uuid()) @map("_id")
+  name         String
+  message      String
+  feedbackType String
+  email        String
+  rate         String
 }
+
 enum GameType {
   mcq
   open_ended
   saq
 }
+
 model Game {
-    id String @id @default(uuid()) @map("_id")
-    userId String
-    timeStarted DateTime
-    topic String
-    timeEned DateTime
-    gameType GameType
-    questions Question[]
+  id          String     @id @default(uuid()) @map("_id")
+  userId      String
+  timeStarted DateTime
+  topic       String
+  timeEned    DateTime?
+  gameType    GameType
+  questions   Question[]
 }
 
-model Question{
-    id String @id @default(uuid()) @map("_id")
-    question String
-    answer String
-    gameId String
-    options Json? // only for mcqs
-    percentageCorrect Float? // for open ended questions
-    isCorrect Boolean?
-    questionType GameType
-    userAnswer String
+model Question {
+  id                String   @id @default(uuid()) @map("_id")
+  question          String
+  answer            String
+  gameId            String
+  options           Json? // only for mcqs
+  percentageCorrect Float? // for open ended questions
+  isCorrect         Boolean?
+  questionType      GameType
+  userAnswer        String?
 
-    game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
 
-    @@index([gameId], name: "gameId")
+  @@index([gameId], name: "gameId")
 }
