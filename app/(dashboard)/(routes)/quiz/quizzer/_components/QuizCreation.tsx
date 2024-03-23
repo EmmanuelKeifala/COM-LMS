@@ -142,7 +142,7 @@ const QuizCreation = () => {
                     <BookOpen className="h-4 w-4 mr-3" />
                     Open Ended
                   </Button>
-                  <Button
+                  {/* <Button
                     type="button"
                     className="md:w-1/3"
                     variant={
@@ -153,7 +153,7 @@ const QuizCreation = () => {
                     }}>
                     <BookOpenCheck className="h-4 w-4 mr-3" />
                     Short Answered
-                  </Button>
+                  </Button> */}
                 </div>
                 <Button type="submit" disabled={isPending} className="w-full">
                   {isPending ? 'Submitting...' : 'Submit'}
