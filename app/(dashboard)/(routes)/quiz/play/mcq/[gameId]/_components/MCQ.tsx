@@ -9,6 +9,7 @@ import {
 import {ChevronRight, Timer} from 'lucide-react';
 import {Metadata} from 'next';
 import React from 'react';
+import MCQCounter from '../../../_components/MCQCounter';
 export const metadata: Metadata = {
   title: 'Take Quiz',
 };
@@ -43,7 +44,7 @@ const MCQ = ({game}: Props) => {
             <Timer className="mr-3" />
             <span>00:00</span>
           </div>
-          {/* <MCQCounter /> */}
+          <MCQCounter correctAnswers={0} wrongAnswers={0} />
         </div>
         <Card className="w-full mt-4">
           <CardHeader className="flex flex-row items-center">
