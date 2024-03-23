@@ -1,5 +1,5 @@
 'use client';
-import {ChevronRight, Loader2, Timer} from 'lucide-react';
+import {ChevronRight, Loader2, Timer, BarChart} from 'lucide-react';
 import React from 'react';
 import {differenceInSeconds} from 'date-fns';
 import {
@@ -13,6 +13,10 @@ import {formatTimeDelta} from '@/lib/utils';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import OpenEndedPercentage from './OpenEndedPercentage';
+import BlankAnswerInput from './BlankedAnswer';
+import {checkAnswerSchema} from '@/lib/validation';
+import {z} from 'zod';
+import Link from 'next/link';
 type Props = {
   game: any;
 };
@@ -28,24 +32,44 @@ const OpenEnded = ({game}: Props) => {
   }, [questionIndex, game.questions]);
   const [now, setNow] = React.useState(new Date());
 
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      if (!hasEnded) {
+        setNow(new Date());
+      }
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [hasEnded]);
+
   const checkAnswer: any = React.useCallback(async () => {
-    const payload = {
+    let filledAnswer = blankAnswer;
+    document
+      .querySelectorAll<HTMLInputElement>('#user-blank-input')
+      .forEach(input => {
+        filledAnswer = filledAnswer.replace('_____', input.value);
+        input.value = '';
+      });
+    const payload: any = {
       questionId: currentQuestion.id,
-      userAnswer: '',
+      userAnswer: filledAnswer,
     };
     try {
       setIsChecking(true);
       const response = await axios.post('/api/quiz/checkAnswer', payload);
       if (response.data) {
         setAveragePercentage(response.data.percentageSimilar);
-        toast.success(`Your answers are graded based on similarity 🥳`);
+        // toast.success(
+        //   `Your answers are graded based on similarity, You Got ${response.data.percentageSimila} similar`,
+        // );
       }
     } catch (error) {
       console.log(error);
     } finally {
       setIsChecking(false);
     }
-  }, [currentQuestion.id]);
+  }, [blankAnswer, currentQuestion.id]);
 
   const handleNext = React.useCallback(async () => {
     await checkAnswer();
@@ -56,6 +80,24 @@ const OpenEnded = ({game}: Props) => {
     }
   }, [questionIndex, game.questions.length, checkAnswer]);
 
+  if (hasEnded) {
+    return (
+      <div className="h-full w-full flex flex-col justify-center items-center mt-10 text-center">
+        <div className="max-w-4xl w-full px-4">
+          <h1 className="text-3xl font-bold mb-4">Quiz Ended</h1>
+          <p className="text-lg text-gray-700 mb-8">
+            You completed In{' '}
+            {formatTimeDelta(differenceInSeconds(now, game.timeStarted))}
+          </p>
+          <Link
+            href={`/quiz/statistics/${game.id}`}
+            className="inline-flex items-center bg-blue-500 border px-4 py-2  border-transparent rounded-md font-semibold text-white hover:bg-blue-600 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 active:bg-blue-700 transition duration-150 ease-in-out">
+            View Statistics <BarChart className="w-4 h-4 ml-2" />
+          </Link>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="h-full w-full flex flex-col justify-center items-center mt-10">
       <div className="max-w-4xl w-full px-4">
@@ -86,21 +128,21 @@ const OpenEnded = ({game}: Props) => {
           </CardHeader>
         </Card>
         <div className="flex flex-col items-center justify-center w-full mt-4">
-          <div className="flex flex-col items-center justify-center w-full mt-4">
-            {/* <BlankAnswerInput
-          setBlankAnswer={setBlankAnswer}
-          answer={currentQuestion.answer}
-        /> */}
+          <div className="flex flex-col items-center justify-center w-full mt-2 mb-2">
+            <BlankAnswerInput
+              setBlankAnswer={setBlankAnswer}
+              answer={currentQuestion.answer}
+            />
             {!isChecking ? (
               <Button
-                className="mt-2"
+                className="mt-4"
                 onClick={() => {
                   handleNext();
                 }}>
                 Next <ChevronRight className="w-4 h-4 ml-2" />
               </Button>
             ) : (
-              <Loader2 className="mx-auto animate-spin" size={30} />
+              <Loader2 className="mx-auto animate-spin mt-4" size={30} />
             )}
           </div>
         </div>
