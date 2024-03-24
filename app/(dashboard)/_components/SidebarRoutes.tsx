@@ -5,7 +5,7 @@ import {SidebarItem} from './SidebarItem';
 import {usePathname} from 'next/navigation';
 import {FcFeedback} from 'react-icons/fc';
 import {MdEmail, MdQuiz} from 'react-icons/md';
-import {auth} from '@clerk/nextjs';
+import {useAuth} from '@clerk/nextjs';
 
 const guestRoutes = [
   {
@@ -54,7 +54,7 @@ const uploadRoute = [
 export const SidebarRoutes = () => {
   const pathname = usePathname();
   const isUploaderRoute = pathname?.includes('/uploader');
-  const {userId} = auth();
+  const {userId} = useAuth();
 
   const isUser2 = userId === 'user_2baYYZEdPno56qBM7z2RDMiC9hM';
 
