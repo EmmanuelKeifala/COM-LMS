@@ -79,8 +79,10 @@ const QuizCreation = ({topicParam}: Props) => {
   form.watch();
   if (showLoader) {
     return (
-      <div className="w-2/3 mx-10">
-        <LoadingQuestions finished={finished} />
+      <div className="flex justify-center items-center h-full">
+        <div className="w-full mx-10 px-10 max-w-md md:max-w-lg lg:max-w-xl">
+          <LoadingQuestions finished={finished} />
+        </div>
       </div>
     );
   }
