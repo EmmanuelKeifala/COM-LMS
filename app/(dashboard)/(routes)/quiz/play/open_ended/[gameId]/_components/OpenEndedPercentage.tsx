@@ -10,7 +10,7 @@ const OpenEndedPercentage = ({percentage}: Props) => {
   return (
     <Card className="flex flex-row items-center p-2">
       <Target size={30} />
-      <span className="ml-3 text-2xl opacity-75">{percentage}</span>
+      <span className="ml-3 text-2xl opacity-75">{Math.round(percentage)}</span>
       <Percent className="" size={25} />
     </Card>
   );

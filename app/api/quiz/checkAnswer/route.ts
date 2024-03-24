@@ -7,7 +7,6 @@ export async function POST(req: Request, res: Response) {
     const body = await req.json();
 
     const {questionId, userAnswer} = body;
-    console.log('ANSWER', userAnswer);
     const question = await db.question.findUnique({
       where: {
         id: questionId,
@@ -56,7 +55,6 @@ export async function POST(req: Request, res: Response) {
         question.answer.toLowerCase().trim(),
       );
       percentageSimilar = Math.round(percentageSimilar * 100);
-
       await db.question.update({
         where: {
           id: questionId,

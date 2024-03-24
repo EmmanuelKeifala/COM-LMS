@@ -50,6 +50,16 @@ const MCQ = ({game}: Props) => {
     }
     return JSON.parse(currentQuestion.options as string) as string[];
   }, [currentQuestion]);
+  async function endGameMutation(gameId: any) {
+    try {
+      const payload = {gameId};
+      const response = await axios.post(`/api/endGame`, payload);
+      return response.data;
+    } catch (error) {
+      console.error('Error ending game:', error);
+      throw error;
+    }
+  }
 
   const checkAnswer: any = React.useCallback(async () => {
     const payload = {
@@ -85,9 +95,10 @@ const MCQ = ({game}: Props) => {
       setQuestionIndex(questionIndex + 1);
       setSelectedChoice(0);
     } else if (questionIndex === game.questions.length - 1) {
+      await endGameMutation(game.id);
       setHasEnded(true);
     }
-  }, [questionIndex, game.questions.length, checkAnswer]);
+  }, [checkAnswer, questionIndex, game.questions.length, game.id]);
 
   React.useEffect(() => {
     const handleKeyDown = async (event: KeyboardEvent) => {

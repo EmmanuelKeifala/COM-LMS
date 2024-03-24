@@ -43,6 +43,17 @@ const OpenEnded = ({game}: Props) => {
     };
   }, [hasEnded]);
 
+  async function endGameMutation(gameId: any) {
+    try {
+      const payload = {gameId};
+      const response = await axios.post(`/api/quiz/endGame`, payload);
+      return response.data;
+    } catch (error) {
+      console.error('Error ending game:', error);
+      throw error;
+    }
+  }
+
   const checkAnswer: any = React.useCallback(async () => {
     let filledAnswer = blankAnswer;
     document
@@ -59,26 +70,29 @@ const OpenEnded = ({game}: Props) => {
       setIsChecking(true);
       const response = await axios.post('/api/quiz/checkAnswer', payload);
       if (response.data) {
-        setAveragePercentage(response.data.percentageSimilar);
-        // toast.success(
-        //   `Your answers are graded based on similarity, You Got ${response.data.percentageSimila} similar`,
-        // );
+        setAveragePercentage(prev => {
+          return (prev + response.data.percentageSimilar) / (questionIndex + 1);
+        });
+        toast.success(
+          `Your answer is ${response.data.percentageSimilar}% similar to the correct answer`,
+        );
       }
     } catch (error) {
       console.log(error);
     } finally {
       setIsChecking(false);
     }
-  }, [blankAnswer, currentQuestion.id]);
+  }, [blankAnswer, currentQuestion.id, questionIndex]);
 
   const handleNext = React.useCallback(async () => {
     await checkAnswer();
     if (questionIndex < game.questions.length - 1) {
       setQuestionIndex(questionIndex + 1);
     } else if (questionIndex === game.questions.length - 1) {
+      await endGameMutation(game.id);
       setHasEnded(true);
     }
-  }, [questionIndex, game.questions.length, checkAnswer]);
+  }, [checkAnswer, questionIndex, game.questions.length, game.id]);
 
   if (hasEnded) {
     return (
@@ -101,14 +115,14 @@ const OpenEnded = ({game}: Props) => {
   return (
     <div className="h-full w-full flex flex-col justify-center items-center mt-10">
       <div className="max-w-4xl w-full px-4">
-        <div className="flex flex-row justify-between mb-4 items-center">
-          <p className="text-slate-400 ">
+        <div className="flex flex-row justify-between mb-4 items-center flex-wrap">
+          <p className="text-slate-400 mb-2">
             Topic{' '}
             <span className="px-2 py-1 text-white rounded-lg bg-slate-800">
               {game.topic}
             </span>
           </p>
-          <div className="flex self-start mt-3 text-slate-400">
+          <div className="flex self-start mt-3 text-slate-400 mb-2">
             <Timer className="mr-3" />
             {formatTimeDelta(differenceInSeconds(now, game.timeStarted))}
           </div>
