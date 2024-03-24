@@ -88,7 +88,7 @@ const OpenEnded = ({game}: Props) => {
     await checkAnswer();
     if (questionIndex < game.questions.length - 1) {
       setQuestionIndex(questionIndex + 1);
-    } else if (questionIndex === game.questions.length - 1) {
+    } else {
       await endGameMutation(game.id);
       setHasEnded(true);
     }

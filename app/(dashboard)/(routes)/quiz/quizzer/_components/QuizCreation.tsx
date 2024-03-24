@@ -26,12 +26,15 @@ import {Separator} from '@/components/ui/separator';
 import axios from 'axios';
 import {useRouter} from 'next/navigation';
 import {quizCreationSchema} from '@/lib/validation';
+import LoadingQuestions from '../../_components/LoadingQuestions';
 
 type Input = z.infer<typeof quizCreationSchema>;
 
 const QuizCreation = () => {
   const router = useRouter();
   const [isPending, setIsPending] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
+  const [finished, setFinished] = useState(false);
 
   const form = useForm<Input>({
     resolver: zodResolver(quizCreationSchema),
@@ -43,30 +46,37 @@ const QuizCreation = () => {
   });
 
   async function onSubmit(input: Input) {
-    setIsPending(true);
+    setShowLoader(true);
     try {
       const response = await axios.post('/api/quiz/game', {
         amount: input.amount,
         topic: input.topic,
         type: input.type,
       });
-      console.log(response.data);
       const {gameId} = response.data;
-      if (form.getValues('type') === 'mcq') {
-        router.push(`/quiz/play/mcq/${gameId}`);
-      } else if (form.getValues('type') === 'open_ended') {
-        router.push(`/quiz/play/open_ended/${gameId}`);
-      } else {
-        router.push(`/quiz/play/saq/${gameId}`);
-      }
+      setFinished(true);
+      setTimeout(() => {
+        if (form.getValues('type') === 'mcq') {
+          router.push(`/quiz/play/mcq/${gameId}`);
+        } else if (form.getValues('type') === 'open_ended') {
+          router.push(`/quiz/play/open_ended/${gameId}`);
+        } else {
+          router.push(`/quiz/play/saq/${gameId}`);
+        }
+      }, 1000);
     } catch (error) {
+      setShowLoader(false);
       console.error('Error submitting form:', error);
     } finally {
       setIsPending(false);
+      setShowLoader(false);
     }
   }
 
   form.watch();
+  if (showLoader) {
+    return <LoadingQuestions finished={finished} />;
+  }
   return (
     <div className="flex justify-center items-center h-full">
       <div className="w-full max-w-md md:max-w-lg lg:max-w-xl">

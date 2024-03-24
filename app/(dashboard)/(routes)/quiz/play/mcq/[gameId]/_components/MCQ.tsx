@@ -50,10 +50,11 @@ const MCQ = ({game}: Props) => {
     }
     return JSON.parse(currentQuestion.options as string) as string[];
   }, [currentQuestion]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   async function endGameMutation(gameId: any) {
     try {
       const payload = {gameId};
-      const response = await axios.post(`/api/endGame`, payload);
+      const response = await axios.post(`/api/quiz/endGame`, payload);
       return response.data;
     } catch (error) {
       console.error('Error ending game:', error);
@@ -94,11 +95,17 @@ const MCQ = ({game}: Props) => {
     if (questionIndex < game.questions.length - 1) {
       setQuestionIndex(questionIndex + 1);
       setSelectedChoice(0);
-    } else if (questionIndex === game.questions.length - 1) {
+    } else {
       await endGameMutation(game.id);
       setHasEnded(true);
     }
-  }, [checkAnswer, questionIndex, game.questions.length, game.id]);
+  }, [
+    checkAnswer,
+    questionIndex,
+    game.questions.length,
+    game.id,
+    endGameMutation,
+  ]);
 
   React.useEffect(() => {
     const handleKeyDown = async (event: KeyboardEvent) => {

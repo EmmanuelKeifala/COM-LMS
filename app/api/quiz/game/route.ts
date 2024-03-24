@@ -31,7 +31,6 @@ export async function POST(req: Request, res: Response) {
     );
 
     let manyData = [];
-    console.log('DATA', data.questions);
     if (type === 'mcq' || type === 'open_ended' || type === 'saq') {
       if (data.questions && Array.isArray(data.questions)) {
         manyData = data.questions.map((question: any) => {
@@ -48,7 +47,13 @@ export async function POST(req: Request, res: Response) {
               question.option1,
               question.option2,
               question.option3,
-            ].sort(() => Math.random() - 0.5);
+            ];
+
+            // Shuffle the options array using Fisher-Yates (Knuth) Shuffle Algorithm
+            for (let i = options.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [options[i], options[j]] = [options[j], options[i]];
+            }
 
             questionData.options = JSON.stringify(options);
           }
