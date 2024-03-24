@@ -20,6 +20,18 @@ export async function POST(req: Request, res: Response) {
       },
     });
 
+    await db.topicCount.upsert({
+      where: {topic: topic},
+      create: {
+        topic: topic,
+        count: 1,
+      },
+      update: {
+        count: {
+          increment: 1,
+        },
+      },
+    });
     const {data} = await axios.post(
       `${process.env.NEXT_PUBLIC_APP_URL}/api/quiz/questions`,
       // `http://localhost:3000/api/quiz/questions`,

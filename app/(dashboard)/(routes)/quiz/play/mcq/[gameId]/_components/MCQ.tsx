@@ -186,11 +186,11 @@ const MCQ = ({game}: Props) => {
                 onClick={() => {
                   setSelectedChoice(index);
                 }}>
-                <div className="flex items-center justify-start">
+                <div className="flex items-center justify-start  ">
                   <div className="p-2 px-3 mr-5 border rounded-md">
                     {index + 1}
                   </div>
-                  <div className="text-start">{option}</div>
+                  <div className="text-start whitespace-pre-wrap">{option}</div>
                 </div>
               </Button>
             );

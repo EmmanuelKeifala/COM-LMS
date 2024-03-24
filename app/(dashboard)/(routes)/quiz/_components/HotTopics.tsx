@@ -7,10 +7,19 @@ import {
 } from '@/components/ui/card';
 import React from 'react';
 import CustomWordCloud from './CustomWordCloud';
+import {db} from '@/lib/db';
 
 type Props = {};
 
-const HotTopics = (props: Props) => {
+const HotTopics = async (props: Props) => {
+  const topics = await db.topicCount.findMany({});
+
+  const formattedTopics = topics.map(topic => {
+    return {
+      text: topic.topic,
+      value: topic.count,
+    };
+  });
   return (
     <Card className="col-span-4">
       <CardHeader>
@@ -20,7 +29,9 @@ const HotTopics = (props: Props) => {
         </CardDescription>
       </CardHeader>
       <CardContent className="pl-2">
-        <CustomWordCloud />
+        {formattedTopics.length != 0 && (
+          <CustomWordCloud formattedTopics={formattedTopics} />
+        )}
       </CardContent>
     </Card>
   );

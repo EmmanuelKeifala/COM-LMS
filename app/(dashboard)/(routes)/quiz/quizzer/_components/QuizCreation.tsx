@@ -29,8 +29,10 @@ import {quizCreationSchema} from '@/lib/validation';
 import LoadingQuestions from '../../_components/LoadingQuestions';
 
 type Input = z.infer<typeof quizCreationSchema>;
-
-const QuizCreation = () => {
+type Props = {
+  topicParam: string;
+};
+const QuizCreation = ({topicParam}: Props) => {
   const router = useRouter();
   const [isPending, setIsPending] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
@@ -40,7 +42,7 @@ const QuizCreation = () => {
     resolver: zodResolver(quizCreationSchema),
     defaultValues: {
       amount: 2,
-      topic: '',
+      topic: topicParam,
       type: 'mcq',
     },
   });
@@ -64,6 +66,7 @@ const QuizCreation = () => {
           router.push(`/quiz/play/saq/${gameId}`);
         }
       }, 1000);
+      setShowLoader(false);
     } catch (error) {
       setShowLoader(false);
       console.error('Error submitting form:', error);
@@ -75,7 +78,11 @@ const QuizCreation = () => {
 
   form.watch();
   if (showLoader) {
-    return <LoadingQuestions finished={finished} />;
+    return (
+      <div className="w-2/3 mx-10">
+        <LoadingQuestions finished={finished} />
+      </div>
+    );
   }
   return (
     <div className="flex justify-center items-center h-full">

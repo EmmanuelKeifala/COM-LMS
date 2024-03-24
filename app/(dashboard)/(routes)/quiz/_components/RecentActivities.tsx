@@ -27,7 +27,7 @@ const RecentActivityCard = async (props: Props) => {
           <Link href="/quiz/history">Recent Activity</Link>
         </CardTitle>
         <CardDescription>
-          You have played a total of {games_count} quizzes.
+          You have played a total of {games_count} quizze(s).
         </CardDescription>
       </CardHeader>
       <CardContent className="max-h-[580px] overflow-scroll">
