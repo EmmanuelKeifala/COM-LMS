@@ -7,6 +7,7 @@ import ResultsCard from './_components/ResultsCard';
 import AccuracyCard from './_components/AccuracyCard';
 import TimeTakenCard from './_components/TimeTaken';
 import QuestionsList from './_components/QuestionList';
+import {buttonVariants} from '@/components/ui/button';
 
 type Props = {
   params: {
@@ -48,9 +49,7 @@ const StatisticsPage = async ({params: {gameId}}: Props) => {
           <h2 className="text-3xl font-bold tracking-tight">Statistics</h2>
 
           <div className="flex items-center space-x-2">
-            <Link
-              href={'/quiz'}
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+            <Link href={'/quiz'} className={buttonVariants()}>
               <LucideLayoutDashboard className="mr-2" />
               Back to Quiz
             </Link>
