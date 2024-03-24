@@ -66,7 +66,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
             disableTransitionOnChange>
             {children}
           </ThemeProvider>
-          <Analytics mode={'production'} />;
+          <Analytics mode={'production'} />
           <SpeedInsights />
           <ConfettiProvider />
           <ToastProvider />

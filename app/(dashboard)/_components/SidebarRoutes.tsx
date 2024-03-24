@@ -5,6 +5,7 @@ import {SidebarItem} from './SidebarItem';
 import {usePathname} from 'next/navigation';
 import {FcFeedback} from 'react-icons/fc';
 import {MdEmail, MdQuiz} from 'react-icons/md';
+import {auth} from '@clerk/nextjs';
 
 const guestRoutes = [
   {
@@ -52,13 +53,20 @@ const uploadRoute = [
 ];
 export const SidebarRoutes = () => {
   const pathname = usePathname();
-
   const isUploaderRoute = pathname?.includes('/uploader');
+  const {userId} = auth();
+
+  const isUser2 = userId === 'user_2baYYZEdPno56qBM7z2RDMiC9hM';
 
   const routes = isUploaderRoute ? uploadRoute : guestRoutes;
+
+  const filteredRoutes = isUser2
+    ? routes
+    : routes.filter(route => route.href !== '/quiz');
+
   return (
     <div className="flex flex-col w-full">
-      {routes.map(route => (
+      {filteredRoutes.map(route => (
         <SidebarItem
           key={route.href}
           label={route.label}
