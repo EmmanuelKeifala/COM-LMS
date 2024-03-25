@@ -117,7 +117,7 @@ const ChapterIdPage = async ({
                 <Preview value={'Chapter Resources'} />
                 <Separator />
                 <div className="p-4">
-                  {chapterAttachment.map((attachment, index) => (
+                  {chapterAttachment.map((attachment: any, index: any) => (
                     <a
                       href={attachment.url}
                       target="_blank"
@@ -142,7 +142,7 @@ const ChapterIdPage = async ({
                 <Preview value={'Chapter Quizzes'} />
                 <Separator />
                 <div className="p-4">
-                  {quizUrls.map((attachment, index) => (
+                  {quizUrls.map((attachment: any, index: any) => (
                     <a
                       href={attachment.quizUrl}
                       target="_blank"
