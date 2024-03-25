@@ -2,63 +2,64 @@ import {auth} from '@clerk/nextjs';
 import axios from 'axios';
 import {NextResponse} from 'next/server';
 
-export async function POST(req: Request) {
+const CLERK_API_URL = 'https://api.clerk.com/v1/users/';
+
+// Reusable authentication middleware
+const authenticateUser = () => {
+  const {userId} = auth();
+  if (!userId) {
+    throw new Error('Unauthorized');
+  }
+  return userId;
+};
+
+const handleRequest = async (req: Request, method: string) => {
   try {
-    // Ensure user authentication
-    const {userId} = auth();
-    if (!userId) {
-      return new NextResponse('Unauthorized', {status: 401});
-    }
+    const userId = authenticateUser();
+    let response;
 
-    const {userClass} = await req.json();
-
-    // Make PATCH request to Clerk API
-    const response = await axios.patch(
-      `https://api.clerk.com/v1/users/${userId}`,
-      {
-        public_metadata: {userClass},
-      },
-      {
+    // Make request to Clerk API based on the HTTP method
+    if (method === 'GET') {
+      response = await axios.get(`${CLERK_API_URL}${userId}`, {
         headers: {
           Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
           Accept: 'application/json',
         },
-      },
-    );
+      });
+    } else if (method === 'POST') {
+      const {userClass} = await req.json();
+      response = await axios.patch(
+        `${CLERK_API_URL}${userId}`,
+        {
+          public_metadata: {userClass},
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
+            Accept: 'application/json',
+          },
+        },
+      );
+    } else {
+      throw new Error('Invalid HTTP method');
+    }
 
     // Return success response
-    return new NextResponse('OK', {status: 200});
+    return new NextResponse(
+      method === 'GET' ? response.data.public_metadata.userClass : 'OK',
+      {status: 200},
+    );
   } catch (error) {
     console.error('[CLASSES]', error);
     // Return error response
     return new NextResponse('Internal Error', {status: 500});
   }
+};
+
+export async function POST(req: Request) {
+  return handleRequest(req, 'POST');
 }
 
 export async function GET(req: Request) {
-  try {
-    // Ensure user authentication
-    const {userId} = auth();
-    if (!userId) {
-      return new NextResponse('Unauthorized', {status: 401});
-    }
-
-    // Make PATCH request to Clerk API
-    const response = await axios.get(
-      `https://api.clerk.com/v1/users/${userId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
-          Accept: 'application/json',
-        },
-      },
-    );
-
-    // Return success response
-    return new NextResponse(response.data.public_metadata.userClass);
-  } catch (error) {
-    console.error('[CLASSES]', error);
-    // Return error response
-    return new NextResponse('Internal Error', {status: 500});
-  }
+  return handleRequest(req, 'GET');
 }

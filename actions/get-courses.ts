@@ -25,98 +25,35 @@ export const getCourses = async ({
   userClass: string;
 }> => {
   try {
-    // Fetch user data
+    // Fetch user details only once
     const userResponse = await fetchUserDetails(userId);
-    const userClass = userResponse?.public_metadata?.userClass;
-    if (!userClass) {
-      return {coursesWithProgress: [], userClass: ''};
-    }
+    const userClass = userResponse?.public_metadata?.userClass || '';
+
     // Find the Level based on userClass
-    const level = userClass
-      ? await db.level.findUnique({
-          where: {
-            name: userClass,
-          },
-          cacheStrategy: {swr: 60, ttl: 60},
-        })
-      : null;
+    const level = userClass ? await getLevelByName(userClass) : null;
 
     // Fetch courses based on levelId if userClass is available
-    const courses = userClass
-      ? await db.course.findMany({
-          where: {
-            isPublished: true,
-            title: {
-              contains: title,
-              mode: 'insensitive',
-            },
-            categoryId,
-            levelId: level?.id,
-          },
-          include: {
-            category: true,
-            level: true,
-            chapters: {
-              where: {
-                isPublished: true,
-              },
-              select: {
-                id: true,
-              },
-            },
-          },
-          orderBy: {
-            createdAt: 'desc',
-          },
-          cacheStrategy: {swr: 60, ttl: 60},
-        })
-      : await db.course.findMany({
-          where: {
-            isPublished: true,
-            title: {
-              contains: title,
-              mode: 'insensitive',
-            },
-            categoryId,
-          },
-          include: {
-            category: true,
-            level: true,
-            chapters: {
-              where: {
-                isPublished: true,
-              },
-              select: {
-                id: true,
-              },
-            },
-          },
-          orderBy: {
-            createdAt: 'desc',
-          },
-          cacheStrategy: {swr: 60, ttl: 60},
-        });
+    const courses = await getCoursesByFilters(title, categoryId, level?.id!!);
 
-    // Fetch progress for each course
-    const coursesWithProgress: CourseWithProgressWithCategory[] =
-      await Promise.all(
-        courses.map(async (course: any) => {
-          const progressPercentage = await getProgress(userId, course.id);
-          return {
-            ...course,
-            progress: progressPercentage,
-          };
-        }),
-      );
-    return {coursesWithProgress, userClass: userClass || ''};
+    // Fetch progress for each course in parallel
+    const coursesWithProgress = await Promise.all(
+      courses.map(async (course: any) => {
+        const progressPercentage = await getProgress(userId, course.id);
+        return {
+          ...course,
+          progress: progressPercentage,
+        };
+      }),
+    );
+
+    return {coursesWithProgress, userClass};
   } catch (error) {
     console.error('[GET_COURSES]', error);
     return {coursesWithProgress: [], userClass: ''};
   }
 };
 
-// Fetch user details from the API
-const fetchUserDetails: any = async (userId: string) => {
+const fetchUserDetails = async (userId: string) => {
   try {
     const response = await axios.get(
       `https://api.clerk.com/v1/users/${userId}`,
@@ -132,4 +69,47 @@ const fetchUserDetails: any = async (userId: string) => {
     console.error('Error fetching user details:', error);
     return null;
   }
+};
+
+const getLevelByName = async (name: string) => {
+  return await db.level.findUnique({
+    where: {
+      name,
+    },
+    cacheStrategy: {swr: 60, ttl: 60},
+  });
+};
+
+const getCoursesByFilters = async (
+  title: string | undefined,
+  categoryId: string | undefined,
+  levelId: string | null,
+) => {
+  return await db.course.findMany({
+    where: {
+      isPublished: true,
+      title: {
+        contains: title || '',
+        mode: 'insensitive',
+      },
+      categoryId,
+      levelId,
+    },
+    include: {
+      category: true,
+      level: true,
+      chapters: {
+        where: {
+          isPublished: true,
+        },
+        select: {
+          id: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    cacheStrategy: {swr: 60, ttl: 60},
+  });
 };

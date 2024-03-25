@@ -7,6 +7,9 @@ import {
   VideoUrl,
 } from '@prisma/client';
 
+// Cache object to store frequently accessed data
+const cache: {[key: string]: any} = {};
+
 interface GetChapterProps {
   userId: string;
   courseId: string;
@@ -19,8 +22,14 @@ export const getChapter = async ({
   chapterId,
 }: GetChapterProps) => {
   try {
-    const cacheStrategy = {swr: 60, ttl: 60};
+    const cacheKey = `${userId}_${courseId}_${chapterId}`;
+    const cachedResult = cache[cacheKey];
 
+    if (cachedResult) {
+      return cachedResult;
+    }
+
+    // Fetch data from database
     const [isEnrolled, course, chapter, userProgress] = await Promise.all([
       db.joined?.findUnique({
         where: {userId_courseId: {userId, courseId}},
@@ -63,12 +72,16 @@ export const getChapter = async ({
 
     if (chapter.isFree || isEnrolled) {
       nextChapter = await db.chapter.findFirst({
-        where: {courseId, isPublished: true, position: {gt: chapter?.position}},
+        where: {
+          courseId,
+          isPublished: true,
+          position: {gt: chapter?.position},
+        },
         orderBy: {position: 'asc'},
       });
     }
 
-    return {
+    const result = {
       chapter,
       course,
       attachments,
@@ -79,12 +92,16 @@ export const getChapter = async ({
       videoUrls,
       quizUrls,
     };
+
+    // Cache the result
+    cache[cacheKey] = result;
+
+    return result;
   } catch (error) {
     console.log('[GET_CHAPTER]', error);
     return {
       chapter: null,
       course: null,
-      muxData: null,
       attachments: [],
       nextChapter: null,
       userProgress: null,

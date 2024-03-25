@@ -24,6 +24,8 @@ async function sendEmailBatch(emails: any[], data: any) {
 export async function POST(req: Request) {
   try {
     const {data} = await req.json();
+
+    // Fetch users from the external API
     const response = await axios.get(
       `https://api.clerk.com/v1/users?limit=499`,
       {
@@ -43,32 +45,32 @@ export async function POST(req: Request) {
       });
     };
 
-    if (data.userCategory === 'general' || data.userCategory === 'noClass') {
-      response.data.forEach((user: any) => {
-        if (user && (!data.userCategory || !user.public_metadata.userClass)) {
-          pushUserDetails(user);
-        }
-      });
-    } else if (
+    let userIDsToCheck: string[] = [];
+
+    if (
       data.userCategory === 'courseNotCompleted' ||
       data.userCategory === 'noCourse'
     ) {
-      const usersToCheck =
-        data.userCategory === 'courseNotCompleted'
-          ? await db.userProgress.findMany({
-              where: {isCompleted: false},
-              select: {userId: true},
-            })
-          : await db.userProgress.findMany({select: {userId: true}});
-      const userIDsToCheck = usersToCheck.map(user => user.userId);
-      console.log(userIDsToCheck);
-      response.data.forEach((user: any) => {
-        // Check if the user is in the response and not in the database users
-        if (user && !userIDsToCheck.includes(user.id)) {
-          pushUserDetails(user);
-        }
-      });
+      // Fetch user IDs to check from the database
+      userIDsToCheck = await db.userProgress
+        .findMany({
+          where: {isCompleted: false},
+          select: {userId: true},
+        })
+        .then(users => users.map(user => user.userId));
     }
+
+    // Process users based on userCategory
+    response.data.forEach((user: any) => {
+      if (
+        !data.userCategory ||
+        !user.public_metadata.userClass ||
+        (data.userCategory === 'courseNotCompleted' &&
+          !userIDsToCheck.includes(user.id))
+      ) {
+        pushUserDetails(user);
+      }
+    });
 
     // Set the batch size and delay between batches
     const batchSize = 50;
@@ -87,7 +89,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json('Emails sent successfully', {status: 200});
   } catch (error) {
-    console.log('[Email Error]', error);
+    console.error('[Email Error]', error);
     return new NextResponse('Internal server error', {status: 500});
   }
 }

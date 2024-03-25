@@ -5,22 +5,24 @@ export const getProgress = async (
   courseId: string,
 ): Promise<number> => {
   try {
+    // Check if the user is enrolled in the course
     const isEnrolled = await db.joined.findUnique({
       where: {
         userId_courseId: {
-          userId: userId,
-          courseId: courseId,
+          userId,
+          courseId,
         },
       },
     });
 
     if (!isEnrolled) {
-      return -1;
+      return -1; // User not enrolled, return -1 as progress
     }
 
-    const publishedChapters = await db.chapter.findMany({
+    // Fetch all published chapter IDs for the course
+    const publishedChapterIds = await db.chapter.findMany({
       where: {
-        courseId: courseId,
+        courseId,
         isPublished: true,
       },
       select: {
@@ -28,24 +30,24 @@ export const getProgress = async (
       },
     });
 
-    const publishedChapterIds = publishedChapters.map(chapter => chapter.id);
-
+    // Fetch count of completed chapters for the user
     const validCompletedChaptersCount = await db.userProgress.count({
       where: {
-        userId: userId,
+        userId,
         chapterId: {
-          in: publishedChapterIds,
+          in: publishedChapterIds.map(chapter => chapter.id),
         },
         isCompleted: true,
       },
     });
 
+    // Calculate progress percentage
     const progressPercentage =
       (validCompletedChaptersCount / publishedChapterIds.length) * 100;
 
     return progressPercentage;
   } catch (error) {
-    console.log('[GET_PROGRESS]', error);
-    return 0;
+    console.error('[GET_PROGRESS]', error);
+    return 0; // Return 0 in case of errors
   }
 };

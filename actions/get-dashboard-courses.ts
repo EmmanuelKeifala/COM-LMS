@@ -37,23 +37,25 @@ export const getDashboardCourses = async (
       },
     });
 
-    const courses = purchasedCourses.map(
-      (purchase: any) => purchase.course,
-    ) as CourseWithProgressWithCategory[];
+    const courseIds = purchasedCourses.map(purchase => purchase.course.id);
 
-    // Use Promise.all to parallelize getProgress calls
-    const progressPromises = courses.map(course =>
-      getProgress(userId, course.id),
+    const progressPromises = courseIds.map(courseId =>
+      getProgress(userId, courseId),
     );
     const progressResults = await Promise.all(progressPromises);
 
-    courses.forEach((course, index) => {
-      course['progress'] = progressResults[index];
-    });
+    const coursesWithProgress: any = purchasedCourses.map(
+      (purchase, index) => ({
+        ...purchase.course,
+        progress: progressResults[index],
+      }),
+    );
 
-    const completedCourses = courses.filter(course => course.progress === 100);
-    const coursesInProgress = courses.filter(
-      course => (course.progress ?? 0) < 100,
+    const completedCourses = coursesWithProgress.filter(
+      (course: {progress: number}) => course.progress === 100,
+    );
+    const coursesInProgress = coursesWithProgress.filter(
+      (course: {progress: any}) => (course.progress ?? 0) < 100,
     );
 
     return {
@@ -61,7 +63,7 @@ export const getDashboardCourses = async (
       coursesInProgress,
     };
   } catch (error) {
-    console.log('[GET_DASHBOARD_COURSES]', error);
+    console.error('[GET_DASHBOARD_COURSES]', error);
     return {
       completedCourses: [],
       coursesInProgress: [],
