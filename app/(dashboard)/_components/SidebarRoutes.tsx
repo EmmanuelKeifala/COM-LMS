@@ -56,7 +56,9 @@ export const SidebarRoutes = () => {
   const isUploaderRoute = pathname?.includes('/uploader');
   const {userId} = useAuth();
 
-  const isUser2 = userId === 'user_2baYYZEdPno56qBM7z2RDMiC9hM';
+  const isUser2 =
+    userId === 'user_2baYYZEdPno56qBM7z2RDMiC9hM' ||
+    'user_2YZm7lOYkOlWQqcmPn1HMaYTWfI';
 
   const routes = isUploaderRoute ? uploadRoute : guestRoutes;
 
