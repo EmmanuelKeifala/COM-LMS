@@ -32,7 +32,7 @@ const HistoryComponent = async ({limit, userId}: Props) => {
               <div className="ml-4 space-y-1">
                 <Link
                   className="text-base font-medium leading-none underline"
-                  href={`/statistics/${game.id}`}>
+                  href={`/quiz/statistics/${game.id}`}>
                   {game.topic}
                 </Link>
                 <p className="flex items-center px-2 py-1 text-xs text-white rounded-lg w-fit bg-slate-800">
