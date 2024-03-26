@@ -10,6 +10,7 @@ import Link from 'next/link';
 import {db} from '@/lib/db';
 import {auth} from '@clerk/nextjs';
 import HistoryComponent from '../history/_components/HistoryComponent';
+import IncompleteGames from '../history/_components/IncompleteGames';
 
 type Props = {};
 
@@ -30,8 +31,9 @@ const RecentActivityCard = async (props: Props) => {
           You have played a total of {games_count} quizze(s).
         </CardDescription>
       </CardHeader>
-      <CardContent className="max-h-[580px] overflow-scroll">
+      <CardContent className="max-h-[580px] overflow-scroll flex flex-col gap-4">
         <HistoryComponent limit={10} userId={userId} />
+        <IncompleteGames limit={10} userId={userId} />
       </CardContent>
     </Card>
   );

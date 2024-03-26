@@ -17,6 +17,7 @@ export async function POST(req: Request, res: Response) {
         timeStarted: new Date(),
         userId: userId!!,
         topic,
+        timeEned: null,
       },
     });
 
