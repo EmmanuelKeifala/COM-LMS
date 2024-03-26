@@ -2,6 +2,7 @@ import {Clock, CopyCheck, Edit2, XCircle} from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 import {db} from '@/lib/db';
+import {redirect} from 'next/dist/server/api-utils';
 
 type Props = {
   limit: number;
@@ -14,10 +15,22 @@ const IncompleteGames = async ({limit, userId}: Props) => {
       userId,
       timeEned: null,
     },
+    include: {
+      questions: {
+        select: {
+          id: true,
+        },
+      },
+    },
     orderBy: {
       timeStarted: 'desc',
     },
   });
+  for (const game of games) {
+    if (!game.questions || game.questions.length === 0) {
+      return;
+    }
+  }
   return (
     <div className="space-y-8">
       {games.map(game => {

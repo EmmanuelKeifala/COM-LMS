@@ -32,8 +32,8 @@ const RecentActivityCard = async (props: Props) => {
         </CardDescription>
       </CardHeader>
       <CardContent className="max-h-[580px] overflow-scroll flex flex-col gap-4">
-        <HistoryComponent limit={10} userId={userId} />
-        <IncompleteGames limit={10} userId={userId} />
+        <HistoryComponent limit={100} userId={userId} />
+        <IncompleteGames limit={100} userId={userId} />
       </CardContent>
     </Card>
   );

@@ -6,8 +6,6 @@ export const POST = async (req: Request, res: Response) => {
   try {
     const body = await req.json();
     const {amount, topic, type} = body;
-    console.log('[AMOUNT]: ', amount);
-
     // Define a maximum chunk size
     const chunkSize = 5; // Adjust this value as needed
 
@@ -50,8 +48,6 @@ export const POST = async (req: Request, res: Response) => {
       // Append the generated questions to the allQuestions array
       allQuestions = allQuestions.concat(questionsBatch);
     }
-
-    console.log('[QUESTIONS: ', allQuestions);
 
     // Return the concatenated questions array
     return NextResponse.json(
