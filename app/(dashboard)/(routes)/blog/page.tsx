@@ -12,10 +12,11 @@ const query = groq`*[_type=="post"]{
 
 const BlogPage = async (props: Props) => {
   const posts = await client.fetch(query);
-  console.log(posts);
-  return <div>
-    <BlogList posts={posts} />
-  </div>;
+  return (
+    <div>
+      <BlogList posts={posts} />
+    </div>
+  );
 };
 
 export default BlogPage;

@@ -21,7 +21,7 @@ interface SanityDocumentProps {
 
 function getPreviewUrl(doc: SanityDocumentProps) {
   return doc?.slug?.current
-    ? `http://localhost:3000/blog/${doc.slug?.current}`
+    ? `${process.env.NEXT_PUBLIC_APP_URL}/blog/post/${doc.slug?.current}`
     : window.location.host;
 }
 
