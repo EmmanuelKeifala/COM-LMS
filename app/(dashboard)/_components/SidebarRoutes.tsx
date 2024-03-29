@@ -1,10 +1,17 @@
 'use client';
 
-import {AreaChart, BarChart, Compass, Layout, List} from 'lucide-react';
+import {
+  AreaChart,
+  BarChart,
+  Compass,
+  Layout,
+  List,
+  Newspaper,
+} from 'lucide-react';
 import {SidebarItem} from './SidebarItem';
 import {usePathname} from 'next/navigation';
 import {FcFeedback} from 'react-icons/fc';
-import {MdEmail, MdQuiz} from 'react-icons/md';
+import {MdDashboard, MdEmail, MdQuiz} from 'react-icons/md';
 import {useAuth} from '@clerk/nextjs';
 
 const guestRoutes = [
@@ -22,6 +29,11 @@ const guestRoutes = [
     icon: MdQuiz,
     label: 'Quiz',
     href: '/quiz',
+  },
+  {
+    icon: Newspaper,
+    label: 'Blog',
+    href: '/blog',
   },
 ];
 const uploadRoute = [
@@ -49,6 +61,11 @@ const uploadRoute = [
     icon: MdEmail,
     label: 'Emails',
     href: '/uploader/email',
+  },
+  {
+    icon: MdDashboard,
+    label: 'Blog Dashboard',
+    href: '/uploader/blogDashboard',
   },
 ];
 export const SidebarRoutes = () => {
