@@ -1,7 +1,7 @@
 import {ArrowLeft} from 'lucide-react';
 import Link from 'next/link';
 
-const StudioNavbar = (props: any) => {
+const StudioNavbarComponent = (props: any) => {
   return (
     <div>
       <div className="flex items-center justify-between p-5">
@@ -15,4 +15,4 @@ const StudioNavbar = (props: any) => {
   );
 };
 
-export default StudioNavbar;
+export default StudioNavbarComponent;
