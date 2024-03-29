@@ -75,6 +75,7 @@
     "react-type-animation": "^3.2.0",
     "recharts": "^2.10.1",
     "sanity": "^3.36.2",
+    "sanity-plugin-iframe-pane": "^3.1.6",
     "string-similarity": "^4.0.4",
     "styled-components": "^6.1.8",
     "tailwind-merge": "^2.0.0",
