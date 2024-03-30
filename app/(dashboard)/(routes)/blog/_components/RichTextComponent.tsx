@@ -5,7 +5,7 @@ import {any} from 'zod';
 
 export const RichTextComponent = {
   types: {
-    image: ({value}) => {
+    image: ({value}: any) => {
       return (
         <div className="object-contain my-4 mx-auto py-10 text-center">
           <Image
