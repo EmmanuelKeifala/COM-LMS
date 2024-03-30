@@ -8,7 +8,7 @@ type Props = {
 const BlogList = ({posts}: Props) => {
   return (
     <div>
-      <hr className="border-sky-700 mb-10 " />
+      <hr className=" mb-10 " />
 
       <div className="grid grid-cols-1 md:grid-cols-2 px-10 gap-10 gap-y-16 pb-10 ">
         {posts.map(post => (
