@@ -13,7 +13,6 @@ import ClassSelection from './ClassSelection';
 
 export const NavbarRoutes = () => {
   const pathname = usePathname();
-  const router = useRouter();
   const {userId} = useAuth();
 
   const isUploderPage = pathname?.startsWith('/uploader');
