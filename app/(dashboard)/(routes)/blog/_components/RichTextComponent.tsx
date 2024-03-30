@@ -8,12 +8,7 @@ export const RichTextComponent = {
     image: ({value}: any) => {
       return (
         <div className="object-contain my-4 mx-auto py-10 text-center">
-          <Image
-            src={urlForImage(value)}
-            width={300}
-            height={300}
-            alt="Blog Image"
-          />
+          <Image src={urlForImage(value)} alt="Blog Image" />
         </div>
       );
     },
