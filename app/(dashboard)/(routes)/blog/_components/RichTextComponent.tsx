@@ -5,10 +5,15 @@ import {any} from 'zod';
 
 export const RichTextComponent = {
   types: {
-    image: ({value}: any) => {
+    image: ({value}) => {
       return (
-        <div className="object-contain">
-          <Image src={urlForImage(value)} fill alt="Blog Image" />;
+        <div className="object-contain my-4 mx-auto py-10 text-center">
+          <Image
+            src={urlForImage(value)}
+            width={300}
+            height={300}
+            alt="Blog Image"
+          />
         </div>
       );
     },
