@@ -44,7 +44,7 @@ export const NavbarRoutes = () => {
                 Uploader mode
               </Button>
             </Link>
-            <Link href="/studio">
+            <Link href="/studio/structure">
               <Button size="sm" variant="ghost">
                 Blog Studio
               </Button>
