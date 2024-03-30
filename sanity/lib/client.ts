@@ -13,7 +13,7 @@ export const client = createClient({
   dataset,
   projectId,
   useCdn,
-  perspective: isPreviewMode ? 'previewDrafts' : 'published',
-  token: isPreviewMode ? sanityToken : undefined,
-  ignoreBrowserTokenWarning: isPreviewMode ? true : false,
+  // perspective: isPreviewMode ? 'previewDrafts' : 'published',
+  // token: isPreviewMode ? sanityToken : undefined,
+  // ignoreBrowserTokenWarning: isPreviewMode ? true : false,
 });
