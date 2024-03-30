@@ -38,11 +38,18 @@ export const NavbarRoutes = () => {
             </Button>
           </Link>
         ) : isUploader(userId) ? (
-          <Link href="/uploader/courses">
-            <Button size="sm" variant="ghost">
-              Uploader mode
-            </Button>
-          </Link>
+          <>
+            <Link href="/uploader/courses">
+              <Button size="sm" variant="ghost">
+                Uploader mode
+              </Button>
+            </Link>
+            <Link href="/studio">
+              <Button size="sm" variant="ghost">
+                Blog Studio
+              </Button>
+            </Link>
+          </>
         ) : null}
         <div className="flex gap-3 items-center">
           <UserButton afterSignOutUrl="/" />

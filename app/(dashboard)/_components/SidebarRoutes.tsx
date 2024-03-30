@@ -1,12 +1,17 @@
 'use client';
-
-import {AreaChart, BarChart, Compass, Layout, List} from 'lucide-react';
+import {
+  AreaChart,
+  BarChart,
+  Compass,
+  Layout,
+  List,
+  Newspaper,
+} from 'lucide-react';
 import {SidebarItem} from './SidebarItem';
 import {usePathname} from 'next/navigation';
 import {FcFeedback} from 'react-icons/fc';
 import {MdEmail, MdQuiz} from 'react-icons/md';
 import {useAuth} from '@clerk/nextjs';
-
 const guestRoutes = [
   {
     icon: Layout,
@@ -22,6 +27,11 @@ const guestRoutes = [
     icon: MdQuiz,
     label: 'Quiz',
     href: '/quiz',
+  },
+  {
+    icon: Newspaper,
+    label: 'Blog',
+    href: '/blog',
   },
 ];
 const uploadRoute = [
@@ -56,16 +66,18 @@ export const SidebarRoutes = () => {
   const isUploaderRoute = pathname?.includes('/uploader');
   const {userId} = useAuth();
 
-  const isUser2 =
-    userId === 'user_2baYYZEdPno56qBM7z2RDMiC9hM' ||
-    'user_2YZm7lOYkOlWQqcmPn1HMaYTWfI';
+  const allowedUserIds = [
+    'user_2baYYZEdPno56qBM7z2RDMiC9hM',
+    'user_2YZm7lOYkOlWQqcmPn1HMaYTWfI',
+  ];
+
+  const isUserAllowed = allowedUserIds.includes(userId!!);
 
   const routes = isUploaderRoute ? uploadRoute : guestRoutes;
 
-  const filteredRoutes = isUser2
+  const filteredRoutes = isUserAllowed
     ? routes
-    : routes.filter(route => route.href !== '/quiz');
-
+    : routes.filter(route => route.href !== '/blog' && route.href !== '/quiz');
   return (
     <div className="flex flex-col w-full">
       {filteredRoutes.map(route => (
