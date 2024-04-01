@@ -4,6 +4,9 @@ import {groq} from 'next-sanity';
 import Image from 'next/image';
 import {PortableText} from '@portabletext/react';
 import {RichTextComponent} from '../../_components/RichTextComponent';
+import {CommentForm} from '../../_components/CommentForm';
+import {auth} from '@clerk/nextjs';
+import CommentCard from '../../_components/CommentCard';
 
 type Props = {
   params: {
@@ -11,7 +14,7 @@ type Props = {
   };
 };
 
-export const revalidate = 60;
+export const revalidate = 1;
 
 export async function generateStaticParams() {
   const query = groq`*[_type == "post"]{
@@ -35,6 +38,17 @@ async function Post({params: {slug}}: Props) {
   }
   `;
   const post: Post = await client.fetch(query, {slug});
+
+  const query2 = `*[_type=="Comment"]`;
+  const comments = await client.fetch(query2);
+
+  // Filter comments where post._ref matches post._id
+  const filteredComments = comments.filter(
+    (comment: {post: {_ref: string}}) => {
+      return comment.post?._ref === post?._id;
+    },
+  );
+
   return (
     <article className="px-10 pb-28 mt-7">
       <section className="space-y-2 border-sky-700">
@@ -95,6 +109,16 @@ async function Post({params: {slug}}: Props) {
         </div>
       </section>
       <PortableText value={post?.body} components={RichTextComponent} />
+      <section className="w-full mt-10 border border-gray-200 shadow-md bg-white rounded-lg">
+        <div className="p-6 sm:p-8 md:p-10 flex flex-col sm:flex-row items-start justify-between">
+          <div className="w-full sm:w-2/3 pr-4">
+            <CommentCard comments={filteredComments} />
+          </div>
+          <div className="w-full sm:w-1/3 flex justify-center sm:justify-end mt-4 sm:mt-0">
+            <CommentForm postId={post._id} />
+          </div>
+        </div>
+      </section>
     </article>
   );
 }

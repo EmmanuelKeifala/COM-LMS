@@ -14,6 +14,6 @@ export const client = createClient({
   projectId,
   useCdn,
   // perspective: isPreviewMode ? 'previewDrafts' : 'published',
-  // token: isPreviewMode ? sanityToken : undefined,
+  token: sanityToken,
   // ignoreBrowserTokenWarning: isPreviewMode ? true : false,
 });
