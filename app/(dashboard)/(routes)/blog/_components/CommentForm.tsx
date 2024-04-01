@@ -16,6 +16,8 @@ import {Textarea} from '@/components/ui/textarea';
 import {useUser} from '@clerk/nextjs';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import {Spin} from 'antd';
+import {useState} from 'react';
 
 const FormSchema = z.object({
   content: z
@@ -38,25 +40,28 @@ export function CommentForm({postId}: Props) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log('DATA', data);
     const sanityData = {
       content: data.content,
       username: user?.username,
       id: postId,
       userimage: user?.profileImageUrl,
     };
+    setIsLoading(true);
     try {
       await axios.post('/api/comments', sanityData);
-      form.reset();
       toast.success('Comment Posted');
+      form.reset();
+      form.resetField('content');
     } catch (error) {
       console.log(error);
       toast.error('Something went wrong');
+    } finally {
+      setIsLoading(false);
     }
   }
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
@@ -78,12 +83,18 @@ export function CommentForm({postId}: Props) {
           )}
         />
 
-        <Button
-          type="submit"
-          disabled={!user?.username}
-          className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">
-          Submit
-        </Button>
+        {!isLoading ? (
+          <Button
+            type="submit"
+            disabled={!user?.username}
+            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">
+            Submit
+          </Button>
+        ) : (
+          <div className="w-full flex items-center justify-center">
+            <Spin />
+          </div>
+        )}
       </form>
     </Form>
   );

@@ -17,51 +17,45 @@ interface Comment {
   _createdAt: Date;
 }
 
-const CommentCard: React.FC<{comments: Comment[]}> = ({comments}) => {
+const CommentCard: React.FC<{comments: Comment[]}> = ({
+  comments: initialComments,
+}) => {
   const {user} = useUser();
   const [localLikes, setLocalLikes] = useState<{[key: string]: number}>({});
+  const [comments, setComments] = useState<Comment[]>(initialComments);
 
   useEffect(() => {
     const fetchLikes = async () => {
       const updatedLocalLikes: {[key: string]: number} = {};
-
-      for (const comment of comments) {
-        try {
-          // Check if the user's ID is included in the comment's likes array
-          const userLiked = comment.likes.includes(user?.id || '');
-
-          // Set the local likes state accordingly
-          updatedLocalLikes[comment._id] = userLiked ? 1 : 0;
-        } catch (error) {
-          console.error('Error fetching likes:', error);
-        }
-      }
+      initialComments.forEach(comment => {
+        const userLiked = comment.likes.includes(user?.id || '');
+        updatedLocalLikes[comment._id] = userLiked ? 1 : 0;
+      });
 
       setLocalLikes(updatedLocalLikes);
     };
 
     fetchLikes();
-
-    // Subscribe to real-time updates
     const subscription = client
-      .listen<Comment>('*[_type == "Comment" && _id in $commentIds]', {
-        commentIds: comments.map(comment => comment._id),
-      })
+      .listen<Comment>('*[_type == "Comment"]')
       .subscribe(update => {
-        // Handle update
         const updatedComment: any = update.result;
+        const existingCommentIndex = comments.findIndex(
+          comment => comment._id === updatedComment._id,
+        );
 
-        // Update local state based on the update
-        setLocalLikes(prevLikes => {
-          const newLikes = {...prevLikes};
-          newLikes[updatedComment._id] = updatedComment.likes.length;
-          return newLikes;
-        });
+        if (existingCommentIndex !== -1) {
+          setLocalLikes(prevLikes => ({
+            ...prevLikes,
+            [updatedComment._id]: updatedComment.likes.length,
+          }));
+        } else {
+          setComments(prevComments => [...prevComments, updatedComment]);
+        }
       });
 
-    // Clean up subscription
     return () => subscription.unsubscribe();
-  }, [comments, user?.id]);
+  }, [comments, initialComments, user?.id]);
 
   const handleLikeClick = async (commentId: string) => {
     try {
@@ -69,8 +63,12 @@ const CommentCard: React.FC<{comments: Comment[]}> = ({comments}) => {
         id: commentId,
       });
 
-      const updatedLikesCount = response?.data?.likes?.length || 0;
+      const updatedComment = response?.data?.comment;
 
+      // Extract the new likes count from the updated comment
+      const updatedLikesCount = updatedComment.likes.length;
+
+      // Update local state with the new likes count
       setLocalLikes(prevLikes => ({
         ...prevLikes,
         [commentId]: updatedLikesCount,
@@ -81,21 +79,12 @@ const CommentCard: React.FC<{comments: Comment[]}> = ({comments}) => {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
       {comments?.map((comment: Comment) => (
         <div key={comment._id} className="flex justify-center">
           <div className="bg-white shadow-sm rounded-md overflow-hidden border border-gray-200 w-full flex flex-col justify-between">
             <div className="p-4">
-              {/* Display Like Count */}
-              {localLikes[comment._id] !== undefined &&
-                localLikes[comment._id] !== 0 && (
-                  <p className="text-xs text-gray-400 mb-2">
-                    {localLikes[comment._id]}{' '}
-                    {localLikes[comment._id] === 1 ? 'Like' : 'Likes'}
-                  </p>
-                )}
-
-              <div className="flex items-center mb-4">
+              <div className="flex items-center mb-4 gap-x-3 justify-between">
                 {comment.userimage ? (
                   <div className="w-10 h-10 mr-3">
                     <Image
@@ -112,6 +101,13 @@ const CommentCard: React.FC<{comments: Comment[]}> = ({comments}) => {
                 <span className="text-gray-800 font-semibold">
                   @{comment.username}
                 </span>
+                <p className="text-xs font-semibold text-gray-600 cursor-pointer whitespace-nowrap">
+                  {localLikes[comment._id] !== undefined &&
+                    localLikes[comment._id] !== 0 &&
+                    `${localLikes[comment._id]} ${
+                      localLikes[comment._id] === 1 ? 'Like' : 'Likes'
+                    }`}
+                </p>
               </div>
               <div className="overflow-y-auto max-h-40 mb-4">
                 <p className="text-gray-600">{comment.content}</p>
@@ -128,20 +124,11 @@ const CommentCard: React.FC<{comments: Comment[]}> = ({comments}) => {
               </div>
               <div className="flex items-center gap-x-2">
                 <HeartIcon
-                  className={`cursor-pointer ${
-                    localLikes[comment._id] ? 'text-red-500' : 'text-gray-500'
+                  className={`cursor-pointer  ${
+                    localLikes[comment._id] ? 'text-sky-700' : 'text-gray-500'
                   }`}
                   onClick={() => handleLikeClick(comment._id)}
                 />
-                {/* <p className="text-xs font-semibold text-gray-600 cursor-pointer">
-                  {localLikes[comment._id] !== undefined &&
-                    localLikes[comment._id] !== 0 && (
-                      <p className="text-xs font-semibold text-gray-600 cursor-pointer">
-                        {localLikes[comment._id]}{' '}
-                        {localLikes[comment._id] === 1 ? 'Like' : 'Likes'}
-                      </p>
-                    )}
-                </p> */}
               </div>
             </div>
           </div>
