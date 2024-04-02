@@ -68,7 +68,11 @@ export const SidebarRoutes = () => {
   const isUploaderRoute = pathname?.includes('/uploader');
   const {userId} = useAuth();
 
-  const allowedUserIds = ['user_2YZm7lOYkOlWQqcmPn1HMaYTWfI'];
+  const allowedUserIds = [
+    'user_2YZm7lOYkOlWQqcmPn1HMaYTWfI',
+    'user_2baYYZEdPno56qBM7z2RDMiC9hM',
+    'user_2YnSAC1dXFgRz7xNvEEBmpHBd4k',
+  ];
 
   const isUserAllowed = allowedUserIds.includes(userId!!);
 
