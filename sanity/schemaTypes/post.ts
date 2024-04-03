@@ -52,6 +52,13 @@ export default defineType({
       type: 'datetime',
     }),
     defineField({
+      name: 'rating',
+      title: 'Rating',
+      type: 'array',
+      of: [{type: 'number'}],
+      readOnly: true,
+    }),
+    defineField({
       name: 'description',
       title: 'Description',
       type: 'string',
@@ -73,5 +80,8 @@ export default defineType({
       const {author} = selection;
       return {...selection, subtitle: author && `by ${author}`};
     },
+  },
+  initialValue: {
+    rating: [],
   },
 });

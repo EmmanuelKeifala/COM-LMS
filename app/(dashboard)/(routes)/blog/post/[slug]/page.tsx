@@ -4,6 +4,11 @@ import {groq} from 'next-sanity';
 import Image from 'next/image';
 import {PortableText} from '@portabletext/react';
 import {RichTextComponent} from '../../_components/RichTextComponent';
+import {CommentForm} from '../../_components/CommentForm';
+import {auth} from '@clerk/nextjs';
+import CommentCard from '../../_components/CommentCard';
+import {Rate} from 'antd';
+import PostBanner from './_components/PostBanner';
 
 type Props = {
   params: {
@@ -11,7 +16,7 @@ type Props = {
   };
 };
 
-export const revalidate = 60;
+export const revalidate = 1;
 
 export async function generateStaticParams() {
   const query = groq`*[_type == "post"]{
@@ -19,9 +24,9 @@ export async function generateStaticParams() {
   }`;
   const slugs: Post[] = await client.fetch(query);
 
-  const slugRoutes = slugs.map(slug => slug.slug.current);
+  const slugRoutes = slugs?.map(slug => slug?.slug?.current);
 
-  return slugRoutes.map(slug => ({
+  return slugRoutes?.map(slug => ({
     slug,
   }));
 }
@@ -35,67 +40,22 @@ async function Post({params: {slug}}: Props) {
   }
   `;
   const post: Post = await client.fetch(query, {slug});
-  return (
-    <article className="px-10 pb-28 mt-7">
-      <section className="space-y-2 border-sky-700">
-        <div className="relative min-h-56 flex flex-col md:flex-row justify-between ">
-          <div className="absolute top-0 w-full h-full opacity-10 blur-sm p-10">
-            <Image
-              className="object-cover object-center mx-auto"
-              src={urlForImage(post.mainImage)}
-              alt={post.title}
-              fill
-            />
-          </div>
-          <section className="p-5 bg-slate-200 w-full">
-            <div className="flex flex-col md:flex-row justify-between gap-y-5">
-              <div>
-                <h1 className="text-4xl font-extrabold">{post.title}</h1>
-                <p className="">
-                  {new Date(post._createdAt).toLocaleDateString('en-US', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric',
-                  })}
-                </p>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Image
-                  className="rounded-full"
-                  src={urlForImage(post.author.image)}
-                  alt={post.author.name}
-                  height={40}
-                  width={40}
-                />
-                <div className="w-64">
-                  <h3 className="text-lg font-bold">{post.author.name}</h3>
-                  <div>
-                    <PortableText
-                      value={post.author.bio}
-                      components={RichTextComponent}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            <div>
-              <h2 className="italic pt-10">{post.description}</h2>
-              <div className="flex items-center justify-end mt-auto space-x-2">
-                {post.categories.map(category => (
-                  <p
-                    key={category.title}
-                    className="bg-gray-800 text-white px-3 py-1 rounded-full text-sm font-semibold mt-4">
-                    {category.title}
-                  </p>
-                ))}
-              </div>
-            </div>
-          </section>
-        </div>
-      </section>
-      <PortableText value={post.body} components={RichTextComponent} />
-    </article>
+  // const query2 = `*[_type=="Comment"]`;
+  // const comments = await client.fetch(query2);
+
+  // // Filter comments where post._ref matches post._id
+  // const filteredComments = comments.filter(
+  //   (comment: {post: {_ref: string}}) => {
+  //     return comment.post?._ref === post?._id;
+  //   },
+  // );
+
+  return (
+    <div className="px-10 pb-28 mt-7 space-y-2">
+      <PostBanner post={post} />
+      <PortableText value={post?.body} components={RichTextComponent} />
+    </div>
   );
 }
 

@@ -7,8 +7,13 @@ export const RichTextComponent = {
   types: {
     image: ({value}: any) => {
       return (
-        <div className="object-contain">
-          <Image src={urlForImage(value)} fill alt="Blog Image" />;
+        <div className="object-contain my-4 mx-auto py-10 text-center">
+          <Image
+            src={urlForImage(value)}
+            alt="Blog Image"
+            width={400}
+            height={400}
+          />
         </div>
       );
     },
@@ -42,14 +47,13 @@ export const RichTextComponent = {
   },
   marks: {
     link: ({value, children}: any) => {
-      const target = !value.href.startsWith('/')
+      const rel = !value?.href?.startsWith('/')
         ? 'noreferrer noopener'
         : undefined;
       return (
         <Link
           href={value?.href}
-          target={target}
-          rel={target}
+          rel={rel}
           className="underline decoration-sky-700 hover:decoration-black">
           {children}
         </Link>

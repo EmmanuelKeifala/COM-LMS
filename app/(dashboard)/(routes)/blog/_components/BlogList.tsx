@@ -8,11 +8,11 @@ type Props = {
 const BlogList = ({posts}: Props) => {
   return (
     <div>
-      <hr className="border-sky-700 mb-10 " />
+      <hr className=" mb-10 " />
 
       <div className="grid grid-cols-1 md:grid-cols-2 px-10 gap-10 gap-y-16 pb-10 ">
         {posts.map(post => (
-          <Link key={post._id} href={`/blog/post/${post.slug.current}`}>
+          <Link key={post._id} href={`/blog/post/${post?.slug?.current}`}>
             <div className="flex flex-col group cursor-pointer ">
               <div className="relative w-full h-80 drop-shadow-xl group-hover:scale-105 transition-transform duration-200">
                 <Image

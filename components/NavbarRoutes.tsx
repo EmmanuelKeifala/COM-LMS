@@ -13,7 +13,6 @@ import ClassSelection from './ClassSelection';
 
 export const NavbarRoutes = () => {
   const pathname = usePathname();
-  const router = useRouter();
   const {userId} = useAuth();
 
   const isUploderPage = pathname?.startsWith('/uploader');
@@ -38,11 +37,18 @@ export const NavbarRoutes = () => {
             </Button>
           </Link>
         ) : isUploader(userId) ? (
-          <Link href="/uploader/courses">
-            <Button size="sm" variant="ghost">
-              Uploader mode
-            </Button>
-          </Link>
+          <>
+            <Link href="/uploader/courses">
+              <Button size="sm" variant="ghost">
+                Uploader mode
+              </Button>
+            </Link>
+            <Link href="/studio/structure">
+              <Button size="sm" variant="ghost">
+                Blog Studio
+              </Button>
+            </Link>
+          </>
         ) : null}
         <div className="flex gap-3 items-center">
           <UserButton afterSignOutUrl="/" />
