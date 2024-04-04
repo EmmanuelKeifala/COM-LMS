@@ -48,7 +48,6 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'library.lol',
       },
-      ,
     ],
   },
 };
