@@ -1,5 +1,6 @@
 'use client';
 
+import {Spin} from 'antd';
 import {Star} from 'lucide-react';
 import Image from 'next/image';
 import {useRouter} from 'next/navigation';
@@ -7,10 +8,17 @@ import React, {useState} from 'react';
 import {TypeAnimation} from 'react-type-animation';
 
 const Library = () => {
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+
   const router = useRouter();
+
   const handleSubmit = () => {
-    console.log('Search input submitted:', searchInput);
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    console.log('Search input:', searchInput);
     router.push(`/library/books?q=${searchInput}`);
   };
 
@@ -49,11 +57,16 @@ const Library = () => {
           onChange={e => setSearchInput(e.target.value)}
           className="mt-4 px-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 bg-white text-gray-800"
         />
-        <button
-          onClick={handleSubmit}
-          className="mt-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300 ease-in-out focus:outline-none">
-          Submit
-        </button>
+        {!loading ? (
+          <button
+            type="submit"
+            onClick={handleSubmit}
+            className="mt-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300 ease-in-out focus:outline-none">
+            Submit
+          </button>
+        ) : (
+          <Spin className="mt-4 px-6 py-2" />
+        )}
       </div>
     </div>
   );
