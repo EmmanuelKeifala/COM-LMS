@@ -36,6 +36,14 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'images.clerk.dev',
       },
+      {
+        protocol: 'http',
+        hostname: 'libgen.is',
+      },
+      {
+        protocol: 'http',
+        hostname: 'gen.lib.rus.ec',
+      },
     ],
   },
 };

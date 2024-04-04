@@ -4,6 +4,7 @@ import {
   BarChart,
   Compass,
   Layout,
+  LibraryBigIcon,
   List,
   Newspaper,
 } from 'lucide-react';
@@ -32,6 +33,11 @@ const guestRoutes = [
     icon: Newspaper,
     label: 'Blog',
     href: '/blog',
+  },
+  {
+    icon: LibraryBigIcon,
+    label: 'Library',
+    href: '/library',
   },
 ];
 
@@ -80,7 +86,12 @@ export const SidebarRoutes = () => {
 
   const filteredRoutes = isUserAllowed
     ? routes
-    : routes.filter(route => route.href !== '/blog' && route.href !== '/quiz');
+    : routes.filter(
+        route =>
+          route.href !== '/blog' &&
+          route.href !== '/quiz' &&
+          route.href !== '/library',
+      );
   return (
     <div className="flex flex-col w-full">
       {filteredRoutes.map(route => (
