@@ -41,8 +41,6 @@ const BookCard = async ({searchParams}: Props) => {
       {data.length > 0 ? (
         data.map(async (book: any) => {
           const imageUrl = `https://library.lol/covers/${book.coverurl}`;
-
-          console.log('Image: ', imageUrl);
           return (
             <div
               className="group hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full"
@@ -96,7 +94,7 @@ const BookCard = async ({searchParams}: Props) => {
                 </div>
                 <div className="w-full flex flex-row justify-between ">
                   <Link
-                    href={`https://library.lol/main/${book.md5.toLowerCase()} `}
+                    href={imageUrl}
                     className="bg-blue-500 text-white px-4 py-2 rounded-md text-center inline-block mt-2 hover:bg-blue-600 transition duration-300 ease-in-out"
                     download>
                     Download
