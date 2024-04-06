@@ -27,6 +27,7 @@ import axios from 'axios';
 import {useRouter} from 'next/navigation';
 import {quizCreationSchema} from '@/lib/validation';
 import LoadingQuestions from '../../_components/LoadingQuestions';
+import {useAuth} from '@clerk/nextjs';
 
 type Input = z.infer<typeof quizCreationSchema>;
 type Props = {
@@ -37,7 +38,7 @@ const QuizCreation = ({topicParam}: Props) => {
   const [isPending, setIsPending] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const [finished, setFinished] = useState(false);
-
+  const {userId} = useAuth();
   const form = useForm<Input>({
     resolver: zodResolver(quizCreationSchema),
     defaultValues: {
@@ -50,12 +51,17 @@ const QuizCreation = ({topicParam}: Props) => {
   async function onSubmit(input: Input) {
     setShowLoader(true);
     try {
-      const response = await axios.post('/api/quiz/game', {
-        amount: input.amount,
-        topic: input.topic,
-        type: input.type,
-      });
+      const response = await axios.post(
+        'https://lms-com-server.onrender.com/api/v1/game',
+        {
+          amount: input.amount,
+          topic: input.topic,
+          type: input.type,
+          userId,
+        },
+      );
       const {gameId} = response.data;
+      console.log(response.data);
       setFinished(true);
       setTimeout(() => {
         if (form.getValues('type') === 'mcq') {

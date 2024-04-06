@@ -44,6 +44,10 @@ const nextConfig = {
         protocol: 'http',
         hostname: 'gen.lib.rus.ec',
       },
+      {
+        protocol: 'https',
+        hostname: 'library.lol',
+      },
     ],
   },
 };
