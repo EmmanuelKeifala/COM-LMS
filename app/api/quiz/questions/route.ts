@@ -6,6 +6,7 @@ export const POST = async (req: Request, res: Response) => {
   try {
     const body = await req.json();
     const {amount, topic, type} = body;
+    
     // Define a maximum chunk size
     const chunkSize = 5; // Adjust this value as needed
 

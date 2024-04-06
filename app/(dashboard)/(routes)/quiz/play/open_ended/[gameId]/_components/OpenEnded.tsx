@@ -46,7 +46,10 @@ const OpenEnded = ({game}: Props) => {
   async function endGameMutation(gameId: any) {
     try {
       const payload = {gameId};
-      const response = await axios.post(`/api/quiz/endGame`, payload);
+      const response = await axios.post(
+        `https://lms-com-server.onrender.com/api/v1/endGame`,
+        payload,
+      );
       return response.data;
     } catch (error) {
       console.error('Error ending game:', error);

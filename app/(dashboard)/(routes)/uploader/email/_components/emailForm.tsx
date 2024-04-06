@@ -54,7 +54,7 @@ export default function EmailForm() {
     // You can handle the email sending logic here
     try {
       setIsLoading(true);
-      await axios.post('/api/mail', {
+      await axios.post('https://lms-com-server.onrender.com/api/v1/mail', {
         data,
       });
       form.reset();
