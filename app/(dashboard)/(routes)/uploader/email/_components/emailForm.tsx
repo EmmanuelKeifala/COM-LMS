@@ -55,7 +55,9 @@ export default function EmailForm() {
     try {
       setIsLoading(true);
       await axios.post('https://lms-com-server.onrender.com/api/v1/mail', {
-        data,
+        subject: data.subject,
+        messageBody: data.messageBody,
+        userCategory: data.userCategory,
       });
       form.reset();
       form.resetField('userCategory');
