@@ -9,6 +9,8 @@ import {CoursesList} from '@/components/courses-list';
 import {InfoCard} from './_components/info-card';
 import ChatButton from '@/components/ChatButton';
 
+export const revalidate = 3600; // revalidate at most every hour
+
 export default function Dashboard() {
   const [completedCourses, setCompletedCourses] = useState([]);
   const [coursesInProgress, setCoursesInProgress] = useState([]);
@@ -19,7 +21,6 @@ export default function Dashboard() {
       try {
         if (!userId) {
           redirect('/');
-          return;
         }
 
         const response = await axios.post(
