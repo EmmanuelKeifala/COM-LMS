@@ -11,6 +11,9 @@ This project is a web platform designed to host university notes along with asso
 - **ShadCN**: Re-usable components built using Radix UI and Tailwind CSS..
 - **Clerk**: An authentication and user management system for Next.js applications.
 - **Pusher**: For instant Messaging.
+- **Sanity:** As a CMS
+- **OpenAI**
+- **Libgen:** For it vast db of books
 
 ## Getting Started
 
@@ -62,7 +65,7 @@ This project is a web platform designed to host university notes along with asso
 - **Blog:** A nice a cool student blog to keep them updated.
 - **Quiz:** Students can also generate quizzes all with the power of AI
 - **Library:** A library as well! students can search for books and download
-- **In Course ChatBox: ** Students can have discussions with an AI trained on the course they are presently in 
+- **In Course ChatBox:** Students can have discussions with an AI trained on the course they are presently in 
 - **Responsive Design:** Tailwind CSS ensures a responsive and visually appealing UI.
 
 _Feel free to explore and enhance the platform based on your requirements!_
