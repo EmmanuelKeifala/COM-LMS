@@ -59,6 +59,10 @@ This project is a web platform designed to host university notes along with asso
 - **YouTube Integration:** Attach YouTube videos to enhance learning.
 - **User Authentication:** Secure user authentication provided by Clerk.
 - **File Uploads:** Seamless file uploads using UploadThing.
+- **Blog:** A nice a cool student blog to keep them updated.
+- **Quiz:** Students can also generate quizzes all with the power of AI
+- **Library:** A library as well! students can search for books and download
+- **In Course ChatBox: ** Students can have discussions with an AI trained on the course they are presently in 
 - **Responsive Design:** Tailwind CSS ensures a responsive and visually appealing UI.
 
 _Feel free to explore and enhance the platform based on your requirements!_
