@@ -9,46 +9,50 @@ type Props = {
   posts: Post[];
 };
 const BlogList = ({posts}: Props) => {
-  // useEffect(() => {
-  //   const showNotification = (post: any) => {
-  //     const notificationTitle = post.title; // Assuming 'title' is a field in your post document
-  //     const notificationOptions = {
-  //       body: post.description,
-  //       icon: '/logo1.png',
-  //       image: post.mainImage,
-  //     };
+  useEffect(() => {
+    const showNotification = (post: any) => {
+      const notificationTitle = post.title; // Assuming 'title' is a field in your post document
+      const notificationOptions = {
+        body: post.description,
+        icon: '/logo1.png',
+        image: post.mainImage,
+      };
 
-  //     // Check if the browser supports notifications
-  //     if (
-  //       typeof window !== 'undefined' &&
-  //       'Notification' in window &&
-  //       Notification.permission === 'granted'
-  //     ) {
-  //       new Notification(notificationTitle, notificationOptions);
-  //     } else if (
-  //       typeof window !== 'undefined' &&
-  //       'Notification' in window &&
-  //       Notification.permission !== 'denied'
-  //     ) {
-  //       Notification.requestPermission().then(permission => {
-  //         if (permission === 'granted') {
-  //           new Notification(notificationTitle, notificationOptions);
-  //         }
-  //       });
-  //     }
-  //   };
-  //   const listenQuery = `[_type=="post"]{..., author->, categories[]->}`;
-  //   const subscription = client.listen(listenQuery).subscribe((update: any) => {
-  //     const newPost = update.result;
-  //     if (newPost) {
-  //       showNotification(newPost);
-  //     }
-  //   });
+      // Check if the browser supports notifications
+      if (
+        typeof window !== 'undefined' &&
+        'Notification' in window &&
+        Notification.permission === 'granted'
+      ) {
+        new Notification(notificationTitle, notificationOptions);
+      } else if (
+        typeof window !== 'undefined' &&
+        'Notification' in window &&
+        Notification.permission !== 'denied'
+      ) {
+        Notification.requestPermission().then(permission => {
+          if (permission === 'granted') {
+            new Notification(notificationTitle, notificationOptions);
+          }
+        });
+      }
+    };
+    const listenQuery = `*[_type == "post" && defined(publishedAt)] {
+  ...,
+  author->,
+  categories[]->
+}`;
+    const subscription = client.listen(listenQuery).subscribe((update: any) => {
+      const newPost = update.result;
+      if (newPost) {
+        showNotification(newPost);
+      }
+    });
 
-  //   return () => {
-  //     subscription.unsubscribe();
-  //   };
-  // }, []);
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   return (
     <div>
