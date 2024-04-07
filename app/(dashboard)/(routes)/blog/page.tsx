@@ -3,9 +3,10 @@ import {groq} from 'next-sanity';
 import BlogList from './_components/BlogList';
 
 type Props = {};
+
 export const revalidate = 60;
 
-const query = groq`*[_type=="post"]{
+const query = groq`*[_type=="post"] {
   ...,
   author->,
   categories[]->
