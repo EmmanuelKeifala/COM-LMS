@@ -86,7 +86,9 @@ export const SidebarRoutes = () => {
 
   const filteredRoutes = isUserAllowed
     ? routes
-    : routes.filter(route => route.href !== '/library');
+    : routes.filter(
+        route => route.href !== '/library' && route.href !== '/blog',
+      );
   return (
     <div className="flex flex-col w-full">
       {filteredRoutes.map(route => (
