@@ -8,6 +8,11 @@ import axios from 'axios';
 import {CoursesList} from '@/components/courses-list';
 import {InfoCard} from './_components/info-card';
 import ChatButton from '@/components/ChatButton';
+import {registerServiceWorker} from '@/lib/utils';
+import {
+  getCurrentPushSubscription,
+  sendPushSubscriptionToServer,
+} from '@/actions/push-service';
 
 export const revalidate = 3600; // revalidate at most every hour
 
@@ -39,6 +44,31 @@ export default function Dashboard() {
 
     fetchData();
   }, [userId]);
+
+  useEffect(() => {
+    async function setUpServiceWorker() {
+      try {
+        await registerServiceWorker();
+      } catch (error) {
+        console.error('Error setting up service worker:', error);
+      }
+    }
+    setUpServiceWorker();
+  }, []);
+
+  useEffect(() => {
+    async function syncPushNotification() {
+      try {
+        const subscription = await getCurrentPushSubscription();
+        if (subscription) {
+          await sendPushSubscriptionToServer(subscription);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    syncPushNotification();
+  }, []);
 
   return (
     <div className="p-6 space-y-4">

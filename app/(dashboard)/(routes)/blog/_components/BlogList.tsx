@@ -5,61 +5,14 @@ import {urlForImage} from '@/sanity/lib/image';
 import {ArrowRight} from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-type Props = {
-  posts: Post[];
-};
-const BlogList = ({posts}: Props) => {
-  useEffect(() => {
-    const showNotification = (post: any) => {
-      const notificationTitle = post.title; // Assuming 'title' is a field in your post document
-      const notificationOptions = {
-        body: post.description,
-        icon: '/logo1.png',
-        image: post.mainImage,
-      };
 
-      // Check if the browser supports notifications
-      if (
-        typeof window !== 'undefined' &&
-        'Notification' in window &&
-        Notification.permission === 'granted'
-      ) {
-        new Notification(notificationTitle, notificationOptions);
-      } else if (
-        typeof window !== 'undefined' &&
-        'Notification' in window &&
-        Notification.permission !== 'denied'
-      ) {
-        Notification.requestPermission().then(permission => {
-          if (permission === 'granted') {
-            new Notification(notificationTitle, notificationOptions);
-          }
-        });
-      }
-    };
-    const listenQuery = `*[_type == "post" && defined(publishedAt)] {
-  ...,
-  author->,
-  categories[]->
-}`;
-    const subscription = client.listen(listenQuery).subscribe((update: any) => {
-      const newPost = update.result;
-      if (newPost) {
-        showNotification(newPost);
-      }
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
-
+const BlogList = ({posts}: any) => {
   return (
     <div>
       <hr className=" mb-10 " />
 
       <div className="grid grid-cols-1 md:grid-cols-2 px-10 gap-10 gap-y-16 pb-10 ">
-        {posts.map(post => (
+        {posts.map((post: any) => (
           <Link
             key={post._id}
             href={`https://meyoneducation.vercel.app/blog/post/${post?.slug?.current}`}>
@@ -83,7 +36,7 @@ const BlogList = ({posts}: Props) => {
                     </p>
                   </div>
                   <div className="flex flex-col md:flex-row gap-y-2 md:gap-x-2 items-center">
-                    {post?.categories?.map(category => (
+                    {post?.categories?.map((category: any) => (
                       <div
                         key={category.description}
                         className=" border border-sky-700 text-center text-white px-3 py-1 rounded-full text-sm font-semibold">

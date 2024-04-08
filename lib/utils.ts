@@ -55,3 +55,17 @@ export function formatTimeDelta(seconds: number) {
 
   return parts.join(' ');
 }
+
+export async function registerServiceWorker() {
+  if (!('serviceWorker' in navigator)) {
+    throw new Error('Service workers are not supported in this browser.');
+  }
+  await navigator.serviceWorker.register('/sw.js');
+}
+
+export async function getReadyServiceWorker() {
+  if (!('serviceWorker' in navigator)) {
+    throw new Error('Service workers are not supported in this browser.');
+  }
+  return navigator.serviceWorker.ready;
+}

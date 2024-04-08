@@ -1,3 +1,5 @@
+import {PushSubscription} from 'web-push';
+
 type Base = {
   _createdAt: string;
   _id: string;
@@ -6,7 +8,7 @@ type Base = {
   _updatedAt: string;
 };
 
-interface Post extends Base {
+export interface Post extends Base {
   author: Author;
   body: Block[];
   categories: Category[];
