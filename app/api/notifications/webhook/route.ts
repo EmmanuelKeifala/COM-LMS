@@ -29,7 +29,7 @@ export async function POST(req: Request, res: Response) {
                 slug: event.slug.current,
                 image: urlForImage(event.mainImage),
                 icon: '/logo1.png',
-                url: `${process.env.NEXT_PUBLIC_APP_URL}/blog/${event.slug.current}`,
+                url: `${process.env.NEXT_PUBLIC_APP_URL}/blog/post/${event.slug.current}`,
               }),
               {
                 vapidDetails: {
