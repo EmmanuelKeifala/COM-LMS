@@ -22,11 +22,11 @@ export async function generateStaticParams() {
   const query = groq`*[_type == "post"]{
     slug
   }`;
-  const slugs: Post[] = await client.fetch(query);
+  const slugs: any = await client.fetch(query);
 
-  const slugRoutes = slugs?.map(slug => slug?.slug?.current);
+  const slugRoutes = slugs?.map((slug: any) => slug?.slug?.current);
 
-  return slugRoutes?.map(slug => ({
+  return slugRoutes?.map((slug: any) => ({
     slug,
   }));
 }
@@ -39,7 +39,7 @@ async function Post({params: {slug}}: Props) {
     categories[]->
   }
   `;
-  const post: Post = await client.fetch(query, {slug});
+  const post: any = await client.fetch(query, {slug});
 
   // const query2 = `*[_type=="Comment"]`;
   // const comments = await client.fetch(query2);
