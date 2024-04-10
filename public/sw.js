@@ -137,7 +137,7 @@ const sw = /**@type {ServiceWorkerGlobalScope & typeof globalThis} */ (
 );
 sw.addEventListener('push', event => {
   const message = event.data.json();
-  const {title, description, slug, image, icon, url} = message;
+  const {title, description, slug, icon, url} = message;
   console.log(message);
   async function handlePushEvent() {
     const windowClient = await sw.clients.matchAll({
@@ -154,7 +154,6 @@ sw.addEventListener('push', event => {
     await sw.registration.showNotification(title, {
       body: description,
       icon: icon,
-      image: image,
       badge: '/logo1.png',
       actions: [
         {

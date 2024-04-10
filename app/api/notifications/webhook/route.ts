@@ -1,4 +1,3 @@
-import {urlForImage} from '@/sanity/lib/image';
 import {clerkClient} from '@clerk/nextjs';
 import {NextResponse} from 'next/server';
 import webPush, {WebPushError} from 'web-push';
@@ -27,7 +26,6 @@ export async function POST(req: Request, res: Response) {
                 title: event.title,
                 description: event.description,
                 slug: event.slug.current,
-                image: urlForImage(event.mainImage),
                 icon: '/logo1.png',
                 url: `${process.env.NEXT_PUBLIC_APP_URL}/blog/post/${event.slug.current}`,
               }),
