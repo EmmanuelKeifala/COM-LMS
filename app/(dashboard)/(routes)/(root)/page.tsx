@@ -13,21 +13,23 @@ import {
   getCurrentPushSubscription,
   sendPushSubscriptionToServer,
 } from '@/actions/push-service';
+import {Spin} from 'antd';
 
 export const revalidate = 3600; // revalidate at most every hour
 
 export default function Dashboard() {
   const [completedCourses, setCompletedCourses] = useState([]);
   const [coursesInProgress, setCoursesInProgress] = useState([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const {userId} = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         if (!userId) {
           redirect('/');
         }
-
         const response = await axios.post(
           'https://lms-com-server.onrender.com/api/v1/getDashboardCourses',
           {
@@ -39,6 +41,8 @@ export default function Dashboard() {
         setCoursesInProgress(response.data.coursesInProgress);
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -72,22 +76,34 @@ export default function Dashboard() {
 
   return (
     <div className="p-6 space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <InfoCard
-          icon={Clock}
-          label="In Progress"
-          numberOfItems={coursesInProgress.length}
-        />
-        <InfoCard
-          icon={CheckCircle}
-          label="Completed"
-          numberOfItems={completedCourses.length}
-          variant="success"
-        />
-      </div>
-      <CoursesList items={[...coursesInProgress, ...completedCourses]} />
+      {loading ? (
+        <div className="w-full flex justify-center items-center">
+          <Spin size="large" />
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <>
+            <InfoCard
+              icon={Clock}
+              label="In Progress"
+              numberOfItems={coursesInProgress.length}
+            />
+            <InfoCard
+              icon={CheckCircle}
+              label="Completed"
+              numberOfItems={completedCourses.length}
+              variant="success"
+            />
+          </>
+        </div>
+      )}
+      {!loading && (
+        <>
+          <CoursesList items={[...coursesInProgress, ...completedCourses]} />
 
-      <ChatButton isChat={false} />
+          <ChatButton isChat={false} />
+        </>
+      )}
     </div>
   );
 }
