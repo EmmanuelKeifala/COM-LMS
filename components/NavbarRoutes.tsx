@@ -60,7 +60,7 @@ export const NavbarRoutes = () => {
           </>
         ) : null}
         <div className="flex gap-3 items-center">
-          <UserButton afterSignOutUrl="/" />
+          <UserButton afterSignOutUrl="/sign-in" />
           <ModeToggle />
         </div>
       </div>
