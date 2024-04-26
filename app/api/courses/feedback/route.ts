@@ -6,7 +6,6 @@ export async function POST(req: Request) {
   try {
     const {userId} = auth();
     const {formData} = await req.json();
-
     if (!userId) return new NextResponse('Unauthorized', {status: 401});
 
     const feedback = await db.feedback.create({
@@ -16,6 +15,7 @@ export async function POST(req: Request) {
         message: formData.message,
         feedbackType: formData.feedbackType,
         rate: formData.rate,
+        url: formData.url || '',
       },
     });
 

@@ -1,6 +1,6 @@
 'use client';
 
-import {Course} from '@prisma/client';
+import {Course, Feedback} from '@prisma/client';
 import {ColumnDef} from '@tanstack/react-table';
 import {ArrowUpDown, MoreHorizontal, Trash} from 'lucide-react';
 
@@ -13,9 +13,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import toast from 'react-hot-toast';
 import axios from 'axios';
-import {useRouter} from 'next/navigation';
+import Image from 'next/image';
 const onDelete = async (id: any) => {
-
   try {
     await axios.delete(`/api/courses/feedback/${id}`);
     toast.success('Feedback deleted');
@@ -23,7 +22,7 @@ const onDelete = async (id: any) => {
     toast.error('Something went wrong');
   }
 };
-export const columns: ColumnDef<Course>[] = [
+export const columns: ColumnDef<Course & Feedback>[] = [
   {
     accessorKey: 'name',
     header: ({column}) => {
@@ -86,6 +85,34 @@ export const columns: ColumnDef<Course>[] = [
           Rate
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
+      );
+    },
+  },
+  {
+    accessorKey: 'url',
+    header: ({column}) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Image Url
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({row}) => {
+      const {url} = row.original;
+
+      return url ? (
+        <Image
+          src={url}
+          alt="Feedback Image"
+          className="max-w-[100px] max-h-[100px]"
+          width={600}
+          height={600}
+        />
+      ) : (
+        <span>No Image</span>
       );
     },
   },

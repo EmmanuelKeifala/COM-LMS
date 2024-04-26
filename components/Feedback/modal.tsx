@@ -4,7 +4,14 @@ import FeedbackModalElementRate from './modal-element-rate';
 import {EmojiMeh, EmojiNice, EmojiSad} from './emojis';
 import {useUser} from '@clerk/nextjs';
 import Image from 'next/image';
-import {MailIcon, MessageCircleIcon, Send, User, XCircle} from 'lucide-react';
+import {
+  MailIcon,
+  MessageCircleIcon,
+  Send,
+  Upload,
+  User,
+  XCircle,
+} from 'lucide-react';
 import {Select, Spin} from 'antd';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -28,13 +35,32 @@ export default function FeedbackModal({
     name: user?.fullName || '',
     rate: '',
     feedbackType: 'other' as any,
+    url: '',
   });
   const [isSending, setIsSending] = useState(false);
+  const cloudFormData = new FormData();
   const onSend = async () => {
     try {
       setIsSending(true);
+      const cloudFormData = new FormData();
+      cloudFormData.append('file', formData.url);
+      cloudFormData.append('upload_preset', 'beecylxr');
+      cloudFormData.append('cloud_name', 'dblkse8mf');
+
+      const cloudResponse = await fetch(
+        'https://api.cloudinary.com/v1_1/dblkse8mf/upload',
+        {
+          method: 'post',
+          body: cloudFormData,
+        },
+      );
+
+      const cloudData = await cloudResponse.json();
       const response = await axios.post('/api/courses/feedback', {
-        formData: formData,
+        formData: {
+          ...formData,
+          url: cloudData.secure_url,
+        },
       });
       toast.success('Feedback sent successfully');
       onClose();
@@ -44,6 +70,7 @@ export default function FeedbackModal({
       setIsSending(false);
     }
   };
+
   useEffect(() => {
     // Update form data when the user object changes
     setFormData(prevData => ({
@@ -53,10 +80,10 @@ export default function FeedbackModal({
     }));
   }, [user]);
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = (field: string, value: string | File) => {
     setFormData(prevData => ({
       ...prevData,
-      [field]: value,
+      [field]: typeof value === 'string' ? value : (value as File),
     }));
   };
   const handleChange = (value: {value: string; label: React.ReactNode}) => {
@@ -130,6 +157,22 @@ export default function FeedbackModal({
             value={formData.name}
             required
             onChange={e => handleInputChange('name', e.target.value)}
+          />
+        </div>
+        <div className="relative w-full mb-4">
+          <Upload
+            size={25}
+            className="text-sky-500 absolute top-0 right-0 mt-2 mr-2"
+          />
+          <input
+            className="input-field border border-gray-300 pl-2 pr-10 py-2 rounded w-full"
+            type="file"
+            accept="image/png, image/gif, image/jpeg, image/jpg"
+            name="url"
+            placeholder="upload an image of the issue"
+            onChange={e =>
+              handleInputChange('url', e.target.files ? e.target.files[0] : '')
+            }
           />
         </div>
         <div className="mb-4 flex justify-between items-center">

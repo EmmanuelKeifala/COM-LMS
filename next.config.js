@@ -48,6 +48,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'library.lol',
       },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
     ],
   },
 };

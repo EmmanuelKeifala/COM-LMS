@@ -158,6 +158,7 @@ model Feedback {
   feedbackType String
   email        String
   rate         String
+  url          String?
 }
 
 enum GameType {
