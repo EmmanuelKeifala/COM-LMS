@@ -102,6 +102,6 @@
     "@types/string-similarity": "^4.0.2",
     "@types/web-push": "^3.6.3",
     "prisma": "^5.8.1",
-    "webpack": "^5.89.0"
+    "webpack": "^5.94.0"
   }
 }
