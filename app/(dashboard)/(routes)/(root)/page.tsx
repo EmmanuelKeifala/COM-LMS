@@ -15,7 +15,6 @@ import {
 } from '@/actions/push-service';
 import {Spin} from 'antd';
 
-export const revalidate = 3600; // revalidate at most every hour
 
 export default function Dashboard() {
   const [completedCourses, setCompletedCourses] = useState([]);
