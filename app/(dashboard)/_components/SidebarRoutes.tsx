@@ -75,9 +75,9 @@ export const SidebarRoutes = () => {
   const {userId} = useAuth();
 
   const allowedUserIds = [
-    'user_2YZm7lOYkOlWQqcmPn1HMaYTWfI',
-    'user_2baYYZEdPno56qBM7z2RDMiC9hM',
-    'user_2YnSAC1dXFgRz7xNvEEBmpHBd4k',
+    process.env.ALLOWED_USER_1,
+    process.env.ALLOWED_USER_2,
+    process.env.ALLOWED_USER_3
   ];
 
   const isUserAllowed = allowedUserIds.includes(userId!!);

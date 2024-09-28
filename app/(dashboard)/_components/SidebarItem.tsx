@@ -5,7 +5,7 @@ import {LucideIcon} from 'lucide-react';
 import {usePathname, useRouter} from 'next/navigation';
 
 interface SidebarItemProps {
-  icon: LucideIcon;
+  icon: any;
   label: string;
   href: string;
 }
