@@ -3,13 +3,13 @@ import React from 'react';
 import Link from 'next/link';
 import {buttonVariants} from '@/components/ui/button';
 import {LucideLayoutDashboard} from 'lucide-react';
-import {auth} from '@clerk/nextjs';
+import {auth} from '@clerk/nextjs/server';
 import HistoryComponent from './_components/HistoryComponent';
 
 type Props = {};
 
 const History = async (props: Props) => {
-  const {userId} = auth();
+  const {userId} = await auth();
   return (
     <div className="flex justify-center items-center h-full">
       <div className="w-full max-w-md md:max-w-lg lg:max-w-xl">

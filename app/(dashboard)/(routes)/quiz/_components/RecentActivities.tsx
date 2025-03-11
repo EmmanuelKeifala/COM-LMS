@@ -8,14 +8,14 @@ import {
 } from '@/components/ui/card';
 import Link from 'next/link';
 import {db} from '@/lib/db';
-import {auth} from '@clerk/nextjs';
+import { auth } from '@clerk/nextjs/server'
 import HistoryComponent from '../history/_components/HistoryComponent';
 import IncompleteGames from '../history/_components/IncompleteGames';
 
 type Props = {};
 
 const RecentActivityCard = async (props: Props) => {
-  const {userId} = auth();
+  const {userId} = await auth();
   const games_count = await db.game.count({
     where: {
       userId: userId!!,
