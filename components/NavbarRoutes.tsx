@@ -45,7 +45,7 @@ export const NavbarRoutes = () => {
               Exit
             </Button>
           </Link>
-        ) : isUploader(userId) ? (
+        ) : isUploader(userId) ? ( 
           <>
             <Link href="/uploader/courses">
               <Button size="sm" variant="ghost">
