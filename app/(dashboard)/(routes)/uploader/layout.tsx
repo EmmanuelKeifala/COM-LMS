@@ -1,12 +1,13 @@
 import {isUploader} from '@/lib/uploader';
-import {auth} from '@clerk/nextjs';
-import {redirect} from 'next/navigation';
+import {auth} from '@clerk/nextjs/server';
+import {  NextResponse } from "next/server";
+const UploaderLayout = async({children}: {children: React.ReactNode}) => {
+   const {userId} = await auth();
 
-const UploaderLayout = ({children}: {children: React.ReactNode}) => {
-  const {userId} = auth();
 
   if (!isUploader(userId)) {
-    return redirect('/');
+
+    return NextResponse.redirect('/');
   }
 
   return <>{children}</>;

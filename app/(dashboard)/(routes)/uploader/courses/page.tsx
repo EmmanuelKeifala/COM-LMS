@@ -1,5 +1,5 @@
-import {auth} from '@clerk/nextjs';
-import {redirect} from 'next/navigation';
+import {auth} from '@clerk/nextjs/server';
+import {  NextResponse } from "next/server";
 
 import {db} from '@/lib/db';
 
@@ -7,10 +7,9 @@ import {DataTable} from './_components/data-table';
 import {columns} from './_components/columns';
 
 const CoursesPage = async () => {
-  const {userId} = auth();
-
-  if (!userId) {
-    return redirect('/');
+   const {userId} = await auth();
+   if (!userId) {
+    return NextResponse.redirect('/');
   }
 
   const courses = await db.course.findMany({
