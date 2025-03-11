@@ -10,7 +10,7 @@ interface CourseUnEnrollButtonProps {
   courseName?: string;
 }
 
-export const CourseUnEnrollButton = ({
+const CourseUnEnrollButton = ({
   courseId,
   courseName,
 }: CourseUnEnrollButtonProps) => {
@@ -51,3 +51,5 @@ export const CourseUnEnrollButton = ({
     );
   }
 };
+
+export default CourseUnEnrollButton

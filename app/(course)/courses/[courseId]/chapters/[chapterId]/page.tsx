@@ -1,6 +1,6 @@
 import {getChapter} from '@/actions/get-chapters';
 import {Banner} from '@/components/banner';
-import {auth} from '@clerk/nextjs';
+import { auth } from '@clerk/nextjs/server'
 import {redirect} from 'next/navigation';
 import YoutubePlayerComponent from '@/components/YoutubePlayerComponent';
 import {CourseProgressButton} from './_components/course-progress-button';
@@ -15,7 +15,7 @@ const ChapterIdPage = async ({
 }: {
   params: {courseId: string; chapterId: string};
 }) => {
-  const {userId} = auth();
+  const {userId} = await auth();
 
   if (!userId) return redirect('/');
   const {

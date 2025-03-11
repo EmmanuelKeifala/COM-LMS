@@ -1,77 +1,73 @@
 'use client';
-import {useAuth} from '@clerk/nextjs';
-import {redirect} from 'next/navigation';
-import {CheckCircle, Clock} from 'lucide-react';
-import {useState, useEffect} from 'react';
+import { useAuth } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
+import { CheckCircle, Clock } from 'lucide-react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import axios from 'axios';
+import dynamic from 'next/dynamic';
+import { Spin } from 'antd';
 
-import {CoursesList} from '@/components/courses-list';
-import {InfoCard} from './_components/info-card';
-import ChatButton from '@/components/ChatButton';
-import {registerServiceWorker} from '@/lib/utils';
-import {
-  getCurrentPushSubscription,
-  sendPushSubscriptionToServer,
-} from '@/actions/push-service';
-import {Spin} from 'antd';
+// Lazy load components
+const CoursesList = dynamic(() => import('@/components/courses-list'));
+const InfoCard = dynamic(() => import('./_components/info-card'));
+const ChatButton = dynamic(() => import('@/components/ChatButton'));
 
+import { registerServiceWorker } from '@/lib/utils';
+import { getCurrentPushSubscription, sendPushSubscriptionToServer } from '@/actions/push-service';
 
 export default function Dashboard() {
   const [completedCourses, setCompletedCourses] = useState([]);
   const [coursesInProgress, setCoursesInProgress] = useState([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const {userId} = useAuth();
+  const [loading, setLoading] = useState(false);
+  const { userId } = useAuth();
+  const router = useRouter();
+
+  const fetchData = useCallback(async () => {
+    if (!userId) {
+      router.push('/');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.post('https://lms-com-server.onrender.com/api/v1/getDashboardCourses', { userId });
+      setCompletedCourses(response.data.completedCourses);
+      setCoursesInProgress(response.data.coursesInProgress);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // Optionally add error state handling here if needed
+    } finally {
+      setLoading(false);
+    }
+  }, [userId, router]); // Added router to dependencies
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        if (!userId) {
-          redirect('/');
-        }
-        const response = await axios.post(
-          'https://lms-com-server.onrender.com/api/v1/getDashboardCourses',
-          {
-            userId: userId,
-          },
-        );
-
-        setCompletedCourses(response.data.completedCourses);
-        setCoursesInProgress(response.data.coursesInProgress);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
-  }, [userId]);
+  }, [fetchData]);
 
   useEffect(() => {
-    async function setUpServiceWorker() {
+    const setupPushNotifications = async () => {
       try {
         await registerServiceWorker();
-      } catch (error) {
-        console.error('Error setting up service worker:', error);
-      }
-    }
-    setUpServiceWorker();
-  }, []);
-
-  useEffect(() => {
-    async function syncPushNotification() {
-      try {
         const subscription = await getCurrentPushSubscription();
         if (subscription) {
           await sendPushSubscriptionToServer(subscription);
         }
       } catch (error) {
-        console.log(error);
+        console.error('Error setting up push notifications:', error);
       }
-    }
-    syncPushNotification();
+    };
+
+    setupPushNotifications();
   }, []);
+
+  const memoizedCoursesList = useMemo(() => (
+    <CoursesList items={[...coursesInProgress, ...completedCourses]} />
+  ), [coursesInProgress, completedCourses]);
+
+  if (!userId) {
+    return null; // Or a loading state if preferred
+  }
 
   return (
     <div className="p-6 space-y-4">
@@ -81,25 +77,22 @@ export default function Dashboard() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <>
-            <InfoCard
-              icon={Clock}
-              label="In Progress"
-              numberOfItems={coursesInProgress.length}
-            />
-            <InfoCard
-              icon={CheckCircle}
-              label="Completed"
-              numberOfItems={completedCourses.length}
-              variant="success"
-            />
-          </>
+          <InfoCard 
+            icon={Clock} 
+            label="In Progress" 
+            numberOfItems={coursesInProgress.length} 
+          />
+          <InfoCard 
+            icon={CheckCircle} 
+            label="Completed" 
+            numberOfItems={completedCourses.length} 
+            variant="success" 
+          />
         </div>
       )}
       {!loading && (
         <>
-          <CoursesList items={[...coursesInProgress, ...completedCourses]} />
-
+          {memoizedCoursesList}
           <ChatButton isChat={false} />
         </>
       )}

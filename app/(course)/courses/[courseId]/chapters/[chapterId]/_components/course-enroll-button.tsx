@@ -5,7 +5,6 @@ import {useState} from 'react';
 import toast from 'react-hot-toast';
 
 import {Button} from '@/components/ui/button';
-import {formatPrice} from '@/lib/format';
 
 interface CourseEnrollButtonProps {
   price: number;
