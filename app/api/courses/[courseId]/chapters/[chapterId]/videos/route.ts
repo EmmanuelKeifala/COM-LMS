@@ -1,17 +1,17 @@
-import {db} from '@/lib/db';
-import {isUploader} from '@/lib/uploader';
-import {auth} from '@clerk/nextjs';
-import {NextResponse} from 'next/server';
+import { db } from "@/lib/db";
+import { isUploader } from "@/lib/uploader";
+import { auth } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
 export async function POST(
   req: Request,
-  {params}: {params: {courseId: string; chapterId: string}},
+  { params }: { params: { courseId: string; chapterId: string } }
 ) {
   try {
-    const {userId} = auth();
-    const {title} = await req.json();
+    const { userId } = await auth();
+    const { title } = await req.json();
     if (!userId || !isUploader) {
-      return NextResponse.json({message: 'Unauthorized'}, {status: 401});
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const chapterOwner = await db.chapter.findUnique({
@@ -22,19 +22,19 @@ export async function POST(
     });
 
     if (!chapterOwner) {
-      return NextResponse.json({message: 'Unauthorized'}, {status: 401});
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
     const lastVideo = await db.videoUrl.findFirst({
       where: {
         chapterId: params.chapterId,
       },
       orderBy: {
-        position: 'desc',
+        position: "desc",
       },
     });
     const newPosition = lastVideo ? lastVideo?.position + 1 : 1;
 
-    if (title.includes('preview')) {
+    if (title.includes("preview")) {
       const urlExist = await db.videoUrl.findMany({
         where: {
           videoUrl: title,
@@ -42,8 +42,8 @@ export async function POST(
       });
       if (urlExist.length > 0) {
         return NextResponse.json(
-          {message: 'Video already exists'},
-          {status: 400},
+          { message: "Video already exists" },
+          { status: 400 }
         );
       }
       const chapterVideo = await db.videoUrl.create({
@@ -55,9 +55,9 @@ export async function POST(
       });
       return NextResponse.json(chapterVideo);
     } else {
-      const index = title.indexOf('/view');
+      const index = title.indexOf("/view");
 
-      var modifiedUrl = title.substring(0, index) + '/preview';
+      var modifiedUrl = title.substring(0, index) + "/preview";
       const urlExist = await db.videoUrl.findMany({
         where: {
           videoUrl: modifiedUrl,
@@ -65,8 +65,8 @@ export async function POST(
       });
       if (urlExist.length > 0) {
         return NextResponse.json(
-          {message: 'Video already exists'},
-          {status: 400},
+          { message: "Video already exists" },
+          { status: 400 }
         );
       }
       const chapterVideo = await db.videoUrl.create({
@@ -79,7 +79,10 @@ export async function POST(
       return NextResponse.json(chapterVideo);
     }
   } catch (error) {
-    console.error('[VIDEO]', error);
-    return NextResponse.json({message: 'Internal server error'}, {status: 500});
+    console.error("[VIDEO]", error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

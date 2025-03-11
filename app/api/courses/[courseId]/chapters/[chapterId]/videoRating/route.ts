@@ -1,18 +1,18 @@
-import {auth} from '@clerk/nextjs';
-import {NextResponse} from 'next/server';
+import { auth } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-import {db} from '@/lib/db';
+import { db } from "@/lib/db";
 
 export async function POST(
   req: Request,
-  {params}: {params: {courseId: string; chapterId: string}},
+  { params }: { params: { courseId: string; chapterId: string } }
 ) {
   try {
-    const {userId} = auth();
-    const {...values} = await req.json();
+    const { userId } = await auth();
+    const { ...values } = await req.json();
 
     if (!userId) {
-      return new NextResponse('Unauthorized', {status: 401});
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     // Check if the user has already rated the video
@@ -51,20 +51,20 @@ export async function POST(
       return NextResponse.json(newRating);
     }
   } catch (error) {
-    console.log('[VIDEO RATING]', error);
-    return new NextResponse('Internal Error', {status: 500});
+    console.log("[VIDEO RATING]", error);
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }
 
 export async function GET(
   req: Request,
-  {params}: {params: {courseId: string; chapterId: string}},
+  { params }: { params: { courseId: string; chapterId: string } }
 ) {
   try {
-    const {userId} = auth();
+    const { userId } = await auth();
 
     if (!userId) {
-      return new NextResponse('Unauthorized', {status: 401});
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     // Fetch ratings for a particular videoId with isReviewed set to false
@@ -76,7 +76,7 @@ export async function GET(
 
     return NextResponse.json(videoRatings);
   } catch (error) {
-    console.log('[VIDEO RATING GETTING]', error);
-    return new NextResponse('Internal Error', {status: 500});
+    console.log("[VIDEO RATING GETTING]", error);
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }
