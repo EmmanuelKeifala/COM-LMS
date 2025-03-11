@@ -1,6 +1,6 @@
 import {IconBadge} from '@/components/icon-badge';
 import {db} from '@/lib/db';
-import {auth} from '@clerk/nextjs';
+import {auth} from '@clerk/nextjs/server';
 import {File, LayoutDashboard, ListChecks} from 'lucide-react';
 import {redirect} from 'next/navigation';
 import TitleForm from './_components/TitleForm';
@@ -15,8 +15,7 @@ import {AttachmentForm} from './_components/attachment-form';
 import {LevelForm} from './_components/LevelForm';
 
 const CourseIdPage = async ({params}: {params: {courseId: String}}) => {
-  const {userId} = auth();
-  if (!userId) return redirect('/');
+   const {userId} = await auth();  if (!userId) return redirect('/');
 
   const course = await db.course.findUnique({
     where: {

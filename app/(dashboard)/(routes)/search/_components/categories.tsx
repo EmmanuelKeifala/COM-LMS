@@ -1,10 +1,9 @@
 'use client';
 
-import {Category, Level} from '@prisma/client';
-import {FcEngineering} from 'react-icons/fc';
-
-import {TbMathFunction, TbMicroscope} from 'react-icons/tb';
-import {SlChemistry, SlSpeech} from 'react-icons/sl';
+import { Category, Level } from '@prisma/client';
+import { FcEngineering } from 'react-icons/fc';
+import { TbMathFunction, TbMicroscope } from 'react-icons/tb';
+import { SlChemistry, SlSpeech } from 'react-icons/sl';
 import {
   GiSkeleton,
   GiStethoscope,
@@ -16,15 +15,14 @@ import {
   GiMedicinePills,
   GiPillDrop,
 } from 'react-icons/gi';
-import {MdOutlineLocalPharmacy} from 'react-icons/md';
-import {GoLaw} from 'react-icons/go';
-
-import {IconType} from 'react-icons';
-
-import {CategoryItem} from './category-item';
+import { MdOutlineLocalPharmacy } from 'react-icons/md';
+import { GoLaw } from 'react-icons/go';
+import { IconType } from 'react-icons';
+import { CategoryItem } from './category-item';
+import { Suspense } from 'react';
 
 interface CategoriesProps {
-  items: Category[] & Level[];
+  items: (Category & Level)[];
 }
 
 const iconMap: Record<Category['name'], IconType> = {
@@ -47,17 +45,19 @@ const iconMap: Record<Category['name'], IconType> = {
   'Community Medicine': GiMedicines,
 };
 
-export const Categories = ({items}: CategoriesProps) => {
+export const Categories = ({ items }: CategoriesProps) => {
   return (
     <div className="flex items-center gap-x-2 overflow-x-auto pb-2">
-      {items.map(item => (
-        <CategoryItem
-          key={item.id}
-          label={item.name}
-          icon={iconMap[item.name]}
-          value={item.id}
-        />
-      ))}
+      <Suspense fallback={<div>Loading categories...</div>}>
+        {items.map((item) => (
+          <CategoryItem
+            key={item.id}
+            label={item.name}
+            icon={iconMap[item.name]}
+            value={item.id}
+          />
+        ))}
+      </Suspense>
     </div>
   );
 };

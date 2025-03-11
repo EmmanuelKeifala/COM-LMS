@@ -1,10 +1,51 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Award, Trophy } from 'lucide-react';
 
-import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-import {Award, Trophy} from 'lucide-react';
-type Props = {accuracy: number};
+type Props = { accuracy: number };
 
-const ResultsCard = ({accuracy}: Props) => {
+const ResultsCard = ({ accuracy }: Props) => {
+  // Memoizing the result rendering logic to avoid unnecessary recalculations
+  const resultContent = useMemo(() => {
+    if (accuracy > 75) {
+      return (
+        <>
+          <Trophy className="mr-4" stroke="gold" size={50} />
+          <div className="flex flex-col text-2xl font-semibold text-yellow-400">
+            <span>Impressive!</span>
+            <span className="text-sm text-center text-black opacity-50">
+              {'> 75% accuracy'}
+            </span>
+          </div>
+        </>
+      );
+    } else if (accuracy > 25) {
+      return (
+        <>
+          <Trophy className="mr-4" stroke="silver" size={50} />
+          <div className="flex flex-col text-2xl font-semibold text-stone-400">
+            <span>Good job!</span>
+            <span className="text-sm text-center text-black opacity-50">
+              {'> 25% accuracy'}
+            </span>
+          </div>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Trophy className="mr-4" stroke="brown" size={50} />
+          <div className="flex flex-col text-2xl font-semibold text-yellow-800">
+            <span>Nice try!</span>
+            <span className="text-sm text-center text-black opacity-50">
+              {'< 25% accuracy'}
+            </span>
+          </div>
+        </>
+      );
+    }
+  }, [accuracy]);
+
   return (
     <Card className="md:col-span-7">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-7">
@@ -12,37 +53,7 @@ const ResultsCard = ({accuracy}: Props) => {
         <Award />
       </CardHeader>
       <CardContent className="flex flex-col items-center justify-center h-3/5">
-        {accuracy > 75 ? (
-          <>
-            <Trophy className="mr-4" stroke="gold" size={50} />
-            <div className="flex flex-col text-2xl font-semibold text-yellow-400">
-              <span className="">Impressive!</span>
-              <span className="text-sm text-center text-black opacity-50">
-                {'> 75% accuracy'}
-              </span>
-            </div>
-          </>
-        ) : accuracy > 25 ? (
-          <>
-            <Trophy className="mr-4" stroke="silver" size={50} />
-            <div className="flex flex-col text-2xl font-semibold text-stone-400">
-              <span className="">Good job!</span>
-              <span className="text-sm text-center text-black opacity-50">
-                {'> 25% accuracy'}
-              </span>
-            </div>
-          </>
-        ) : (
-          <>
-            <Trophy className="mr-4" stroke="brown" size={50} />
-            <div className="flex flex-col text-2xl font-semibold text-yellow-800">
-              <span className="">Nice try!</span>
-              <span className="text-sm text-center text-black opacity-50">
-                {'< 25% accuracy'}
-              </span>
-            </div>
-          </>
-        )}
+        {resultContent}
       </CardContent>
     </Card>
   );
