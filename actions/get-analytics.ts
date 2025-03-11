@@ -1,7 +1,8 @@
-import {db} from '@/lib/db';
+import { db } from "@/lib/db";
+
 export const getAnalytics = async () => {
   try {
-    const analyticsData = await db.$transaction(async prisma => {
+    const analyticsData = await db.$transaction(async (prisma) => {
       // Fetch joined courses with only necessary columns
       const joinedCourses = await prisma.joined.findMany({
         select: {
@@ -12,31 +13,36 @@ export const getAnalytics = async () => {
             },
           },
         },
-        cacheStrategy: {swr: 60, ttl: 60},
+        cacheStrategy: { swr: 60, ttl: 60 },
       });
+
+      // Extract unique user IDs for batch fetching
+      const userIds = [
+        ...new Set(joinedCourses.map((joined) => joined.userId)),
+      ];
 
       // Use batch fetching to get all user progress in a single query
       const userProgress = await prisma.userProgress.findMany({
         where: {
           userId: {
-            in: joinedCourses.map(joined => joined.userId),
+            in: userIds,
           },
         },
-        cacheStrategy: {swr: 60, ttl: 60},
+        cacheStrategy: { swr: 60, ttl: 60 },
       });
 
-      // Count the occurrences of each course title using Prisma's distinct option
-      const courseCounts: {[courseTitle: string]: number} = {};
-      const courseTitleToFirstWords: {[courseTitle: string]: string} = {};
+      // Count the occurrences of each course title using a Map for better performance
+      const courseCounts = new Map<string, number>();
+      const courseTitleToFirstWords: { [courseTitle: string]: string } = {};
 
-      joinedCourses.forEach(joined => {
+      joinedCourses.forEach((joined) => {
         const firstWords = joined.course.title
-          .split(' ')
+          .split(" ")
           .slice(0, 2)
-          .map(word => word[0])
-          .join('');
+          .map((word) => word[0])
+          .join("");
 
-        courseCounts[firstWords] = (courseCounts[firstWords] || 0) + 1;
+        courseCounts.set(firstWords, (courseCounts.get(firstWords) || 0) + 1);
         courseTitleToFirstWords[joined.course.title] = firstWords;
       });
 
@@ -45,35 +51,47 @@ export const getAnalytics = async () => {
         where: {
           isCompleted: true,
         },
-        cacheStrategy: {swr: 60, ttl: 60},
+        cacheStrategy: { swr: 60, ttl: 60 },
       });
 
       // Map course counts to the desired format for the Chart component
-      const data = Object.entries(courseCounts).map(([name, students]) => ({
-        name,
-        students,
-      }));
+      const data = Array.from(courseCounts.entries()).map(
+        ([name, students]) => ({
+          name,
+          students,
+        })
+      );
 
       const tableData = Object.entries(courseTitleToFirstWords).map(
         ([actualName, abbreviation]) => ({
           actualName,
           abbreviation,
-        }),
+        })
       );
 
       const totalStudents = data.reduce((acc, curr) => acc + curr.students, 0);
 
+      // Create a map of user progress for quick lookup
+      const userProgressMap = new Map<string, typeof userProgress>();
+      userProgress.forEach((progress) => {
+        if (!userProgressMap.has(progress.userId)) {
+          userProgressMap.set(progress.userId, []);
+        }
+        userProgressMap.get(progress.userId)!.push(progress);
+      });
+
       // Parallelize the fetching of user-specific data
       const userData = await Promise.all(
-        joinedCourses.map(async joined => {
+        joinedCourses.map(async (joined) => {
           const userId = joined.userId;
+          const userCourses = userProgressMap.get(userId) || [];
 
-          const userCompletedCourses = userProgress.filter(
-            course => course.userId === userId && course.isCompleted === true,
+          const userCompletedCourses = userCourses.filter(
+            (course) => course.isCompleted === true
           );
 
-          const userInProgressCourses = userProgress.filter(
-            course => course.userId === userId && course.isCompleted === false,
+          const userInProgressCourses = userCourses.filter(
+            (course) => course.isCompleted === false
           );
 
           return {
@@ -84,7 +102,7 @@ export const getAnalytics = async () => {
             completedCourses: userCompletedCourses,
             inProgressCourses: userInProgressCourses,
           };
-        }),
+        })
       );
 
       return {
@@ -98,7 +116,7 @@ export const getAnalytics = async () => {
 
     return analyticsData;
   } catch (error) {
-    console.error('Error fetching analytics:', error);
+    console.error("Error fetching analytics:", error);
     return {
       totalCompletedCourses: 0,
       userData: [],

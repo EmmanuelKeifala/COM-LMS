@@ -21,38 +21,41 @@ const nextConfig = {
     // 'utfs.io'
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'utfs.io',
+        protocol: "https",
+        hostname: "utfs.io",
       },
       {
-        protocol: 'https',
-        hostname: 'img.clerk.com',
+        protocol: "https",
+        hostname: "img.clerk.com",
       },
       {
-        protocol: 'https',
-        hostname: 'cdn.sanity.io',
+        protocol: "https",
+        hostname: "cdn.sanity.io",
       },
       {
-        protocol: 'https',
-        hostname: 'images.clerk.dev',
+        protocol: "https",
+        hostname: "images.clerk.dev",
       },
       {
-        protocol: 'http',
-        hostname: 'libgen.is',
+        protocol: "http",
+        hostname: "libgen.is",
       },
       {
-        protocol: 'http',
-        hostname: 'gen.lib.rus.ec',
+        protocol: "http",
+        hostname: "gen.lib.rus.ec",
       },
       {
-        protocol: 'https',
-        hostname: 'library.lol',
+        protocol: "https",
+        hostname: "library.lol",
       },
       {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
+        protocol: "https",
+        hostname: "res.cloudinary.com",
       },
     ],
+  },
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
   },
 };
 

@@ -1,6 +1,6 @@
-import {getReadyServiceWorker} from '@/lib/utils';
-import axios from 'axios';
-import toast from 'react-hot-toast';
+import { getReadyServiceWorker } from "@/lib/utils";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 export async function getCurrentPushSubscription(): Promise<PushSubscription | null> {
   const sw = await getReadyServiceWorker();
@@ -8,13 +8,13 @@ export async function getCurrentPushSubscription(): Promise<PushSubscription | n
 }
 
 export async function registerPushNotifications() {
-  if (!('PushManager' in window)) {
-    throw new Error('Service workers are not supported in this browser.');
+  if (!("PushManager" in window)) {
+    throw new Error("Service workers are not supported in this browser.");
   }
 
   const existingSubscription = await getCurrentPushSubscription();
   if (existingSubscription) {
-    throw new Error('Exisiting push notification found');
+    throw new Error("Exisiting push notification found");
   }
   const sw = await getReadyServiceWorker();
   const subscription = await sw.pushManager.subscribe({
@@ -28,35 +28,35 @@ export async function registerPushNotifications() {
 export async function unRegisterPushNotification() {
   const existingSubscription = await getCurrentPushSubscription();
   if (!existingSubscription) {
-    throw new Error('No push notification found');
+    throw new Error("No push notification found");
   }
   await deletePushNotificationFromServer(existingSubscription);
   await existingSubscription.unsubscribe();
 }
 
 export async function sendPushSubscriptionToServer(
-  subscription: PushSubscription | null,
+  subscription: PushSubscription | null
 ) {
   try {
-    await axios.post('/api/notifications/register', {
+    await axios.post("/api/notifications/register", {
       subscription,
     });
-    toast.success('Push subscription sent to server');
+    toast.success("Push subscription sent to server");
   } catch (error) {
-    toast.error('Error sending push subscription to server');
+    toast.error("Error sending push subscription to server");
   }
 }
 
 export async function deletePushNotificationFromServer(
-  subscription: PushSubscription,
+  subscription: PushSubscription
 ) {
   try {
-    await axios.delete('/api/notifications/register', {
+    await axios.delete("/api/notifications/register", {
       data: subscription,
     });
-    toast.success('Push subscription deleted');
+    toast.success("Push subscription deleted");
   } catch (error) {
-    console.error('Error sending push subscription to server: ', error);
-    toast.error('Error sending push subscription to server');
+    console.error("Error sending push subscription to server: ", error);
+    toast.error("Error sending push subscription to server");
   }
 }

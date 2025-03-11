@@ -1,11 +1,11 @@
-import {Category, Course, Level} from '@prisma/client';
-import {getProgress} from '@/actions/get-progress';
-import {db} from '@/lib/db';
-import axios from 'axios';
+import { Category, Course, Level } from "@prisma/client";
+import { getProgress } from "@/actions/get-progress";
+import { db } from "@/lib/db";
+import axios from "axios";
 
 type CourseWithProgressWithCategory = Course & {
   category: Category | null;
-  chapters: {id: string}[];
+  chapters: { id: string }[];
   progress: number | null;
   level: Level | null;
 };
@@ -27,7 +27,7 @@ export const getCourses = async ({
   try {
     // Fetch user details only once
     const userResponse = await fetchUserDetails(userId);
-    const userClass = userResponse?.public_metadata?.userClass || '';
+    const userClass = userResponse?.public_metadata?.userClass || "";
 
     // Find the Level based on userClass
     const level = userClass ? await getLevelByName(userClass) : null;
@@ -43,13 +43,13 @@ export const getCourses = async ({
           ...course,
           progress: progressPercentage,
         };
-      }),
+      })
     );
 
-    return {coursesWithProgress, userClass};
+    return { coursesWithProgress, userClass };
   } catch (error) {
-    console.error('[GET_COURSES]', error);
-    return {coursesWithProgress: [], userClass: ''};
+    console.error("[GET_COURSES]", error);
+    return { coursesWithProgress: [], userClass: "" };
   }
 };
 
@@ -60,13 +60,13 @@ const fetchUserDetails = async (userId: string) => {
       {
         headers: {
           Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
-          Accept: 'application/json',
+          Accept: "application/json",
         },
-      },
+      }
     );
     return response.data;
   } catch (error) {
-    console.error('Error fetching user details:', error);
+    console.error("Error fetching user details:", error);
     return null;
   }
 };
@@ -76,21 +76,21 @@ const getLevelByName = async (name: string) => {
     where: {
       name,
     },
-    cacheStrategy: {swr: 60, ttl: 60},
+    cacheStrategy: { swr: 60, ttl: 60 },
   });
 };
 
 const getCoursesByFilters = async (
   title: string | undefined,
   categoryId: string | undefined,
-  levelId: string | null,
+  levelId: string | null
 ) => {
   return await db.course.findMany({
     where: {
       isPublished: true,
       title: {
-        contains: title || '',
-        mode: 'insensitive',
+        contains: title || "",
+        mode: "insensitive",
       },
       categoryId,
       levelId,
@@ -108,8 +108,8 @@ const getCoursesByFilters = async (
       },
     },
     orderBy: {
-      createdAt: 'desc',
+      createdAt: "desc",
     },
-    cacheStrategy: {swr: 60, ttl: 60},
+    cacheStrategy: { swr: 60, ttl: 60 },
   });
 };

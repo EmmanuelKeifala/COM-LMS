@@ -9,7 +9,7 @@ interface InfoCardProps {
   icon: LucideIcon;
 }
 
-export const InfoCard = ({
+const InfoCard = ({
   variant,
   icon: Icon,
   numberOfItems,
@@ -27,3 +27,5 @@ export const InfoCard = ({
     </div>
   );
 };
+
+export default InfoCard;  
