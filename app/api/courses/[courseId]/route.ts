@@ -1,17 +1,17 @@
-import {db} from '@/lib/db';
-import {isUploader} from '@/lib/uploader';
-import {auth} from '@clerk/nextjs';
-import {NextResponse} from 'next/server';
+import { db } from "@/lib/db";
+import { isUploader } from "@/lib/uploader";
+import { auth } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
 export async function DELETE(
   req: Request,
-  {params}: {params: {courseId: string}},
+  { params }: { params: { courseId: string } }
 ) {
   try {
-    const {userId} = auth();
+    const { userId } = await auth();
 
     if (!userId || !isUploader) {
-      return new NextResponse('Unauthorized', {status: 401});
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const course = await db.course.findUnique({
@@ -25,7 +25,7 @@ export async function DELETE(
     });
 
     if (!course) {
-      return new NextResponse('Not found', {status: 404});
+      return new NextResponse("Not found", { status: 404 });
     }
 
     const deletedCourse = await db.course.delete({
@@ -36,22 +36,22 @@ export async function DELETE(
 
     return NextResponse.json(deletedCourse);
   } catch (error) {
-    console.log('[COURSE_ID_DELETE]', error);
-    return new NextResponse('Internal Error', {status: 500});
+    console.log("[COURSE_ID_DELETE]", error);
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }
 
 export async function PATCH(
   req: Request,
-  {params}: {params: {courseId: string}},
+  { params }: { params: { courseId: string } }
 ) {
   try {
-    const {userId} = auth();
-    const {courseId} = params;
+    const { userId } = await auth();
+    const { courseId } = params;
     const values = await req.json();
 
     if (!userId || !isUploader) {
-      return new NextResponse('Unauthorized', {status: 401});
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const course = await db.course.update({
@@ -66,7 +66,7 @@ export async function PATCH(
 
     return NextResponse.json(course);
   } catch (error) {
-    console.log('[COURSE_ID]', error);
-    return new NextResponse('Internal Error', {status: 500});
+    console.log("[COURSE_ID]", error);
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }

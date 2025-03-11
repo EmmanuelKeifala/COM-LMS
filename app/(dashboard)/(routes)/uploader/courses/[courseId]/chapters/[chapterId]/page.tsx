@@ -1,4 +1,4 @@
-import {auth} from '@clerk/nextjs';
+import {auth} from '@clerk/nextjs/server';
 import {redirect} from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -32,8 +32,7 @@ const ChapterIdPage = async ({
 }: {
   params: {courseId: string; chapterId: string};
 }) => {
-  const {userId} = auth();
-
+   const {userId} = await auth();
   if (!userId) {
     return redirect('/');
   }
