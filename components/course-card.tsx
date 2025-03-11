@@ -3,7 +3,6 @@ import Link from 'next/link';
 import {BookOpen, Lock} from 'lucide-react';
 
 import {IconBadge} from '@/components/icon-badge';
-import {formatPrice} from '@/lib/format';
 import {CourseProgress} from '@/components/course-progress';
 
 interface CourseCardProps {
@@ -17,7 +16,7 @@ interface CourseCardProps {
   level: string;
 }
 
-export const CourseCard = ({
+const CourseCard = ({
   id,
   title,
   imageUrl,
@@ -64,3 +63,5 @@ export const CourseCard = ({
     </Link>
   );
 };
+
+export default CourseCard

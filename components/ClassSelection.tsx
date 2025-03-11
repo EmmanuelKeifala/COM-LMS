@@ -1,3 +1,4 @@
+"use client"
 import React, {useEffect, useState} from 'react';
 import {Select} from 'antd';
 import axios from 'axios';
@@ -23,10 +24,11 @@ const ClassSelection = () => {
   useEffect(() => {
     const getUserClassName = async () => {
       const reponse = await axios.get(`/api/userclass`);
-      setuserClassName(reponse.data);
+      setuserClassName(reponse.data.userClass);
     };
     getUserClassName();
   }, []);
+
 
   return (
     <Select
