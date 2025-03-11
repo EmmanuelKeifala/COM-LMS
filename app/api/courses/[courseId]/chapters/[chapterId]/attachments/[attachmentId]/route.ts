@@ -1,17 +1,17 @@
-import {auth} from '@clerk/nextjs';
-import {NextResponse} from 'next/server';
+import { auth } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-import {db} from '@/lib/db';
+import { db } from "@/lib/db";
 
 export async function DELETE(
   req: Request,
-  {params}: {params: {courseId: string; attachmentId: string}},
+  { params }: { params: { courseId: string; attachmentId: string } }
 ) {
   try {
-    const {userId} = auth();
+    const { userId } = await auth();
 
     if (!userId) {
-      return new NextResponse('Unauthorized', {status: 401});
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const courseOwner = await db.course.findUnique({
@@ -22,7 +22,7 @@ export async function DELETE(
     });
 
     if (!courseOwner) {
-      return new NextResponse('Unauthorized', {status: 401});
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     // Check if the attachment exists
@@ -33,7 +33,7 @@ export async function DELETE(
     });
 
     if (!existingAttachment) {
-      return new NextResponse('Attachment not found', {status: 404});
+      return new NextResponse("Attachment not found", { status: 404 });
     }
 
     // Delete the attachment
@@ -45,7 +45,7 @@ export async function DELETE(
 
     return NextResponse.json(deletedAttachment);
   } catch (error) {
-    console.log('ATTACHMENT_ID', error);
-    return new NextResponse('Internal Error', {status: 500});
+    console.log("ATTACHMENT_ID", error);
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }

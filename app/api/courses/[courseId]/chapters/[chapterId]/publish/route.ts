@@ -1,14 +1,14 @@
-import {db} from '@/lib/db';
-import {auth} from '@clerk/nextjs';
-import {NextResponse} from 'next/server';
+import { db } from "@/lib/db";
+import { auth } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
 export async function PATCH(
   req: Request,
-  {params}: {params: {courseId: string; chapterId: string}},
+  { params }: { params: { courseId: string; chapterId: string } }
 ) {
   try {
-    const {userId} = auth();
-    if (!userId) return new NextResponse('Unauthorized', {status: 401});
+    const { userId } = await auth();
+    if (!userId) return new NextResponse("Unauthorized", { status: 401 });
 
     const ownCourse = await db.course.findUnique({
       where: {
@@ -16,9 +16,7 @@ export async function PATCH(
         userId,
       },
     });
-    if (!ownCourse) return new NextResponse('Unauthorized', {status: 401});
-
-    
+    if (!ownCourse) return new NextResponse("Unauthorized", { status: 401 });
 
     const publishedChapters = await db.chapter.update({
       where: {
@@ -32,7 +30,7 @@ export async function PATCH(
 
     return NextResponse.json(publishedChapters);
   } catch (error) {
-    console.log('[CHAPTER PUBLISH]', error);
-    return new NextResponse('Internal server error', {status: 500});
+    console.log("[CHAPTER PUBLISH]", error);
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }

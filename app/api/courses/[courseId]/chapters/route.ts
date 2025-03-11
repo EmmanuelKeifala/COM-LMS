@@ -1,18 +1,18 @@
-import {db} from '@/lib/db';
-import {isUploader} from '@/lib/uploader';
-import {auth} from '@clerk/nextjs';
-import {NextResponse} from 'next/server';
+import { db } from "@/lib/db";
+import { isUploader } from "@/lib/uploader";
+import { auth } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
 export async function POST(
   req: Request,
-  {params}: {params: {courseId: string}},
+  { params }: { params: { courseId: string } }
 ) {
   try {
-    const {userId} = auth();
-    const {title} = await req.json();
+    const { userId } = await auth();
+    const { title } = await req.json();
 
     if (!userId || !isUploader)
-      return new NextResponse('Unauthorized', {status: 401});
+      return new NextResponse("Unauthorized", { status: 401 });
 
     const courseOwner = await db.course.findUnique({
       where: {
@@ -21,14 +21,14 @@ export async function POST(
       },
     });
 
-    if (!courseOwner) return new NextResponse('Unauthorized', {status: 401});
+    if (!courseOwner) return new NextResponse("Unauthorized", { status: 401 });
 
     const lastChapter = await db.chapter.findFirst({
       where: {
         courseId: params.courseId,
       },
       orderBy: {
-        position: 'desc',
+        position: "desc",
       },
     });
 
@@ -45,7 +45,7 @@ export async function POST(
 
     return NextResponse.json(chapter);
   } catch (error) {
-    console.error('[CHAPTERS]', error);
-    return new NextResponse('Internal server error', {status: 500});
+    console.error("[CHAPTERS]", error);
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }
