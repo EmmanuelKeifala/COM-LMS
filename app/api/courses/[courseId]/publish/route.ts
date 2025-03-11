@@ -1,18 +1,22 @@
-import {auth} from '@clerk/nextjs';
-import {NextResponse} from 'next/server';
-import {clerkClient} from '@clerk/nextjs';
-import {db} from '@/lib/db';
-import {transporter} from '@/lib/sendEmail';
+import { auth } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
+import { createClerkClient } from "@clerk/nextjs/server";
+import { db } from "@/lib/db";
+import { transporter } from "@/lib/sendEmail";
+
+const clerkClient = createClerkClient({
+  secretKey: process.env.CLERK_SECRET_KEY,
+});
 
 export async function PATCH(
   req: Request,
-  {params}: {params: {courseId: string}},
+  { params }: { params: { courseId: string } }
 ) {
   try {
-    const {userId} = auth();
+    const { userId } = await auth();
 
     if (!userId) {
-      return new NextResponse('Unauthorized', {status: 401});
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const course = await db.course.findUnique({
@@ -26,11 +30,11 @@ export async function PATCH(
     });
 
     if (!course) {
-      return new NextResponse('Not found', {status: 404});
+      return new NextResponse("Not found", { status: 404 });
     }
 
     const hasPublishedChapter = course.chapters.some(
-      chapter => chapter.isPublished,
+      (chapter) => chapter.isPublished
     );
 
     if (
@@ -40,7 +44,7 @@ export async function PATCH(
       !course.categoryId ||
       !hasPublishedChapter
     ) {
-      return new NextResponse('Missing required fields', {status: 401});
+      return new NextResponse("Missing required fields", { status: 401 });
     }
 
     const courseDetail = await db.course.findUnique({
@@ -54,30 +58,31 @@ export async function PATCH(
       },
     });
 
-    const users = await clerkClient.users.getUserList({
-      limit: 499,
-    });
-    let userEmails: any = [];
+    const usersResponse = await clerkClient.users.getUserList();
+    const users = usersResponse.data;
 
-    {
-      users.map(user => {
-        if (user.publicMetadata.userClass === courseLevel?.name) {
-          userEmails.push(user.emailAddresses[0].emailAddress);
+    let userEmails: string[] = [];
+
+    users.forEach((user) => {
+      if (user.publicMetadata.userClass === courseLevel?.name) {
+        const email = user.emailAddresses[0]?.emailAddress;
+        if (email) {
+          userEmails.push(email);
         }
-      });
-    }
+      }
+    });
     const courseLink = `https://meyoneducation.vercel.app/courses/${courseDetail?.id}`;
 
     const info = await transporter.sendMail({
       from: '"meyoneducation" <meyoneducationhub@gmail.com>', // sender address
       to: userEmails,
-      subject: 'Hello, 🔥',
+      subject: "Hello, 🔥",
       html: `<p> We have just published the ${courseDetail?.title} course</p> <br /> <div>Here is the link: <a href=${courseLink}>${courseDetail?.title}</a> </div> <br /> <p>Regards, <br /> meyoneducation</p>`,
     });
 
     const usersWithoutClasses: any = [];
     {
-      users.map(user => {
+      users.map((user) => {
         if (!user.publicMetadata.userClass) {
           usersWithoutClasses.push(user.emailAddresses[0].emailAddress);
         }
@@ -86,7 +91,7 @@ export async function PATCH(
     const reminderEmail = await transporter.sendMail({
       from: '"meyoneducation" <meyoneducationhub@gmail.com>', // sender address
       to: usersWithoutClasses,
-      subject: 'Hello Student',
+      subject: "Hello Student",
       html: `<p><strong>Reminder: Select Your Class on meyoneducation Platform</strong></p>
 
     <p>Dear Student,</p>
@@ -118,7 +123,7 @@ export async function PATCH(
 
     return NextResponse.json(publishedCourse);
   } catch (error) {
-    console.log('[COURSE_ID_PUBLISH]', error);
-    return NextResponse.json({status: 500, message: error});
+    console.log("[COURSE_ID_PUBLISH]", error);
+    return NextResponse.json({ status: 500, message: error });
   }
 }

@@ -1,17 +1,17 @@
-import {auth} from '@clerk/nextjs';
-import {NextResponse} from 'next/server';
-import {db} from '@/lib/db';
-import crypto from 'crypto'; // Import the crypto module
+import { auth } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
+import { db } from "@/lib/db";
+import crypto from "crypto"; // Import the crypto module
 
 export async function DELETE(
   req: Request,
-  {params}: {params: {feedbackId: string}},
+  { params }: { params: { feedbackId: string } }
 ) {
   try {
-    const {userId} = auth();
+    const { userId } = await auth();
 
     if (!userId) {
-      return new NextResponse('Unauthorized', {status: 401});
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const feedbackData = await db.feedback.findUnique({
@@ -21,7 +21,7 @@ export async function DELETE(
     });
 
     if (!feedbackData) {
-      return new NextResponse('Feedback not found', {status: 404});
+      return new NextResponse("Feedback not found", { status: 404 });
     }
 
     const imageUrl = feedbackData.url;
@@ -80,7 +80,7 @@ export async function DELETE(
 
     return NextResponse.json(deletedFeedback);
   } catch (error) {
-    console.error('[FEEDBACK_DELETE]', error);
-    return new NextResponse('Internal Error', {status: 500});
+    console.error("[FEEDBACK_DELETE]", error);
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }
