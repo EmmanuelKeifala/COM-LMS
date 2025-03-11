@@ -1,84 +1,89 @@
-import {db} from '@/lib/db';
-import {isUploader} from '@/lib/uploader';
-import {auth} from '@clerk/nextjs';
-import {NextResponse} from 'next/server';
+import { db } from "@/lib/db";
+import { isUploader } from "@/lib/uploader";
+import { auth } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
+
+const checkPermissions = async (userId: string | undefined | null) => {
+  if (!userId || !isUploader) {
+    return new NextResponse("Unauthorized", { status: 401 });
+  }
+  return null; // No error, user is authorized
+};
+
 export async function POST(req: Request) {
   try {
-    const {userId} = auth();
-    const {title} = await req.json();
+    const { userId } = await auth();
+    const { title } = await req.json();
 
-    if (!userId || !isUploader)
-      return new NextResponse('Unauthorized', {status: 401});
+    const permissionError = await checkPermissions(userId);
+    if (permissionError) return permissionError;
 
+    if (!userId) {
+      return;
+    }
+
+    // Create course with a single query
     const course = await db.course.create({
-      data: {userId, title},
+      data: { userId, title },
     });
 
     return NextResponse.json(course);
   } catch (error) {
-    console.log('[COURSES]', error);
-    return new NextResponse('Internal Error', {status: 500});
+    console.error("[COURSES]", error);
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }
 
 export async function PATCH(
   req: Request,
-  {params}: {params: {courseId: string; chapterId: string}},
+  { params }: { params: { courseId: string; chapterId: string } }
 ) {
   try {
-    const {userId} = auth();
-    const {videoId, url: newUrl} = await req.json();
+    const { userId } = await auth();
+    const { videoId, url: newUrl } = await req.json();
 
-    if (!userId || !isUploader) {
-      return new NextResponse('Unauthorized', {status: 401});
-    }
+    const permissionError = await checkPermissions(userId);
+    if (permissionError) return permissionError;
 
-    // Retrieve the existing video URL
+    // Retrieve the existing video URL and check if it's already updated
     const existingVideo = await db.videoUrl.findUnique({
-      where: {
-        id: videoId,
-      },
+      where: { id: videoId },
     });
 
     if (!existingVideo) {
-      return new NextResponse('Video not found', {status: 404});
+      return new NextResponse("Video not found", { status: 404 });
     }
 
     const oldUrl = existingVideo.videoUrl;
 
-    // Check if the new URL is different from the old URL
+    // Prevent redundant URL update if the URL is the same
     if (oldUrl === newUrl) {
       return NextResponse.json(
-        {message: 'New URL must be different from the old URL'},
-        {
-          status: 400,
-        },
+        { message: "New URL must be different from the old URL" },
+        { status: 400 }
       );
     }
 
-    // Update VideoUrl with the new URL
-    const updatedVideoUrl = await db.videoUrl.update({
-      where: {
-        id: videoId,
-      },
-      data: {
-        videoUrl: newUrl,
-      },
-    });
+    // Transaction to update video and related ratings in one go
+    const updatedVideoUrl = await db.$transaction(async (prisma) => {
+      // Update video URL
+      const updatedVideo = await prisma.videoUrl.update({
+        where: { id: videoId },
+        data: { videoUrl: newUrl },
+      });
 
-    // Set isReviewed to true for all related VideoRating records
-    await db.videoRating.updateMany({
-      where: {
-        videoId,
-      },
-      data: {
-        isReviewed: true,
-      },
+      // Set isReviewed to true for all related VideoRating records
+      await prisma.videoRating.updateMany({
+        where: { videoId },
+        data: { isReviewed: true },
+      });
+
+      return updatedVideo;
     });
 
     return NextResponse.json(updatedVideoUrl);
   } catch (error) {
-    console.error('[VIDEO]', error);
-    return new NextResponse('Internal server error', {status: 500});
+    console.error("[VIDEO]", error);
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }
